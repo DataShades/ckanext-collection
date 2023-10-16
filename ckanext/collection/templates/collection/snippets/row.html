@@ -1,0 +1,10 @@
+<tr class="collection-table--row">
+    {% for column in table.columns.names if column in table.columns.visible  %}
+        <td class="collection-table--cell{% if sortable %} collection-table--cell-sortable{% endif %}">
+            <div>
+                {{ row[column] }}
+            </div>
+        </td>
+    {% endfor %}
+
+</tr>
