@@ -1,0 +1,14 @@
+# collection-js:
+#   filter: rjsmin
+#   output: ckanext-collection/%(version)s-collection.js
+#   contents:
+#     - js/collection.js
+#   extra:
+#     preload:
+#       - base/main
+
+# collection-css:
+#   filter: cssrewrite
+#   output: ckanext-collection/%(version)s-collection.css
+#   contents:
+#     - css/collection.css
