@@ -3,7 +3,7 @@ from typing import Any
 from typing_extensions import Self
 
 from .columns import Columns
-from .data import Data, ModelData
+from .data import ApiData, Data, ModelData
 from .pager import Pager, ClassicPager
 from .serialize import Serializer
 from .filter import Filters
@@ -25,9 +25,10 @@ class BaseCollection:
     produce values for UI filters you can create the following collection
     subclass:
 
-        class ApiCollection(ApiData):
+        class ApiCollection(BaseCollection):
             DataFactory = ApiData
             FiltersFactory = ApiFilters
+            PagerFactory = ClassicPager
 
     Attributes:
       name: unique name of the collection
@@ -116,3 +117,7 @@ class Collection(BaseCollection):
 
 class ModelCollection(Collection):
     DataFactory = ModelData
+
+
+class ApiCollection(Collection):
+    DataFactory = ApiData

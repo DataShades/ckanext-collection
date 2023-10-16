@@ -11,6 +11,7 @@ from ckanext.collection.types import TDataCollection
 
 log = logging.getLogger(__name__)
 
+
 class Data(Generic[TDataCollection]):
     """Data source for collection.
 
