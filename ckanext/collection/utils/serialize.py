@@ -6,15 +6,14 @@ import json
 import ckan.plugins.toolkit as tk
 import operator
 from functools import reduce
-from typing import Any, Generic, Iterable
+from typing import Any, Iterable
 from ckanext.collection.types import TDataCollection
+from .shared import AttachTrait
 
 
-class Serializer(abc.ABC, Generic[TDataCollection]):
-    _collection: TDataCollection
-
+class Serializer(AttachTrait[TDataCollection], abc.ABC):
     def __init__(self, col: TDataCollection, /, **kwargs: Any):
-        self._collection = col
+        self.attach(col)
 
     @abc.abstractmethod
     def stream(self) -> Iterable[str] | Iterable[bytes]:
@@ -25,30 +24,41 @@ class Serializer(abc.ABC, Generic[TDataCollection]):
 
 
 class CsvSerializer(Serializer[TDataCollection]):
-    def stream(self) -> Iterable[str]:
-        buff = io.StringIO()
-        writer = csv.DictWriter(
+    def get_writer(self, buff: io.StringIO):
+        return csv.DictWriter(
             buff,
-            fieldnames=[
-                name
-                for name in self._collection.columns.names
-                if name in self._collection.columns.visible
-            ],
+            fieldnames=self.get_fieldnames(),
             extrasaction="ignore",
         )
 
-        writer.writerow(
-            {
-                col: self._collection.columns.labels.get(col, col)
-                for col in writer.fieldnames
-            },
-        )
+    def get_fieldnames(self) -> list[str]:
+        return [
+            name
+            for name in self._collection.columns.names
+            if name in self._collection.columns.visible
+        ]
+
+    def get_header_row(self, writer: csv.DictWriter[str]) -> dict[str, str]:
+        return {
+            col: self._collection.columns.labels.get(col, col)
+            for col in writer.fieldnames
+        }
+
+    def prepare_row(self, row: Any, writer: csv.DictWriter[str]) -> dict[str, Any]:
+        return row
+
+    def stream(self) -> Iterable[str]:
+        buff = io.StringIO()
+        writer = self.get_writer(buff)
+
+        writer.writerow(self.get_header_row(writer))
+
         yield buff.getvalue()
         buff.seek(0)
         buff.truncate()
 
         for row in self._collection.data:
-            writer.writerow(row)
+            writer.writerow(self.prepare_row(row, writer))
             yield buff.getvalue()
             buff.seek(0)
             buff.truncate()

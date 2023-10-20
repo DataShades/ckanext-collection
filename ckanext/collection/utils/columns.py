@@ -1,11 +1,10 @@
 from __future__ import annotations
-from typing import Generic
 import dataclasses
 from ckanext.collection.types import TDataCollection
+from .shared import AttachTrait
 
 
-@dataclasses.dataclass
-class Columns(Generic[TDataCollection]):
+class Columns(AttachTrait[TDataCollection]):
     """Collection of columns details for filtering/rendering.
 
     Attributes:
@@ -15,8 +14,30 @@ class Columns(Generic[TDataCollection]):
       labels: UI labels for columns
     """
 
-    _collection: TDataCollection
     names: list[str] = dataclasses.field(default_factory=list)
     visible: set[str] = dataclasses.field(default_factory=set)
     sortable: set[str] = dataclasses.field(default_factory=set)
+    filterable: set[str] = dataclasses.field(default_factory=set)
     labels: dict[str, str] = dataclasses.field(default_factory=dict)
+
+    def __init__(
+        self,
+        collection: TDataCollection,
+        names: list[str],
+        visible: set[str] | None = None,
+        hidden: set[str] | None = None,
+        sortable: set[str] | None = None,
+        filterable: set[str] | None = None,
+        labels: dict[str, str] | None = None,
+    ):
+        self.attach(collection)
+        self.names = names
+
+        self.visible = visible if visible is not None else set(names)
+        if hidden is not None:
+            self.visible = {c for c in self.visible if c not in hidden}
+
+        self.sortable = sortable if sortable is not None else set(names)
+        self.filterable = filterable if filterable is not None else set(names)
+
+        self.labels = labels if labels is not None else {c: c for c in names}

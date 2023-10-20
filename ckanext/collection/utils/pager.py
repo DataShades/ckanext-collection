@@ -1,18 +1,17 @@
 from __future__ import annotations
 import abc
-from typing import Any, Generic
+from typing import Any
 import ckan.plugins.toolkit as tk
 from ckanext.collection.types import TDataCollection
+from .shared import AttachTrait
 
-class Pager(Generic[TDataCollection], abc.ABC):
+class Pager(AttachTrait[TDataCollection], abc.ABC):
     """Pagination logic for collections.
 
     This class must be abstract enough to fit into majority of pager
     implementations.
 
     """
-
-    _collection: TDataCollection
     params: dict[str, Any]
 
     @abc.abstractproperty
@@ -37,8 +36,8 @@ class Pager(Generic[TDataCollection], abc.ABC):
 
     def __init__(self, obj: TDataCollection, /, **kwargs: Any):
         """Get relevant information from search params and store it inside pager."""
+        self.attach(obj)
         self.params = kwargs.get("params", {})
-        self._collection = obj
 
     @property
     def size(self):

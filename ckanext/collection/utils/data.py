@@ -3,16 +3,17 @@ import copy
 import logging
 import ckan.plugins.toolkit as tk
 from ckan import types
-from typing import Any, Generic, Iterable, cast
+from typing import Any, Iterable, cast
 from ckan import model
 import sqlalchemy as sa
 from functools import cached_property
 from ckanext.collection.types import TDataCollection
+from .shared import AttachTrait
 
 log = logging.getLogger(__name__)
 
 
-class Data(Generic[TDataCollection]):
+class Data(AttachTrait[TDataCollection]):
     """Data source for collection.
 
     This class produces data for collection.
@@ -23,11 +24,10 @@ class Data(Generic[TDataCollection]):
     """
 
     total: int = 0
-    data: list[Any]
-    _collection: TDataCollection
+    data: Iterable[Any]
 
     def __init__(self, obj: TDataCollection, /, **kwargs: Any):
-        self._collection = obj
+        self.attach(obj)
 
         data = self.get_initial_data()
 
@@ -38,7 +38,7 @@ class Data(Generic[TDataCollection]):
         return iter(self.data)
 
     def __len__(self):
-        return len(self.data)
+        return self.total
 
     def get_initial_data(self) -> Any:
         """Return base data collection(with filters applied).
