@@ -38,7 +38,7 @@ class Data(AttachTrait[TDataCollection]):
         return iter(self.data)
 
     def __len__(self):
-        return self.total
+        return len(cast(Any, self.data))
 
     def get_initial_data(self) -> Any:
         """Return base data collection(with filters applied).
@@ -90,7 +90,7 @@ class ModelData(Data[TDataCollection]):
 
     def select_columns(self) -> Iterable[Any]:
         """Return list of columns for select statement."""
-        return [self.model] if self.model else []
+        return sa.inspect(self.model).columns if self.model else []
 
     @cached_property
     def extra_sources(self) -> dict[str, Any]:
@@ -199,12 +199,16 @@ class ApiData(Data[TDataCollection]):
     """
 
     action: str
-    payload: dict[str, Any]
+    payload: dict[str, Any] | None = None
 
     def __init__(self, obj: TDataCollection, /, **kwargs: Any):
         """Set model before data is computed"""
-        self.action = kwargs.get("action", "package_search")
-        self.payload = copy.deepcopy(kwargs.get("payload", {}))
+        if action := kwargs.get("action"):
+            self.action = action
+
+        payload = kwargs.get("payload")
+        if payload is not None:
+            self.payload = payload
 
         super().__init__(obj, **kwargs)
 
@@ -214,12 +218,37 @@ class ApiData(Data[TDataCollection]):
     def make_payload(self) -> dict[str, Any]:
 
         return dict(
-            self.payload,
-            **{
-                "start": self._collection.pager.start,
-                "rows": self._collection.pager.size,
-            },
+            self.payload or {},
+            **self.get_filters(),
+            **self.get_offsets(),
+            **self.get_sort(),
         )
+
+    def get_offsets(self) -> dict[str, Any]:
+        return {
+            "start": self._collection.pager.start,
+            "rows": self._collection.pager.size,
+        }
+
+    def get_filters(self) -> dict[str, str]:
+        return {}
+
+    def get_sort(self) -> dict[str, str]:
+        sort = self._collection.params.get("sort")
+        if not sort:
+            return {}
+
+        direction = "asc"
+        if sort.startswith("-"):
+            sort = sort[1:]
+            direction = "desc"
+
+        if sort not in self._collection.columns.sortable:
+            log.warning("Unexpected sort value: %s", sort)
+            return {}
+
+        return {"sort": f"{sort} {direction}"}
+
 
     def get_initial_data(self):
         action = tk.get_action(self.action)

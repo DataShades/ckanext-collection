@@ -114,11 +114,11 @@ class BaseCollection:
         self.params = params
         kwargs.setdefault("pager_settings", {"params": params})
 
-        self.serializer = self._instantiate("serializer", kwargs)
         self.columns = self._instantiate("columns", kwargs)
         self.pager = self._instantiate("pager", kwargs)
-        self.data = self._instantiate("data", kwargs)
         self.filters = self._instantiate("filters", kwargs)
+        self.data = self._instantiate("data", kwargs)
+        self.serializer = self._instantiate("serializer", kwargs)
 
     def _instantiate(self, name: str, kwargs: dict[str, Any]) -> Any:
         if factory := kwargs.get(f"{name}_factory"):
