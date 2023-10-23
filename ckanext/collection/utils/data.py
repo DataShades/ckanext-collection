@@ -80,11 +80,17 @@ class ModelData(Data[TDataCollection]):
     """
 
     model: Any = None
+    extras: dict[str, Any] = {}
+    is_scalar: bool = False
 
     def __init__(self, obj: TDataCollection, /, **kwargs: Any):
         """Set model before data is computed"""
         if model := kwargs.get("model"):
             self.model = model
+
+        extras = kwargs.get("extras")
+        if extras is not None:
+            self.extras = extras
 
         super().__init__(obj, **kwargs)
 
@@ -147,6 +153,7 @@ class ModelData(Data[TDataCollection]):
         return stmt
 
     def statement_with_sorting(self, stmt: sa.select):
+
         sort = self._collection.params.get("sort")
         if not sort:
             return stmt
@@ -155,6 +162,12 @@ class ModelData(Data[TDataCollection]):
         if sort.startswith("-"):
             sort = sort[1:]
             desc = True
+
+        elif len(parts := sort.split()) == 2:
+            sort, direction = parts
+
+            if direction.lower() == "desc":
+                desc = True
 
         if sort not in self._collection.columns.sortable:
             log.warning("Unexpected sort value: %s", sort)
@@ -182,11 +195,14 @@ class ModelData(Data[TDataCollection]):
     def compute_total(self, data: sa.select) -> int:
         return self.count_statement(data)
 
-    def slice_data(self, data: sa.select):
+    def slice_data(self, data: sa.select) -> Iterable[Any]:
         stmt = self.statement_with_limits(data)
 
-        rows: Any = model.Session.execute(stmt)
-        return [dict(zip(row.keys(), row)) for row in rows]
+        if self.is_scalar:
+            return model.Session.scalars(stmt).all()
+
+        else:
+            return model.Session.execute(stmt).all()
 
 
 class ApiData(Data[TDataCollection]):
@@ -248,7 +264,6 @@ class ApiData(Data[TDataCollection]):
             return {}
 
         return {"sort": f"{sort} {direction}"}
-
 
     def get_initial_data(self):
         action = tk.get_action(self.action)
