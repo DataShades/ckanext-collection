@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Any, TypedDict
 from ckanext.collection.types import TDataCollection
-from .shared import AttachTrait
+from .shared import AttachTrait, AttrSettingsTrait
 
 
 class Option(TypedDict):
@@ -26,7 +26,7 @@ class DateRange(TypedDict):
     label: str
 
 
-class Filters(AttachTrait[TDataCollection]):
+class Filters(AttachTrait[TDataCollection], AttrSettingsTrait):
     """Information about UI filters.
 
     Redefine its methods to produce information for UI filters, date-range
@@ -42,6 +42,7 @@ class Filters(AttachTrait[TDataCollection]):
 
     def __init__(self, obj: TDataCollection, /, **kwargs: Any):
         self.attach(obj)
+        self.gather_settings(kwargs)
 
         self.date_range = kwargs.get("date_range", self.make_date_range())
         self.dropdowns = kwargs.get("dropdowns", self.make_dropdowns())

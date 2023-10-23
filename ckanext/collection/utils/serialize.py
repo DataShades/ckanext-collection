@@ -8,12 +8,13 @@ import operator
 from functools import reduce
 from typing import Any, Iterable
 from ckanext.collection.types import TDataCollection
-from .shared import AttachTrait
+from .shared import AttachTrait, AttrSettingsTrait
 
 
-class Serializer(AttachTrait[TDataCollection], abc.ABC):
+class Serializer(AttachTrait[TDataCollection], AttrSettingsTrait, abc.ABC):
     def __init__(self, col: TDataCollection, /, **kwargs: Any):
         self.attach(col)
+        self.gather_settings(kwargs)
 
     @abc.abstractmethod
     def stream(self) -> Iterable[str] | Iterable[bytes]:

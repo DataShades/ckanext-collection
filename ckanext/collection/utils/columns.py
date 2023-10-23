@@ -1,10 +1,12 @@
+
 from __future__ import annotations
 import dataclasses
+from typing import Any
 from ckanext.collection.types import TDataCollection
-from .shared import AttachTrait
+from .shared import AttachTrait, AttrSettingsTrait
 
 
-class Columns(AttachTrait[TDataCollection]):
+class Columns(AttachTrait[TDataCollection], AttrSettingsTrait):
     """Collection of columns details for filtering/rendering.
 
     Attributes:
@@ -29,8 +31,10 @@ class Columns(AttachTrait[TDataCollection]):
         sortable: set[str] | None = None,
         filterable: set[str] | None = None,
         labels: dict[str, str] | None = None,
+        **kwargs: Any,
     ):
         self.attach(collection)
+        self.gather_settings(kwargs)
         self.names = names if names is not None else []
 
         self.visible = visible if visible is not None else set(self.names)

@@ -8,12 +8,12 @@ from ckan import model
 import sqlalchemy as sa
 from functools import cached_property
 from ckanext.collection.types import TDataCollection
-from .shared import AttachTrait
+from .shared import AttachTrait, AttrSettingsTrait
 
 log = logging.getLogger(__name__)
 
 
-class Data(AttachTrait[TDataCollection]):
+class Data(AttachTrait[TDataCollection], AttrSettingsTrait):
     """Data source for collection.
 
     This class produces data for collection.
@@ -28,6 +28,7 @@ class Data(AttachTrait[TDataCollection]):
 
     def __init__(self, obj: TDataCollection, /, **kwargs: Any):
         self.attach(obj)
+        self.gather_settings(kwargs)
 
         data = self.get_initial_data()
 
