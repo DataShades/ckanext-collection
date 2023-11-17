@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 <small>[Compare with latest](https://github.com/DataShades/ckanext-collection/compare/v0.0.1...HEAD)</small>
 
+### Bug Fixes
+
+- invariant base collection causes typing error ([6ebb0a1](https://github.com/DataShades/ckanext-collection/commit/6ebb0a1e3b445c83dbdc86f6a7a594074e1333e3) by Sergey Motornyuk).
+
 <!-- insertion marker -->
 ## [v0.0.1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.0.1) - 2023-10-23
 
