@@ -7,4 +7,4 @@ if TYPE_CHECKING:
     from .utils.collection import BaseCollection
 
 
-TDataCollection = TypeVar("TDataCollection", bound="BaseCollection")
+TDataCollection = TypeVar("TDataCollection", bound="BaseCollection", covariant=True)
