@@ -6,6 +6,7 @@ import json
 import ckan.plugins.toolkit as tk
 import operator
 from functools import reduce
+from sqlalchemy.engine import Row
 from typing import Any, Iterable
 from ckanext.collection.types import TDataCollection
 from .shared import AttachTrait, AttrSettingsTrait
@@ -46,6 +47,8 @@ class CsvSerializer(Serializer[TDataCollection]):
         }
 
     def prepare_row(self, row: Any, writer: csv.DictWriter[str]) -> dict[str, Any]:
+        if isinstance(row, Row):
+            return dict(zip(row.keys(), row))
         return row
 
     def stream(self) -> Iterable[str]:
@@ -57,6 +60,7 @@ class CsvSerializer(Serializer[TDataCollection]):
         yield buff.getvalue()
         buff.seek(0)
         buff.truncate()
+
 
         for row in self._collection.data:
             writer.writerow(self.prepare_row(row, writer))
