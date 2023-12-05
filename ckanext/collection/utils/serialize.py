@@ -73,6 +73,9 @@ class JsonlSerializer(Serializer[TDataCollection]):
     def stream(self) -> Iterable[str]:
         buff = io.StringIO()
         for row in self._collection.data:
+            if isinstance(row, Row):
+                row = dict(zip(row.keys(), row))
+
             json.dump(row, buff)
             yield buff.getvalue()
             yield "\n"
@@ -82,7 +85,7 @@ class JsonlSerializer(Serializer[TDataCollection]):
 
 class JsonSerializer(Serializer[TDataCollection]):
     def stream(self):
-        yield json.dumps(list(self._collection.data))
+        yield json.dumps(dict(zip(row.keys(), row)) if isinstance(row, Row) else row for row in self._collection.data)
 
 
 class ChartJsSerializer(Serializer[TDataCollection]):
@@ -114,6 +117,9 @@ class ChartJsSerializer(Serializer[TDataCollection]):
         data: list[list[int]] = []
 
         for item in self._collection.data:
+            if isinstance(item, Row):
+                item = dict(zip(item.keys(), item))
+
             labels.append(item.get(self.label_column, None))
             data.append([item.get(name, 0) for name in self.dataset_columns])
 
