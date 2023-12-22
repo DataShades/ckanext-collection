@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import abc
-from collections.abc import Iterable, Sized
-from typing import Any, Generic, TypedDict, TypeVar
+from typing import Any, Generic, Iterable, Sized, TypedDict, TypeVar
 
 from typing_extensions import Self
 
@@ -26,13 +25,6 @@ class BaseData(abc.ABC, Generic[types.TDataCollection], Sized, Iterable[Any]):
 
     total: int
     data: Iterable[Any]
-
-
-class BaseFilters(abc.ABC, Generic[types.TDataCollection]):
-    """Declaration of filters properties."""
-
-    filters: list[Filter]
-    actions: list[Filter]
 
 
 class BasePager(abc.ABC, Generic[types.TDataCollection]):
@@ -59,6 +51,13 @@ class BaseCollection(abc.ABC):
     filters: BaseFilters[Self]
     pager: BasePager[Self]
     serializer: BaseSerializer[Self]
+
+
+class BaseFilters(abc.ABC, Generic[types.TDataCollection]):
+    """Declaration of filters properties."""
+
+    filters: list[Filter]
+    actions: list[Filter]
 
 
 class Filter(TypedDict):

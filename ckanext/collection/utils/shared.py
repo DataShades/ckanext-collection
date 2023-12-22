@@ -9,10 +9,16 @@ from ckanext.collection.types import TDataCollection
 
 
 class AttachTrait(abc.ABC, Generic[TDataCollection]):
-    _collection: TDataCollection
+    """Attach collection to the current object"""
+
+    __collection: TDataCollection
 
     def attach(self, obj: TDataCollection):
-        self._collection = obj
+        self.__collection = obj
+
+    @property
+    def attached(self) -> TDataCollection:
+        return self.__collection
 
 
 class AttrSettingsTrait(abc.ABC):
