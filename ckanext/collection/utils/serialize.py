@@ -8,12 +8,12 @@ import operator
 from functools import reduce
 from sqlalchemy.engine import Row
 from typing import Any, Iterable
-from ckanext.collection.types import TDataCollection
+from ckanext.collection import types
 from .shared import AttachTrait, AttrSettingsTrait
 
 
-class Serializer(AttachTrait[TDataCollection], AttrSettingsTrait, abc.ABC):
-    def __init__(self, col: TDataCollection, /, **kwargs: Any):
+class Serializer(types.BaseSerializer[types.TDataCollection], AttachTrait[types.TDataCollection], AttrSettingsTrait, abc.ABC):
+    def __init__(self, col: types.TDataCollection, /, **kwargs: Any):
         self.attach(col)
         self.gather_settings(kwargs)
 
@@ -25,7 +25,7 @@ class Serializer(AttachTrait[TDataCollection], AttrSettingsTrait, abc.ABC):
         return reduce(operator.add, self.stream())
 
 
-class CsvSerializer(Serializer[TDataCollection]):
+class CsvSerializer(Serializer[types.TDataCollection]):
     def get_writer(self, buff: io.StringIO):
         return csv.DictWriter(
             buff,
@@ -68,7 +68,7 @@ class CsvSerializer(Serializer[TDataCollection]):
             buff.truncate()
 
 
-class JsonlSerializer(Serializer[TDataCollection]):
+class JsonlSerializer(Serializer[types.TDataCollection]):
     def stream(self) -> Iterable[str]:
         buff = io.StringIO()
         for row in self._collection.data:
@@ -82,7 +82,7 @@ class JsonlSerializer(Serializer[TDataCollection]):
             buff.truncate()
 
 
-class JsonSerializer(Serializer[TDataCollection]):
+class JsonSerializer(Serializer[types.TDataCollection]):
     def stream(self):
         yield json.dumps(
             dict(zip(row.keys(), row)) if isinstance(row, Row) else row
@@ -90,7 +90,7 @@ class JsonSerializer(Serializer[TDataCollection]):
         )
 
 
-class ChartJsSerializer(Serializer[TDataCollection]):
+class ChartJsSerializer(Serializer[types.TDataCollection]):
     label_column: str
     dataset_columns: list[str]
     dataset_labels: dict[str, str]
@@ -105,7 +105,7 @@ class ChartJsSerializer(Serializer[TDataCollection]):
     def table_id(self):
         return f"{self.prefix}-id--{self._collection.name}"
 
-    def __init__(self, obj: TDataCollection, /, **kwargs: Any):
+    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         super().__init__(obj, **kwargs)
         self.label_column = kwargs.get("label_column", "")
 
@@ -141,10 +141,10 @@ class ChartJsSerializer(Serializer[TDataCollection]):
         )
 
 
-class HtmlSerializer(Serializer[TDataCollection]):
+class HtmlSerializer(Serializer[types.TDataCollection]):
     template: str
 
-    def __init__(self, obj: TDataCollection, /, **kwargs: Any):
+    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         super().__init__(obj, **kwargs)
 
         if "template" in kwargs:
@@ -162,12 +162,12 @@ class HtmlSerializer(Serializer[TDataCollection]):
         )
 
 
-class TableSerializer(HtmlSerializer[TDataCollection]):
+class TableSerializer(HtmlSerializer[types.TDataCollection]):
     template: str = "collection/snippets/table.html"
     row_snippet: str = "collection/snippets/row.html"
     prefix: str = "collection-table"
 
-    def __init__(self, obj: TDataCollection, /, **kwargs: Any):
+    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         kwargs.setdefault("template", self.template)
         super().__init__(obj, **kwargs)
 

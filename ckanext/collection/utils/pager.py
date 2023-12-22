@@ -2,10 +2,12 @@ from __future__ import annotations
 import abc
 from typing import Any
 import ckan.plugins.toolkit as tk
-from ckanext.collection.types import TDataCollection
+from ckanext.collection import types
 from .shared import AttachTrait, AttrSettingsTrait
 
-class Pager(AttachTrait[TDataCollection], AttrSettingsTrait, abc.ABC):
+
+
+class Pager(types.BasePager[types.TDataCollection], AttachTrait[types.TDataCollection], AttrSettingsTrait, abc.ABC):
     """Pagination logic for collections.
 
     This class must be abstract enough to fit into majority of pager
@@ -34,7 +36,7 @@ class Pager(AttachTrait[TDataCollection], AttrSettingsTrait, abc.ABC):
         """
         ...
 
-    def __init__(self, obj: TDataCollection, /, **kwargs: Any):
+    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         """Get relevant information from search params and store it inside pager."""
         self.attach(obj)
         self.gather_settings(kwargs)
@@ -52,7 +54,7 @@ class Pager(AttachTrait[TDataCollection], AttrSettingsTrait, abc.ABC):
         return self.start - self.end
 
 
-class ClassicPager(Pager[TDataCollection]):
+class ClassicPager(Pager[types.TDataCollection]):
     """Limit/offset based pagination.
 
     Attributes:
@@ -63,7 +65,7 @@ class ClassicPager(Pager[TDataCollection]):
     page: int = 1
     rows_per_page: int = 10
 
-    def __init__(self, obj: TDataCollection, /, **kwargs: Any):
+    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         """Use `page` and `rows_per_page` parameters."""
         super().__init__(obj, **kwargs)
         self.page = tk.h.get_page_number(self.params, "page", self.page)

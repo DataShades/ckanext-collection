@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Any
 from typing_extensions import Self
 
+from ckanext.collection import types
 from .columns import Columns
 from .data import ApiData, Data, ModelData
 from .pager import Pager, ClassicPager
@@ -9,7 +10,7 @@ from .serialize import Serializer
 from .filter import Filters
 
 
-class BaseCollection:
+class Collection(types.BaseCollection):
     """Base data collection.
 
     Contains the following information:
@@ -24,26 +25,15 @@ class BaseCollection:
     produces data using CKAN API, you can create the following collection
     subclass:
 
-    >>> class ApiCollection(BaseCollection):
+    >>> class ApiCollection(Collection):
     >>>     DataFactory = ApiData
-    >>>     PagerFactory = ClassicPager
-
-    `PagerFactory` must be specified as well, because `BaseCollection` use
-    abstract `Pager` by default and cannot be instantiated without actual pager
-    implementation. You can use `Collection` as a base class instead, it
-    already uses `ClassicPager`.
-
-    `ClassicPager` contains pagination logic based on page number and number of
-    items per page. It's mostly usable when data source accepts limit/offset
-    parameters for slicing the data.
 
     Collections can be created on demand, using constructor parameters. For
     example, ApiCollection mentioned above can be instantiated even without
     dedicated class:
 
-    >>> api_collection = BaseCollection(
+    >>> api_collection = Collection(
     >>>     data_factory=ApiData,
-    >>>     pager_factory=ClassicPager,
     >>> )
 
     Subclasses are more flexible, than dynamic collections. They allow
@@ -57,15 +47,14 @@ class BaseCollection:
 
     * SMTH_factory - class used to instantiate an attribute. Example:
 
-      >>> BaseColection(pager_factory=ClassicPager)
-      >>> BaseColection(data_factory=ModelData)
-      >>> BaseColection(serializer_factory=JsonSerializer)
+      >>> Colection(data_factory=ModelData)
+      >>> Colection(serializer_factory=JsonSerializer)
 
     * SMTH_instance - object assigned to the attribute. If present, factory is
       ignored. Example:
 
       >>> col = Colection()
-      >>> another_col = BaseColection(pager_instance=col.pager)
+      >>> another_col = Colection(pager_instance=col.pager)
 
     * SMTH_settings - collection of named arguments passed into constructor of
       the corresponding attribute. Example
@@ -79,21 +68,12 @@ class BaseCollection:
 
     """
 
-    name: str
-    params: dict[str, Any]
-
     # keep these classes here to simplify overrides
     ColumnsFactory: type[Columns[Self]] = Columns
     DataFactory: type[Data[Self]] = Data
     FiltersFactory: type[Filters[Self]] = Filters
-    PagerFactory: type[Pager[Self]] = Pager
     SerializerFactory: type[Serializer[Self]] = Serializer
-
-    columns: Columns[Self]
-    data: Data[Self]
-    filters: Filters[Self]
-    pager: Pager[Self]
-    serializer: Serializer[Self]
+    PagerFactory = ClassicPager
 
     def __init__(self, name: str, params: dict[str, Any], /, **kwargs: Any):
         """Use name to pick only relevant parameters.
@@ -154,10 +134,6 @@ class BaseCollection:
     def make_data(self, **kwargs: Any) -> Data[Self]:
         """Return search filters."""
         return self.DataFactory(self, **kwargs)
-
-
-class Collection(BaseCollection):
-    PagerFactory = ClassicPager
 
 
 class ModelCollection(Collection):

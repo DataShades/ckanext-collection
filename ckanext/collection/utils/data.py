@@ -1,7 +1,7 @@
 from __future__ import annotations
 import logging
 import ckan.plugins.toolkit as tk
-from ckan import types
+from ckan.types import Context
 from typing import Any, Iterable, cast
 from ckan import model
 import sqlalchemy as sa
@@ -9,13 +9,13 @@ from functools import cached_property
 from sqlalchemy.orm import Mapper
 
 from sqlalchemy.sql import Select
-from ckanext.collection.types import TDataCollection
+from ckanext.collection import types
 from .shared import AttachTrait, AttrSettingsTrait
 
 log = logging.getLogger(__name__)
 
 
-class Data(AttachTrait[TDataCollection], AttrSettingsTrait):
+class Data(types.BaseData[types.TDataCollection], AttachTrait[types.TDataCollection], AttrSettingsTrait):
     """Data source for collection.
 
     This class produces data for collection.
@@ -25,10 +25,7 @@ class Data(AttachTrait[TDataCollection], AttrSettingsTrait):
       data: slice of all available data.
     """
 
-    total: int = 0
-    data: Iterable[Any]
-
-    def __init__(self, obj: TDataCollection, /, **kwargs: Any):
+    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         self.attach(obj)
         self.gather_settings(kwargs)
 
@@ -73,7 +70,7 @@ class Data(AttachTrait[TDataCollection], AttrSettingsTrait):
         return data
 
 
-class ModelData(Data[TDataCollection]):
+class ModelData(Data[types.TDataCollection]):
     """DB data source.
 
     This base class is suitable for building SQL query.
@@ -86,7 +83,7 @@ class ModelData(Data[TDataCollection]):
     extras: dict[str, Any] = {}
     is_scalar: bool = False
 
-    def __init__(self, obj: TDataCollection, /, **kwargs: Any):
+    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         """Set model before data is computed"""
         if model := kwargs.get("model"):
             self.model = model
@@ -206,7 +203,7 @@ class ModelData(Data[TDataCollection]):
         return model.Session.execute(stmt).all()
 
 
-class ApiData(Data[TDataCollection]):
+class ApiData(Data[types.TDataCollection]):
     """API data source.
 
     This base class is suitable for building API calls.
@@ -218,7 +215,7 @@ class ApiData(Data[TDataCollection]):
     action: str
     payload: dict[str, Any] | None = None
 
-    def __init__(self, obj: TDataCollection, /, **kwargs: Any):
+    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         """Set model before data is computed"""
         if action := kwargs.get("action"):
             self.action = action
@@ -230,7 +227,7 @@ class ApiData(Data[TDataCollection]):
         super().__init__(obj, **kwargs)
 
     def make_context(self):
-        return types.Context()
+        return Context()
 
     def make_payload(self) -> dict[str, Any]:
 

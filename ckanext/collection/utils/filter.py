@@ -1,32 +1,14 @@
 from __future__ import annotations
-from typing import Any, TypedDict
-from ckanext.collection.types import TDataCollection
+from typing import Any
+from ckanext.collection import types
 from .shared import AttachTrait, AttrSettingsTrait
 
 
-class Option(TypedDict):
-    """Single option for Filter."""
-
-    value: str
-    label: str
-
-
-class Filter(TypedDict):
-    """Dropdown filter."""
-
-    name: str
-    placeholder: str | None
-    options: list[Option]
-
-
-class DateRange(TypedDict):
-    """After/before datepicker."""
-
-    name: str
-    label: str
-
-
-class Filters(AttachTrait[TDataCollection], AttrSettingsTrait):
+class Filters(
+    types.BaseFilters[types.TDataCollection],
+    AttachTrait[types.TDataCollection],
+    AttrSettingsTrait,
+):
     """Information about UI filters.
 
     Redefine its methods to produce information for UI filters, date-range
@@ -34,13 +16,7 @@ class Filters(AttachTrait[TDataCollection], AttrSettingsTrait):
 
     """
 
-    dropdowns: list[Filter]
-    date_range: DateRange | None
-    actions: list[Any]
-
-    _collection: TDataCollection
-
-    def __init__(self, obj: TDataCollection, /, **kwargs: Any):
+    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         self.attach(obj)
         self.gather_settings(kwargs)
 
@@ -48,12 +24,12 @@ class Filters(AttachTrait[TDataCollection], AttrSettingsTrait):
         self.dropdowns = kwargs.get("dropdowns", self.make_dropdowns())
         self.actions = kwargs.get("actions", self.make_actions())
 
-    def make_date_range(self) -> None | DateRange:
+    def make_date_range(self) -> None | types.DateRange:
         return
         # return DateRange(name="date_range", label="Date Range")
 
-    def make_actions(self) -> list[Option]:
+    def make_actions(self) -> list[types.Option]:
         return []
 
-    def make_dropdowns(self) -> list[Filter]:
+    def make_dropdowns(self) -> list[types.Filter]:
         return []
