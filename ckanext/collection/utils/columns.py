@@ -1,6 +1,5 @@
 
 from __future__ import annotations
-import dataclasses
 from typing import Any
 from ckanext.collection.types import TDataCollection
 from .shared import AttachTrait, AttrSettingsTrait
@@ -16,11 +15,11 @@ class Columns(AttachTrait[TDataCollection], AttrSettingsTrait):
       labels: UI labels for columns
     """
 
-    names: list[str] = dataclasses.field(default_factory=list)
-    visible: set[str] = dataclasses.field(default_factory=set)
-    sortable: set[str] = dataclasses.field(default_factory=set)
-    filterable: set[str] = dataclasses.field(default_factory=set)
-    labels: dict[str, str] = dataclasses.field(default_factory=dict)
+    names: list[str]
+    visible: set[str]
+    sortable: set[str]
+    filterable: set[str]
+    labels: dict[str, str]
 
     def __init__(
         self,

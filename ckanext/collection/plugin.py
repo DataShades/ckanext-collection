@@ -1,15 +1,14 @@
 from ckan.common import CKANConfig
-import ckan.plugins as plugins
-import ckan.plugins.toolkit as toolkit
+import ckan.plugins as p
+import ckan.plugins.toolkit as tk
 
 
-class CollectionPlugin(plugins.SingletonPlugin):
-    plugins.implements(plugins.IConfigurer)
-
+class CollectionPlugin(p.SingletonPlugin):
+    p.implements(p.IConfigurer)
 
     # IConfigurer
 
     def update_config(self, config_: CKANConfig):
-        toolkit.add_template_directory(config_, "templates")
-        toolkit.add_public_directory(config_, "public")
-        toolkit.add_resource("assets", "collection")
+        tk.add_template_directory(config_, "templates")
+        tk.add_public_directory(config_, "public")
+        tk.add_resource("assets", "collection")

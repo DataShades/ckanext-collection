@@ -61,7 +61,6 @@ class CsvSerializer(Serializer[TDataCollection]):
         buff.seek(0)
         buff.truncate()
 
-
         for row in self._collection.data:
             writer.writerow(self.prepare_row(row, writer))
             yield buff.getvalue()
@@ -85,7 +84,10 @@ class JsonlSerializer(Serializer[TDataCollection]):
 
 class JsonSerializer(Serializer[TDataCollection]):
     def stream(self):
-        yield json.dumps(dict(zip(row.keys(), row)) if isinstance(row, Row) else row for row in self._collection.data)
+        yield json.dumps(
+            dict(zip(row.keys(), row)) if isinstance(row, Row) else row
+            for row in self._collection.data
+        )
 
 
 class ChartJsSerializer(Serializer[TDataCollection]):

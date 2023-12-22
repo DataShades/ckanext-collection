@@ -1,5 +1,4 @@
 from __future__ import annotations
-import copy
 import logging
 import ckan.plugins.toolkit as tk
 from ckan import types
@@ -7,6 +6,9 @@ from typing import Any, Iterable, cast
 from ckan import model
 import sqlalchemy as sa
 from functools import cached_property
+from sqlalchemy.orm import Mapper
+
+from sqlalchemy.sql import Select
 from ckanext.collection.types import TDataCollection
 from .shared import AttachTrait, AttrSettingsTrait
 
@@ -97,7 +99,8 @@ class ModelData(Data[TDataCollection]):
 
     def select_columns(self) -> Iterable[Any]:
         """Return list of columns for select statement."""
-        return sa.inspect(self.model).columns if self.model else []
+        mapper = cast(Mapper, sa.inspect(self.model))
+        return mapper.columns if self.model else []
 
     @cached_property
     def extra_sources(self) -> dict[str, Any]:
@@ -118,13 +121,13 @@ class ModelData(Data[TDataCollection]):
         """
         return []
 
-    def apply_joins(self, stmt: sa.select) -> sa.select:
+    def apply_joins(self, stmt: Select) -> Select:
         """Return list of columns for select statement."""
 
         sources = self.extra_sources
 
         for name, condition, isouter in self.get_joins():
-            stmt = cast(sa.select, stmt.join(sources[name], condition, isouter))
+            stmt = stmt.join(sources[name], condition, isouter)
 
         return stmt
 
@@ -137,11 +140,11 @@ class ModelData(Data[TDataCollection]):
 
         return self.apply_joins(stmt)
 
-    def alter_statement(self, stmt: sa.select):
+    def alter_statement(self, stmt: Select):
         """Add columns, joins and unconditional filters to statement."""
         return stmt
 
-    def count_statement(self, stmt: sa.select) -> int:
+    def count_statement(self, stmt: Select) -> int:
         """Count number of items in query"""
         return cast(
             int,
@@ -150,10 +153,10 @@ class ModelData(Data[TDataCollection]):
             ).scalar(),
         )
 
-    def statement_with_filters(self, stmt: sa.select):
+    def statement_with_filters(self, stmt: Select):
         return stmt
 
-    def statement_with_sorting(self, stmt: sa.select):
+    def statement_with_sorting(self, stmt: Select):
 
         sort = self._collection.params.get("sort")
         if not sort:
@@ -179,7 +182,7 @@ class ModelData(Data[TDataCollection]):
 
         return stmt.order_by(sa.text(sort))
 
-    def statement_with_limits(self, stmt: sa.select):
+    def statement_with_limits(self, stmt: Select):
         limit = self._collection.pager.size
         offset = self._collection.pager.start
 
@@ -189,21 +192,18 @@ class ModelData(Data[TDataCollection]):
         stmt = self.get_base_statement()
         stmt = self.alter_statement(stmt)
         stmt = self.statement_with_filters(stmt)
-        stmt = self.statement_with_sorting(stmt)
+        return self.statement_with_sorting(stmt)
 
-        return stmt
-
-    def compute_total(self, data: sa.select) -> int:
+    def compute_total(self, data: Select) -> int:
         return self.count_statement(data)
 
-    def slice_data(self, data: sa.select) -> Iterable[Any]:
+    def slice_data(self, data: Select) -> Iterable[Any]:
         stmt = self.statement_with_limits(data)
 
         if self.is_scalar:
             return model.Session.scalars(stmt).all()
 
-        else:
-            return model.Session.execute(stmt).all()
+        return model.Session.execute(stmt).all()
 
 
 class ApiData(Data[TDataCollection]):
