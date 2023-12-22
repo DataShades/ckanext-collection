@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 import abc
 from typing import Any, Callable, Generic
+
 from typing_extensions import Self
 
 from ckanext.collection.types import TDataCollection
@@ -11,6 +13,7 @@ class AttachTrait(abc.ABC, Generic[TDataCollection]):
 
     def attach(self, obj: TDataCollection):
         self._collection = obj
+
 
 class AttrSettingsTrait(abc.ABC):
     _attr_settings: dict[str, Callable[[Self], Any] | None] = {}

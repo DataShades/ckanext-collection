@@ -1,13 +1,16 @@
 from __future__ import annotations
+
 from typing import Any
+
 from typing_extensions import Self
 
 from ckanext.collection import types
+
 from .columns import Columns
 from .data import ApiData, Data, ModelData
-from .pager import Pager, ClassicPager
-from .serialize import Serializer
 from .filter import Filters
+from .pager import ClassicPager, Pager
+from .serialize import Serializer
 
 
 class Collection(types.BaseCollection):

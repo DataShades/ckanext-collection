@@ -1,10 +1,17 @@
-
 from __future__ import annotations
+
 from typing import Any
+
 from ckanext.collection import types
+
 from .shared import AttachTrait, AttrSettingsTrait
 
-class Columns(types.BaseColumns[types.TDataCollection], AttachTrait[types.TDataCollection], AttrSettingsTrait):
+
+class Columns(
+    types.BaseColumns[types.TDataCollection],
+    AttachTrait[types.TDataCollection],
+    AttrSettingsTrait,
+):
     """Collection of columns details for filtering/rendering.
 
     Attributes:

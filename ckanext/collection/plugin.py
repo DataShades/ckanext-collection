@@ -1,6 +1,6 @@
-from ckan.common import CKANConfig
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
+from ckan.common import CKANConfig
 
 
 class CollectionPlugin(p.SingletonPlugin):

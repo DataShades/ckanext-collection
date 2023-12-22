@@ -1,21 +1,29 @@
 from __future__ import annotations
-import logging
-import ckan.plugins.toolkit as tk
-from ckan.types import Context
-from typing import Any, Iterable, cast
-from ckan import model
-import sqlalchemy as sa
-from functools import cached_property
-from sqlalchemy.orm import Mapper
 
+import logging
+from functools import cached_property
+from typing import Any, Iterable, cast
+
+import sqlalchemy as sa
+from sqlalchemy.orm import Mapper
 from sqlalchemy.sql import Select
+
+import ckan.plugins.toolkit as tk
+from ckan import model
+from ckan.types import Context
+
 from ckanext.collection import types
+
 from .shared import AttachTrait, AttrSettingsTrait
 
 log = logging.getLogger(__name__)
 
 
-class Data(types.BaseData[types.TDataCollection], AttachTrait[types.TDataCollection], AttrSettingsTrait):
+class Data(
+    types.BaseData[types.TDataCollection],
+    AttachTrait[types.TDataCollection],
+    AttrSettingsTrait,
+):
     """Data source for collection.
 
     This class produces data for collection.
@@ -154,7 +162,6 @@ class ModelData(Data[types.TDataCollection]):
         return stmt
 
     def statement_with_sorting(self, stmt: Select):
-
         sort = self._collection.params.get("sort")
         if not sort:
             return stmt
@@ -230,7 +237,6 @@ class ApiData(Data[types.TDataCollection]):
         return Context()
 
     def make_payload(self) -> dict[str, Any]:
-
         return dict(
             self.payload or {},
             **self.get_filters(),

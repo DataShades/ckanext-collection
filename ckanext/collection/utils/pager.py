@@ -1,19 +1,28 @@
 from __future__ import annotations
+
 import abc
 from typing import Any
+
 import ckan.plugins.toolkit as tk
+
 from ckanext.collection import types
+
 from .shared import AttachTrait, AttrSettingsTrait
 
 
-
-class Pager(types.BasePager[types.TDataCollection], AttachTrait[types.TDataCollection], AttrSettingsTrait, abc.ABC):
+class Pager(
+    types.BasePager[types.TDataCollection],
+    AttachTrait[types.TDataCollection],
+    AttrSettingsTrait,
+    abc.ABC,
+):
     """Pagination logic for collections.
 
     This class must be abstract enough to fit into majority of pager
     implementations.
 
     """
+
     params: dict[str, Any]
 
     @abc.abstractproperty

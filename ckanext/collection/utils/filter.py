@@ -1,6 +1,9 @@
 from __future__ import annotations
+
 from typing import Any
+
 from ckanext.collection import types
+
 from .shared import AttachTrait, AttrSettingsTrait
 
 

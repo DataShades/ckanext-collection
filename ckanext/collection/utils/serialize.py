@@ -1,18 +1,28 @@
 from __future__ import annotations
+
 import abc
-import io
 import csv
+import io
 import json
-import ckan.plugins.toolkit as tk
 import operator
 from functools import reduce
-from sqlalchemy.engine import Row
 from typing import Any, Iterable
+
+from sqlalchemy.engine import Row
+
+import ckan.plugins.toolkit as tk
+
 from ckanext.collection import types
+
 from .shared import AttachTrait, AttrSettingsTrait
 
 
-class Serializer(types.BaseSerializer[types.TDataCollection], AttachTrait[types.TDataCollection], AttrSettingsTrait, abc.ABC):
+class Serializer(
+    types.BaseSerializer[types.TDataCollection],
+    AttachTrait[types.TDataCollection],
+    AttrSettingsTrait,
+    abc.ABC,
+):
     def __init__(self, col: types.TDataCollection, /, **kwargs: Any):
         self.attach(col)
         self.gather_settings(kwargs)
