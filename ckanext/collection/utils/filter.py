@@ -14,8 +14,8 @@ class Filters(
 ):
     """Information about UI filters.
 
-    Redefine its methods to produce information for UI filters, date-range
-    field and action buttions(Download, Export, etc.).
+    Redefine its methods to produce information for UI filters and action
+    buttions(Download, Export, etc.).
 
     """
 
@@ -23,16 +23,11 @@ class Filters(
         self.attach(obj)
         self.gather_settings(kwargs)
 
-        self.date_range = kwargs.get("date_range", self.make_date_range())
-        self.dropdowns = kwargs.get("dropdowns", self.make_dropdowns())
+        self.dropdowns = kwargs.get("filters", self.make_filters())
         self.actions = kwargs.get("actions", self.make_actions())
 
-    def make_date_range(self) -> None | types.DateRange:
-        return
-        # return DateRange(name="date_range", label="Date Range")
-
-    def make_actions(self) -> list[types.Option]:
+    def make_filters(self) -> list[types.Filter]:
         return []
 
-    def make_dropdowns(self) -> list[types.Filter]:
+    def make_actions(self) -> list[types.Filter]:
         return []

@@ -24,16 +24,15 @@ class BaseColumns(abc.ABC, Generic[types.TDataCollection]):
 class BaseData(abc.ABC, Generic[types.TDataCollection], Sized, Iterable[Any]):
     """Declaration of data properties."""
 
-    total: int = 0
+    total: int
     data: Iterable[Any]
 
 
 class BaseFilters(abc.ABC, Generic[types.TDataCollection]):
     """Declaration of filters properties."""
 
-    dropdowns: list[types.Filter]
-    date_range: types.DateRange | None
-    actions: list[Any]
+    filters: list[Filter]
+    actions: list[Filter]
 
 
 class BasePager(abc.ABC, Generic[types.TDataCollection]):
@@ -62,23 +61,9 @@ class BaseCollection(abc.ABC):
     serializer: BaseSerializer[Self]
 
 
-class Option(TypedDict):
-    """Single option for Filter."""
-
-    value: str
-    label: str
-
-
 class Filter(TypedDict):
     """Dropdown filter."""
 
     name: str
-    placeholder: str | None
-    options: list[Option]
-
-
-class DateRange(TypedDict):
-    """After/before datepicker."""
-
-    name: str
-    label: str
+    options: dict[str, Any]
+    type: str
