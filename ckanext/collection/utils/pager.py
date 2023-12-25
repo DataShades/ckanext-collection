@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import abc
 from typing import Any
 
 import ckan.plugins.toolkit as tk
@@ -8,12 +7,7 @@ import ckan.plugins.toolkit as tk
 from ckanext.collection import shared, types
 
 
-class Pager(
-    types.BasePager[types.TDataCollection],
-    shared.AttachTrait[types.TDataCollection],
-    shared.AttrSettingsTrait,
-    abc.ABC,
-):
+class Pager(types.BasePager, shared.Domain[types.TDataCollection]):
     """Pagination logic for collections.
 
     This class must be abstract enough to fit into majority of pager
@@ -21,44 +15,9 @@ class Pager(
 
     """
 
-    params: dict[str, Any]
-
-    @abc.abstractproperty
-    def start(self) -> Any:
-        """Inclusive lower bound of the page.
-
-        For classic limit/offset pagination, start:0 means that index of the
-        first element is 0.
-
-        """
-        ...
-
-    @abc.abstractproperty
-    def end(self) -> Any:
-        """Exclusive upper bound of the page.
-
-        For classic limit/offset pagination, end:10 means that index of the
-        last element is less than 10.
-
-        """
-        ...
-
-    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
-        """Get relevant information from search params and store it inside pager."""
-        self._attach(obj)
-        self._gather_settings(kwargs)
-
-        self.params = kwargs.get("params", {})
-
-    @property
-    def size(self):
-        """Range of the pager.
-
-        In classic pager it may be the number of items per page. For date range
-        pager, it can be a timespan within which we are searching for records.
-
-        """
-        return self.start - self.end
+    params: dict[str, Any] = shared.configurable_attribute(
+        default_factory=lambda self: {},
+    )
 
 
 class ClassicPager(Pager[types.TDataCollection]):
@@ -69,8 +28,8 @@ class ClassicPager(Pager[types.TDataCollection]):
       rows_per_page: max number of items per page
     """
 
-    page: int = 1
-    rows_per_page: int = 10
+    page: int = shared.configurable_attribute(1)
+    rows_per_page: int = shared.configurable_attribute(10)
 
     def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         """Use `page` and `rows_per_page` parameters."""
@@ -91,5 +50,5 @@ class ClassicPager(Pager[types.TDataCollection]):
         return self.start + self.size
 
     @property
-    def size(self):
+    def size(self) -> Any:
         return self.rows_per_page

@@ -13,7 +13,7 @@ import ckan.plugins.toolkit as tk
 from ckanext.collection.types import TDataCollection
 
 T = TypeVar("T")
-_sentinel = object()
+SENTINEL = object()
 
 
 class AttachTrait(abc.ABC, Generic[TDataCollection]):
@@ -126,8 +126,8 @@ class AttrSettingsTrait:
 
 @dataclasses.dataclass
 class _InitAttr:
-    default: Any = _sentinel
-    default_factory: Callable[[Any], Any] = cast(Any, _sentinel)
+    default: Any = SENTINEL
+    default_factory: Callable[[Any], Any] = cast(Any, SENTINEL)
 
     def __post_init__(self):
         if self.default is not self.default_factory:
@@ -137,15 +137,15 @@ class _InitAttr:
         raise ValueError(msg)
 
     def get_default(self, obj: Any):
-        if self.default is _sentinel:
+        if self.default is SENTINEL:
             return self.default_factory(obj)
 
         return self.default
 
 
 def configurable_attribute(
-    default: T | object = _sentinel,
-    default_factory: Callable[[Any], T] | object = _sentinel,
+    default: T | object = SENTINEL,
+    default_factory: Callable[[Any], T] | object = SENTINEL,
 ) -> T:
     """Declare configurable attribute.
 
@@ -169,3 +169,19 @@ class UserTrait(AttrSettingsTrait):
     user = configurable_attribute(
         default_factory=lambda str: tk.current_user.name if tk.current_user else "",
     )
+
+
+class Domain(AttachTrait[TDataCollection], AttrSettingsTrait):
+    """Standard initializer for collection utilities.
+
+    Used as base class for utility instances created during collection
+    initialization(e.g Pager, Columns, Filters, Data).
+
+    Defines standard constructor signature, attaches collection to the utility
+    instance and collects settings.
+
+    """
+
+    def __init__(self, obj: TDataCollection, /, **kwargs: Any):
+        self._attach(obj)
+        self._gather_settings(kwargs)

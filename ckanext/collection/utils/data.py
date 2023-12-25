@@ -18,9 +18,8 @@ log = logging.getLogger(__name__)
 
 
 class Data(
-    types.BaseData[types.TDataCollection],
-    shared.AttachTrait[types.TDataCollection],
-    shared.AttrSettingsTrait,
+    types.BaseData,
+    shared.Domain[types.TDataCollection],
 ):
     """Data source for collection.
 
@@ -32,8 +31,7 @@ class Data(
     """
 
     def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
-        self._attach(obj)
-        self._gather_settings(kwargs)
+        super().__init__(obj, **kwargs)
 
         data = self.get_initial_data()
 
@@ -89,20 +87,12 @@ class ModelData(Data[types.TDataCollection]):
       model: main model used by data source
     """
 
-    model: Any = None
-    extras: dict[str, Any] = {}
+    model: Any = shared.configurable_attribute(None)
+    extras: dict[str, Any] = shared.configurable_attribute(
+        default_factory=lambda self: {},
+    )
+
     is_scalar: bool = False
-
-    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
-        """Set model before data is computed"""
-        if model := kwargs.get("model"):
-            self.model = model
-
-        extras = kwargs.get("extras")
-        if extras is not None:
-            self.extras = extras
-
-        super().__init__(obj, **kwargs)
 
     def select_columns(self) -> Iterable[Any]:
         """Return list of columns for select statement."""
@@ -221,19 +211,10 @@ class ApiData(Data[types.TDataCollection]):
       action: API action that returns the data
     """
 
-    action: str
-    payload: dict[str, Any] | None = None
-
-    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
-        """Set model before data is computed"""
-        if action := kwargs.get("action"):
-            self.action = action
-
-        payload = kwargs.get("payload")
-        if payload is not None:
-            self.payload = payload
-
-        super().__init__(obj, **kwargs)
+    action: str = shared.configurable_attribute(None)
+    payload: dict[str, Any] = shared.configurable_attribute(
+        default_factory=lambda self: {},
+    )
 
     def make_context(self):
         return Context()

@@ -91,7 +91,6 @@ class TestHtmlSerializer:
     @pytest.mark.usefixtures("with_request_context")
     def test_output(self, collection: StaticCollection, ckan_config: Any):
         serializer = serialize.HtmlSerializer(collection)
-
         output = serializer.render().strip()
 
         dump = json.dumps(list(collection.data), sort_keys=True)

@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-from typing import Any
-
 from ckanext.collection import shared, types
 
 
 class Filters(
-    types.BaseFilters[types.TDataCollection],
-    shared.AttachTrait[types.TDataCollection],
-    shared.AttrSettingsTrait,
+    types.BaseFilters,
+    shared.Domain[types.TDataCollection],
 ):
     """Information about UI filters.
 
@@ -17,15 +14,15 @@ class Filters(
 
     """
 
-    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
-        self._attach(obj)
-        self._gather_settings(kwargs)
-
-        self.dropdowns = kwargs.get("filters", self.make_filters())
-        self.actions = kwargs.get("actions", self.make_actions())
-
     def make_filters(self) -> list[types.Filter]:
         return []
 
     def make_actions(self) -> list[types.Filter]:
         return []
+
+    filters: list[types.Filter] = shared.configurable_attribute(
+        default_factory=make_filters,
+    )
+    actions: list[types.Filter] = shared.configurable_attribute(
+        default_factory=make_actions,
+    )

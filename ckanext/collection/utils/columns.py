@@ -4,11 +4,12 @@ from typing import Any
 
 from ckanext.collection import shared, types
 
+SENTINEL = object()
+
 
 class Columns(
-    types.BaseColumns[types.TDataCollection],
-    shared.AttachTrait[types.TDataCollection],
-    shared.AttrSettingsTrait,
+    types.BaseColumns,
+    shared.Domain[types.TDataCollection],
 ):
     """Collection of columns details for filtering/rendering.
 
@@ -19,26 +20,24 @@ class Columns(
       labels: UI labels for columns
     """
 
-    def __init__(
-        self,
-        collection: types.TDataCollection,
-        names: list[str] | None = None,
-        visible: set[str] | None = None,
-        hidden: set[str] | None = None,
-        sortable: set[str] | None = None,
-        filterable: set[str] | None = None,
-        labels: dict[str, str] | None = None,
-        **kwargs: Any,
-    ):
-        self._attach(collection)
-        self._gather_settings(kwargs)
-        self.names = names if names is not None else []
+    names: list[str] = shared.configurable_attribute(default_factory=lambda self: [])
+    hidden: set[str] = shared.configurable_attribute(default_factory=lambda self: set())
+    visible: set[str] = shared.configurable_attribute(SENTINEL)
+    sortable: set[str] = shared.configurable_attribute(SENTINEL)
+    filterable: set[str] = shared.configurable_attribute(SENTINEL)
+    labels: dict[str, str] = shared.configurable_attribute(SENTINEL)
 
-        self.visible = visible if visible is not None else set(self.names)
-        if hidden is not None:
-            self.visible = {c for c in self.visible if c not in hidden}
+    def __init__(self, obj: types.TDataCollection, **kwargs: Any):
+        super().__init__(obj, **kwargs)
 
-        self.sortable = sortable if sortable is not None else set(self.names)
-        self.filterable = filterable if filterable is not None else set(self.names)
+        if self.visible is SENTINEL:
+            self.visible = {c for c in self.names if c not in self.hidden}
 
-        self.labels = labels if labels is not None else {c: c for c in self.names}
+        if self.sortable is SENTINEL:
+            self.sortable = set(self.names)
+
+        if self.filterable is SENTINEL:
+            self.filterable = set(self.names)
+
+        if self.labels is SENTINEL:
+            self.labels = {c: c for c in self.names}

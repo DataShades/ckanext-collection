@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import abc
 import csv
 import io
 import json
@@ -15,12 +14,7 @@ import ckan.plugins.toolkit as tk
 from ckanext.collection import shared, types
 
 
-class Serializer(
-    types.BaseSerializer[types.TDataCollection],
-    shared.AttachTrait[types.TDataCollection],
-    shared.AttrSettingsTrait,
-    abc.ABC,
-):
+class Serializer(types.BaseSerializer, shared.Domain[types.TDataCollection]):
     """Abstract collection serializer.
 
     Its`stream` produces iterable of collection records in the format that has
@@ -38,10 +32,6 @@ class Serializer(
     >>>     return "\n---\n".join(self.stream())
 
     """
-
-    def __init__(self, col: types.TDataCollection, /, **kwargs: Any):
-        self._attach(col)
-        self._gather_settings(kwargs)
 
     def stream(self) -> Iterable[str] | Iterable[bytes]:
         """Iterate over fragments of the content."""

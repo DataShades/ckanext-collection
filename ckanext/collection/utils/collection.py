@@ -76,7 +76,7 @@ class Collection(types.BaseCollection):
     DataFactory: type[Data[Self]] = Data
     FiltersFactory: type[Filters[Self]] = Filters
     SerializerFactory: type[Serializer[Self]] = Serializer
-    PagerFactory = ClassicPager
+    PagerFactory: type[Pager[Self]] = ClassicPager
 
     def __init__(self, name: str, params: dict[str, Any], /, **kwargs: Any):
         """Use name to pick only relevant parameters.
