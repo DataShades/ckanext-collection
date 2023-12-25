@@ -12,9 +12,7 @@ from sqlalchemy.engine import Row
 
 import ckan.plugins.toolkit as tk
 
-from ckanext.collection import types
-
-from . import shared
+from ckanext.collection import shared, types
 
 
 class Serializer(

@@ -7,7 +7,7 @@ from faker import Faker
 
 import ckan.plugins.toolkit as tk
 
-from ckanext.collection.utils import shared
+from ckanext.collection import shared
 
 
 class AttachExample(shared.AttachTrait[Any]):

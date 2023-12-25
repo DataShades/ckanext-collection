@@ -5,15 +5,13 @@ from typing import Any
 
 import ckan.plugins.toolkit as tk
 
-from ckanext.collection import types
-
-from .shared import AttachTrait, AttrSettingsTrait
+from ckanext.collection import shared, types
 
 
 class Pager(
     types.BasePager[types.TDataCollection],
-    AttachTrait[types.TDataCollection],
-    AttrSettingsTrait,
+    shared.AttachTrait[types.TDataCollection],
+    shared.AttrSettingsTrait,
     abc.ABC,
 ):
     """Pagination logic for collections.

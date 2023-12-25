@@ -2,15 +2,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from ckanext.collection import types
-
-from .shared import AttachTrait, AttrSettingsTrait
+from ckanext.collection import shared, types
 
 
 class Columns(
     types.BaseColumns[types.TDataCollection],
-    AttachTrait[types.TDataCollection],
-    AttrSettingsTrait,
+    shared.AttachTrait[types.TDataCollection],
+    shared.AttrSettingsTrait,
 ):
     """Collection of columns details for filtering/rendering.
 

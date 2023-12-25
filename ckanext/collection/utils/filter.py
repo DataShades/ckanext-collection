@@ -2,15 +2,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from ckanext.collection import types
-
-from .shared import AttachTrait, AttrSettingsTrait
+from ckanext.collection import shared, types
 
 
 class Filters(
     types.BaseFilters[types.TDataCollection],
-    AttachTrait[types.TDataCollection],
-    AttrSettingsTrait,
+    shared.AttachTrait[types.TDataCollection],
+    shared.AttrSettingsTrait,
 ):
     """Information about UI filters.
 

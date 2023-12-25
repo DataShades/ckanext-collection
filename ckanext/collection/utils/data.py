@@ -12,9 +12,7 @@ import ckan.plugins.toolkit as tk
 from ckan import model
 from ckan.types import Context
 
-from ckanext.collection import types
-
-from . import shared
+from ckanext.collection import shared, types
 
 log = logging.getLogger(__name__)
 
