@@ -32,8 +32,8 @@ class Columns(
         labels: dict[str, str] | None = None,
         **kwargs: Any,
     ):
-        self.attach(collection)
-        self.gather_settings(kwargs)
+        self._attach(collection)
+        self._gather_settings(kwargs)
         self.names = names if names is not None else []
 
         self.visible = visible if visible is not None else set(self.names)

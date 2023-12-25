@@ -14,28 +14,49 @@ import ckan.plugins.toolkit as tk
 
 from ckanext.collection import types
 
-from .shared import AttachTrait, AttrSettingsTrait
+from . import shared
 
 
 class Serializer(
     types.BaseSerializer[types.TDataCollection],
-    AttachTrait[types.TDataCollection],
-    AttrSettingsTrait,
+    shared.AttachTrait[types.TDataCollection],
+    shared.AttrSettingsTrait,
     abc.ABC,
 ):
-    def __init__(self, col: types.TDataCollection, /, **kwargs: Any):
-        self.attach(col)
-        self.gather_settings(kwargs)
+    """Abstract collection serializer.
 
-    @abc.abstractmethod
+    Its`stream` produces iterable of collection records in the format that has
+    sense for the serializer. Example:
+
+    >>> def stream(self):
+    >>>     for record in self.attached.data:
+    >>>         yield yaml.dump(record)
+
+    By default, all chunks are combined into single dump via `render` method,
+    which combines fragments using addition operator. If this strategy doesn't
+    work, override `render`:
+
+    >>> def render(self):
+    >>>     return "\n---\n".join(self.stream())
+
+    """
+
+    def __init__(self, col: types.TDataCollection, /, **kwargs: Any):
+        self._attach(col)
+        self._gather_settings(kwargs)
+
     def stream(self) -> Iterable[str] | Iterable[bytes]:
-        return []
+        """Iterate over fragments of the content."""
+        return ""
 
     def render(self) -> str | bytes:
+        """Combine content fragments into a single dump."""
         return reduce(operator.add, self.stream())
 
 
 class CsvSerializer(Serializer[types.TDataCollection]):
+    """Serialize collection into CSV document."""
+
     def get_writer(self, buff: io.StringIO):
         return csv.DictWriter(
             buff,
@@ -46,14 +67,13 @@ class CsvSerializer(Serializer[types.TDataCollection]):
     def get_fieldnames(self) -> list[str]:
         return [
             name
-            for name in self._collection.columns.names
-            if name in self._collection.columns.visible
+            for name in self.attached.columns.names
+            if name in self.attached.columns.visible
         ]
 
     def get_header_row(self, writer: csv.DictWriter[str]) -> dict[str, str]:
         return {
-            col: self._collection.columns.labels.get(col, col)
-            for col in writer.fieldnames
+            col: self.attached.columns.labels.get(col, col) for col in writer.fieldnames
         }
 
     def prepare_row(self, row: Any, writer: csv.DictWriter[str]) -> dict[str, Any]:
@@ -71,7 +91,7 @@ class CsvSerializer(Serializer[types.TDataCollection]):
         buff.seek(0)
         buff.truncate()
 
-        for row in self._collection.data:
+        for row in self.attached.data:
             writer.writerow(self.prepare_row(row, writer))
             yield buff.getvalue()
             buff.seek(0)
@@ -79,9 +99,11 @@ class CsvSerializer(Serializer[types.TDataCollection]):
 
 
 class JsonlSerializer(Serializer[types.TDataCollection]):
+    """Serialize collection into JSONL lines."""
+
     def stream(self) -> Iterable[str]:
         buff = io.StringIO()
-        for row in self._collection.data:
+        for row in self.attached.data:
             if isinstance(row, Row):
                 row = dict(zip(row.keys(), row))
 
@@ -93,42 +115,39 @@ class JsonlSerializer(Serializer[types.TDataCollection]):
 
 
 class JsonSerializer(Serializer[types.TDataCollection]):
+    """Serialize collection into single JSON document."""
+
     def stream(self):
         yield json.dumps(
-            dict(zip(row.keys(), row)) if isinstance(row, Row) else row
-            for row in self._collection.data
+            [
+                dict(zip(row.keys(), row)) if isinstance(row, Row) else row
+                for row in self.attached.data
+            ],
         )
 
 
 class ChartJsSerializer(Serializer[types.TDataCollection]):
-    label_column: str
-    dataset_columns: list[str]
-    dataset_labels: dict[str, str]
+    """Serialize collection into data source for ChartJS module of
+    ckanext-charts.
 
-    prefix: str = "interactive-table"
+    """
 
-    @property
-    def form_id(self):
-        return f"{self.prefix}-form--{self._collection.name}"
-
-    @property
-    def table_id(self):
-        return f"{self.prefix}-id--{self._collection.name}"
-
-    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
-        super().__init__(obj, **kwargs)
-        self.label_column = kwargs.get("label_column", "")
-
-        self.dataset_labels = kwargs.get("dataset_labels", {})
-
-        self.dataset_columns = kwargs.get("dataset_columns", [])
-        self.colors = kwargs.get("colors", {})
+    label_column: str = shared.configurable_attribute("")
+    dataset_columns: list[str] = shared.configurable_attribute(
+        default_factory=lambda self: [],
+    )
+    dataset_labels: dict[str, str] = shared.configurable_attribute(
+        default_factory=lambda self: {},
+    )
+    colors: dict[str, str] = shared.configurable_attribute(
+        default_factory=lambda self: {},
+    )
 
     def stream(self):
         labels = []
         data: list[list[int]] = []
 
-        for item in self._collection.data:
+        for item in self.attached.data:
             if isinstance(item, Row):
                 item = dict(zip(item.keys(), item))
 
@@ -152,17 +171,13 @@ class ChartJsSerializer(Serializer[types.TDataCollection]):
 
 
 class HtmlSerializer(Serializer[types.TDataCollection]):
-    template: str
+    """Serialize collection into HTML document."""
 
-    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
-        super().__init__(obj, **kwargs)
-
-        if "template" in kwargs:
-            self.template = kwargs["template"]
+    template: str = shared.configurable_attribute("collection/snippets/dump.html")
 
     def get_data(self) -> dict[str, Any]:
         return {
-            "collection": self._collection,
+            "collection": self.attached,
         }
 
     def stream(self):
@@ -173,27 +188,17 @@ class HtmlSerializer(Serializer[types.TDataCollection]):
 
 
 class TableSerializer(HtmlSerializer[types.TDataCollection]):
-    template: str = "collection/snippets/table.html"
-    row_snippet: str = "collection/snippets/row.html"
-    prefix: str = "collection-table"
+    """Serialize collection into HTML table."""
 
-    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
-        kwargs.setdefault("template", self.template)
-        super().__init__(obj, **kwargs)
-
-        if "row_snippet" in kwargs:
-            self.row_snippet = kwargs["row_snippet"]
-
-    @property
-    def form_id(self):
-        return f"{self.prefix}-form--{self._collection.name}"
-
-    @property
-    def table_id(self):
-        return f"{self.prefix}-id--{self._collection.name}"
+    templatel: str = shared.configurable_attribute("collection/snippets/table.html")
+    row_snippet: str = shared.configurable_attribute("collection/snippets/row.html")
 
     def get_data(self) -> dict[str, Any]:
-        return {
-            "table": self._collection,
-            "row_snippet": self.row_snippet,
-        }
+        data = super().get_data()
+        data.update(
+            {
+                "table": self.attached,
+                "row_snippet": self.row_snippet,
+            },
+        )
+        return data

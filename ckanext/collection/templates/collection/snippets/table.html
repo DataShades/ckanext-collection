@@ -1,4 +1,4 @@
-<table id="{{ table.serializer.table_id }}" class="collection-table">
+<table id="collection--{{ table.name }}--table" class="collection-table">
     <tr class="collection-table--row collection-table--header">
         {% for col in table.columns.names if col in table.columns.visible %}
 

@@ -20,8 +20,8 @@ class Filters(
     """
 
     def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
-        self.attach(obj)
-        self.gather_settings(kwargs)
+        self._attach(obj)
+        self._gather_settings(kwargs)
 
         self.dropdowns = kwargs.get("filters", self.make_filters())
         self.actions = kwargs.get("actions", self.make_actions())

@@ -1,19 +1,45 @@
+"""Logic used across collection utilities.
+
+"""
 from __future__ import annotations
 
 import abc
-from typing import Any, Callable, Generic
+import dataclasses
+import inspect
+from typing import Any, Callable, Generic, TypeVar, cast
 
-from typing_extensions import Self
+import ckan.plugins.toolkit as tk
 
 from ckanext.collection.types import TDataCollection
 
+T = TypeVar("T")
+_sentinel = object()
+
 
 class AttachTrait(abc.ABC, Generic[TDataCollection]):
-    """Attach collection to the current object"""
+    """Attach collection to the current object.
+
+    `_attach` method must be called as early as possible in the constructor of
+    the derived class. It makes collection available inside an instance via
+    `attached` property. Because initialization of collection utilities often
+    relies on collection details, you should call `_attach` before any other
+    logic.
+
+    Example:
+
+    >>> class Impl(AttachTrait):
+    >>>     def __init__(self, collection):
+    >>>         self._attach(collection)
+    >>>
+    >>> collection = object()
+    >>> obj = Impl(collection)
+    >>> assert obj.attached is collection
+
+    """
 
     __collection: TDataCollection
 
-    def attach(self, obj: TDataCollection):
+    def _attach(self, obj: TDataCollection):
         self.__collection = obj
 
     @property
@@ -21,13 +47,125 @@ class AttachTrait(abc.ABC, Generic[TDataCollection]):
         return self.__collection
 
 
-class AttrSettingsTrait(abc.ABC):
-    _attr_settings: dict[str, Callable[[Self], Any] | None] = {}
+class AttrSettingsTrait:
+    """Get attribute value from settings for the current utility object.
 
-    def gather_settings(self, kwargs: dict[str, Any]):
-        for k, default_factory in self._attr_settings.items():
+    To mark an attribute as configurable, declare it using
+    `configurable_attribute` function:
+
+    >>> class Impl(AttrSettingsTrait):
+    >>>     attr = configurable_attribute("default value")
+
+    To initialize attributes, call `_gather_settings` with dictionary
+    containing attribute values. If attribute is available in the dictionary,
+    dictionary value moved into attribute:
+
+    >>> obj = Impl()
+    >>> obj._gather_settings({"attr": "custom value"})
+    >>> assert obj.attr == "custom value"
+
+    If dictionary doesn't have a member named after the attribute, default
+    value/factory is used to initialize the attribute
+
+    >>> obj = Impl()
+    >>> obj._gather_settings({})
+    >>> assert obj.attr == "default value"
+
+    `_gather_settings` can be called multiple times to reset/modify
+    settings. Keep in mind, that every call processes all the configurable
+    attributes of the instance. For example, if instance has `a` and `b`
+    configurable attributes and you call `_gather_settings` with `{"a": 1}`
+    first, and then with `{"b": 2}`, value of `a` will be removed and replaced
+    by the default:
+
+    >>> class Impl(AttrSettingsTrait):
+    >>>     a = configurable_attribute(None)
+    >>>     b = configurable_attribute(None)
+    >>>
+    >>> obj = Impl()
+    >>> obj._gather_settings({"a": 1})
+    >>> assert obj.a == 1
+    >>> assert obj.b is None
+    >>>
+    >>> obj._gather_settings({"b": 2})
+    >>> assert obj.a == None
+    >>> assert obj.b is 2
+    >>>
+    >>> obj._gather_settings({"b": 2, "a": 1})
+    >>> assert obj.a == 1
+    >>> assert obj.b == 2
+    >>>
+    >>> obj._gather_settings({})
+    >>> assert obj.a is None
+    >>> assert obj.b is None
+
+    The best place to gather settings, early in the constructor, right after
+    `_attach`. Example:
+
+    >>> class Impl(AttachTrait, AttrSettingsTrait):
+    >>>     a = configurable_attribute(None)
+    >>>     b = configurable_attribute(None)
+    >>>
+    >>>     def __init__(self, collection, **kwargs):
+    >>>         self._attach(collection)
+    >>>         self._gather_settings(kwargs)
+
+    """
+
+    def _gather_settings(self, kwargs: dict[str, Any]):
+        for k, attr in inspect.getmembers(
+            type(self),
+            lambda attr: isinstance(attr, _InitAttr),
+        ):
             if k in kwargs:
                 setattr(self, k, kwargs.pop(k))
 
-            elif default_factory:
-                setattr(self, k, default_factory(self))
+            else:
+                setattr(self, k, attr.get_default(self))
+
+
+@dataclasses.dataclass
+class _InitAttr:
+    default: Any = _sentinel
+    default_factory: Callable[[Any], Any] = cast(Any, _sentinel)
+
+    def __post_init__(self):
+        if self.default is not self.default_factory:
+            return
+
+        msg = "Either `default` or `default_factory` must be provided"
+        raise ValueError(msg)
+
+    def get_default(self, obj: Any):
+        if self.default is _sentinel:
+            return self.default_factory(obj)
+
+        return self.default
+
+
+def configurable_attribute(
+    default: T | object = _sentinel,
+    default_factory: Callable[[Any], T] | object = _sentinel,
+) -> T:
+    """Declare configurable attribute.
+
+    Example:
+
+    >>> class DataFactory(Data):
+    >>>     private = configurable_attribute(False)
+    >>>
+    >>> data = DataFactory(None, private=True)
+    >>> assert data.private
+    """
+    return cast(T, _InitAttr(default, cast(Any, default_factory)))
+
+
+class UserTrait(AttrSettingsTrait):
+    """Add configurable `user` attribute, with default set to
+    `current_user.name`.
+
+    """
+
+    user = configurable_attribute(
+        default_factory=lambda str: tk.current_user.name if tk.current_user else "",
+    )

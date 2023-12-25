@@ -5,12 +5,10 @@ from typing import Any, Generic, Iterable, Sized, TypedDict, TypeVar
 
 from typing_extensions import Self
 
-from ckanext.collection import types
-
 TDataCollection = TypeVar("TDataCollection", bound="BaseCollection")
 
 
-class BaseColumns(abc.ABC, Generic[types.TDataCollection]):
+class BaseColumns(abc.ABC, Generic[TDataCollection]):
     """Declaration of columns properties"""
 
     names: list[str]
@@ -20,14 +18,14 @@ class BaseColumns(abc.ABC, Generic[types.TDataCollection]):
     labels: dict[str, str]
 
 
-class BaseData(abc.ABC, Generic[types.TDataCollection], Sized, Iterable[Any]):
+class BaseData(abc.ABC, Generic[TDataCollection], Sized, Iterable[Any]):
     """Declaration of data properties."""
 
     total: int
     data: Iterable[Any]
 
 
-class BasePager(abc.ABC, Generic[types.TDataCollection]):
+class BasePager(abc.ABC, Generic[TDataCollection]):
     """Declaration of pager properties"""
 
     params: dict[str, Any]
@@ -36,8 +34,16 @@ class BasePager(abc.ABC, Generic[types.TDataCollection]):
     size: Any
 
 
-class BaseSerializer(abc.ABC, Generic[types.TDataCollection]):
-    pass
+class BaseSerializer(abc.ABC, Generic[TDataCollection]):
+    @abc.abstractmethod
+    def stream(self) -> Iterable[str] | Iterable[bytes]:
+        """Iterate over fragments of the content."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def render(self) -> str | bytes:
+        """Combine content fragments into a single dump."""
+        raise NotImplementedError
 
 
 class BaseCollection(abc.ABC):
@@ -53,7 +59,7 @@ class BaseCollection(abc.ABC):
     serializer: BaseSerializer[Self]
 
 
-class BaseFilters(abc.ABC, Generic[types.TDataCollection]):
+class BaseFilters(abc.ABC, Generic[TDataCollection]):
     """Declaration of filters properties."""
 
     filters: list[Filter]
@@ -61,7 +67,7 @@ class BaseFilters(abc.ABC, Generic[types.TDataCollection]):
 
 
 class Filter(TypedDict):
-    """Dropdown filter."""
+    """Filter details."""
 
     name: str
     options: dict[str, Any]

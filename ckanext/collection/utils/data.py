@@ -14,15 +14,15 @@ from ckan.types import Context
 
 from ckanext.collection import types
 
-from .shared import AttachTrait, AttrSettingsTrait
+from . import shared
 
 log = logging.getLogger(__name__)
 
 
 class Data(
     types.BaseData[types.TDataCollection],
-    AttachTrait[types.TDataCollection],
-    AttrSettingsTrait,
+    shared.AttachTrait[types.TDataCollection],
+    shared.AttrSettingsTrait,
 ):
     """Data source for collection.
 
@@ -34,8 +34,8 @@ class Data(
     """
 
     def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
-        self.attach(obj)
-        self.gather_settings(kwargs)
+        self._attach(obj)
+        self._gather_settings(kwargs)
 
         data = self.get_initial_data()
 
@@ -64,10 +64,7 @@ class Data(
         this method and extract fields in `compute_total`/`slice_data`.
 
         """
-        return [
-            {"field": "hello", "value": "Hello"},
-            {"field": "world", "value": "World"},
-        ]
+        return []
 
     def compute_total(self, data: Any) -> int:
         """Return total number of records."""
@@ -76,6 +73,13 @@ class Data(
     def slice_data(self, data: Any):
         """Return data slice according to pager settings."""
         return data
+
+
+class StaticData(Data[types.TDataCollection]):
+    data = shared.configurable_attribute(default_factory=lambda self: [])
+
+    def get_initial_data(self) -> Any:
+        return self.data
 
 
 class ModelData(Data[types.TDataCollection]):
@@ -162,7 +166,7 @@ class ModelData(Data[types.TDataCollection]):
         return stmt
 
     def statement_with_sorting(self, stmt: Select):
-        sort = self._collection.params.get("sort")
+        sort = self.attached.params.get("sort")
         if not sort:
             return stmt
 
@@ -177,7 +181,7 @@ class ModelData(Data[types.TDataCollection]):
             if direction.lower() == "desc":
                 desc = True
 
-        if sort not in self._collection.columns.sortable:
+        if sort not in self.attached.columns.sortable:
             log.warning("Unexpected sort value: %s", sort)
             return stmt
 
@@ -187,8 +191,8 @@ class ModelData(Data[types.TDataCollection]):
         return stmt.order_by(sa.text(sort))
 
     def statement_with_limits(self, stmt: Select):
-        limit = self._collection.pager.size
-        offset = self._collection.pager.start
+        limit = self.attached.pager.size
+        offset = self.attached.pager.start
 
         return stmt.limit(limit).offset(offset)
 
@@ -246,15 +250,15 @@ class ApiData(Data[types.TDataCollection]):
 
     def get_offsets(self) -> dict[str, Any]:
         return {
-            "start": self._collection.pager.start,
-            "rows": self._collection.pager.size,
+            "start": self.attached.pager.start,
+            "rows": self.attached.pager.size,
         }
 
     def get_filters(self) -> dict[str, str]:
         return {}
 
     def get_sort(self) -> dict[str, str]:
-        sort = self._collection.params.get("sort")
+        sort = self.attached.params.get("sort")
         if not sort:
             return {}
 
@@ -263,7 +267,7 @@ class ApiData(Data[types.TDataCollection]):
             sort = sort[1:]
             direction = "desc"
 
-        if sort not in self._collection.columns.sortable:
+        if sort not in self.attached.columns.sortable:
             log.warning("Unexpected sort value: %s", sort)
             return {}
 
