@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import abc
-from typing import Any, Iterable, Sized, TypedDict, TypeVar
+from typing import Any, Iterable, Sized, TypedDict
+
+from typing_extensions import TypeVar
 
 TDataCollection = TypeVar("TDataCollection", bound="BaseCollection")
 

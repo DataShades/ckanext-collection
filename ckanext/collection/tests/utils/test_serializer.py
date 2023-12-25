@@ -20,7 +20,7 @@ def collection():
         "",
         {},
         data_settings={
-            "data": [
+            "initial_data": [
                 {"name": "a", "age": 1},
                 {"name": "b", "age": 2},
             ],

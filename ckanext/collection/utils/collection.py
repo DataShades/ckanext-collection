@@ -8,7 +8,7 @@ from ckanext.collection import types
 
 from .columns import Columns
 from .data import ApiData, Data, ModelData
-from .filter import Filters
+from .filters import Filters
 from .pager import ClassicPager, Pager
 from .serialize import Serializer
 

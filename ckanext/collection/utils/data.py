@@ -32,7 +32,15 @@ class Data(
 
     def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         super().__init__(obj, **kwargs)
+        self.refresh_data()
 
+    def refresh_data(self):
+        """Pull and slice data, updating `total`.
+
+        This operation is similar to creating a new data object with the same
+        settings.
+
+        """
         data = self.get_initial_data()
 
         self.total = self.compute_total(data)
@@ -68,14 +76,14 @@ class Data(
 
     def slice_data(self, data: Any):
         """Return data slice according to pager settings."""
-        return data
+        return data[self.attached.pager.start : self.attached.pager.end]
 
 
 class StaticData(Data[types.TDataCollection]):
-    data = shared.configurable_attribute(default_factory=lambda self: [])
+    initial_data = shared.configurable_attribute(default_factory=lambda self: [])
 
     def get_initial_data(self) -> Any:
-        return self.data
+        return self.initial_data
 
 
 class ModelData(Data[types.TDataCollection]):
