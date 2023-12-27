@@ -95,7 +95,6 @@ class Collection(types.BaseCollection):
                 if k.startswith(f"{self.name}:")
             }
         self.params = params
-        kwargs.setdefault("pager_settings", {"params": params})
 
         self.columns = self._instantiate("columns", kwargs)
         self.pager = self._instantiate("pager", kwargs)

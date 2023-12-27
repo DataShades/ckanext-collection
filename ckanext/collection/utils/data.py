@@ -96,27 +96,87 @@ class ModelData(Data[types.TDataCollection]):
     """
 
     model: Any = shared.configurable_attribute(None)
-    extras: dict[str, Any] = shared.configurable_attribute(
+    is_scalar: bool = shared.configurable_attribute(False)
+    static_columns: list[sa.Column[Any]] = shared.configurable_attribute(
+        default_factory=lambda self: [],
+    )
+    static_filters: list[Any] = shared.configurable_attribute(
+        default_factory=lambda self: [],
+    )
+    static_sources: dict[str, Any] = shared.configurable_attribute(
         default_factory=lambda self: {},
     )
+    static_joins: list[tuple[str, Any, bool]] = shared.configurable_attribute(
+        default_factory=lambda self: [],
+    )
 
-    is_scalar: bool = False
+    def get_initial_data(self):
+        """@inherit"""
+        stmt = self.get_base_statement()
+        stmt = self.alter_statement(stmt)
+        stmt = self.statement_with_filters(stmt)
+        return self.statement_with_sorting(stmt)
+
+    def compute_total(self, data: Select) -> int:
+        """@inherit"""
+        return self.count_statement(data)
+
+    def slice_data(self, data: Select) -> Iterable[Any]:
+        """@inherit"""
+        stmt = self.statement_with_limits(data)
+
+        if self.is_scalar:
+            return model.Session.scalars(stmt).all()
+
+        return model.Session.execute(stmt).all()
 
     def select_columns(self) -> Iterable[Any]:
         """Return list of columns for select statement."""
-        mapper = cast(Mapper, sa.inspect(self.model))
-        return mapper.columns if self.model else []
+        if self.static_columns:
+            return self.static_columns
 
-    @cached_property
-    def extra_sources(self) -> dict[str, Any]:
+        if not self.model:
+            return []
+
+        mapper = cast(Mapper, sa.inspect(self.model))
+        return [self.model] if self.is_scalar else [mapper.columns]
+
+    def get_extra_sources(self) -> dict[str, Any]:
         """Return mapping of additional models/subqueries used to build the
         statement.
 
-        Result is cached after first invocation because sources must not change
-        during query building process.
+        Note: Don't call this method direclty. Instead, use `extra_sources`
+        property, that caches return value of the current method. Extra sources
+        must not change during query building process.
+
+        Extra sources are used when the query contains subqueries or joins with
+        aliased models. For example, in order to select column from joined
+        subquery, instead of creating identical subqueries inside
+        `select_columns` and `get_joins`, write the following code:
+
+        >>> def get_extra_sources(self):
+        >>>     return {"subq": make_subquery()}
+        >>>
+        >>> def select_columns(self):
+        >>>     return [self.extra_sources["subq"].c.column_name]
+        >>>
+        >>> def get_joins(self):
+        >>>     subq = self.extra_sources["subq"]
+        >>>     return [("subq", subq.c.id == self.model.id, False)]
 
         """
-        return {}
+        return self.static_sources
+
+    @cached_property
+    def extra_sources(self) -> dict[str, Any]:
+        """Cache for extra sources.
+
+        If you are going to override this property, don't forget to add
+        `cached_property` decorator. The better option would be to override
+        `get_extra_sources`. In this way you will not be affected if cache
+        implementation changes in future.
+        """
+        return self.get_extra_sources()
 
     def get_joins(self) -> Iterable[tuple[str, Any, bool]]:
         """Return join details for extra_sources.
@@ -124,7 +184,7 @@ class ModelData(Data[types.TDataCollection]):
         Every item is a tuple of of (extra_source_name, join_condition,
         outerjoin_flag)
         """
-        return []
+        return self.static_joins
 
     def apply_joins(self, stmt: Select) -> Select:
         """Return list of columns for select statement."""
@@ -159,9 +219,14 @@ class ModelData(Data[types.TDataCollection]):
         )
 
     def statement_with_filters(self, stmt: Select):
+        """Add normal filter to statement."""
+        for cond in self.static_filters:
+            stmt = stmt.where(cond)
+
         return stmt
 
     def statement_with_sorting(self, stmt: Select):
+        """Specify sorting order for statement."""
         sort = self.attached.params.get("sort")
         if not sort:
             return stmt
@@ -177,7 +242,7 @@ class ModelData(Data[types.TDataCollection]):
             if direction.lower() == "desc":
                 desc = True
 
-        if sort not in self.attached.columns.sortable:
+        if sort not in self.attached.columns.sortable and sort not in stmt.columns:
             log.warning("Unexpected sort value: %s", sort)
             return stmt
 
@@ -191,23 +256,6 @@ class ModelData(Data[types.TDataCollection]):
         offset = self.attached.pager.start
 
         return stmt.limit(limit).offset(offset)
-
-    def get_initial_data(self):
-        stmt = self.get_base_statement()
-        stmt = self.alter_statement(stmt)
-        stmt = self.statement_with_filters(stmt)
-        return self.statement_with_sorting(stmt)
-
-    def compute_total(self, data: Select) -> int:
-        return self.count_statement(data)
-
-    def slice_data(self, data: Select) -> Iterable[Any]:
-        stmt = self.statement_with_limits(data)
-
-        if self.is_scalar:
-            return model.Session.scalars(stmt).all()
-
-        return model.Session.execute(stmt).all()
 
 
 class ApiData(Data[types.TDataCollection]):

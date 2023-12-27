@@ -20,11 +20,6 @@ class TestClassicPager:
         assert obj.page == 5
         assert obj.size == 101
 
-    def test_params_has_higher_proirity_than_settings(self, collection: Collection):
-        obj = pager.ClassicPager(collection, params={"page": 2, "rows_per_page": 5})
-        assert obj.page == 2
-        assert obj.size == 5
-
     @pytest.mark.parametrize(
         ("page", "size", "start", "end"),
         [
@@ -43,7 +38,8 @@ class TestClassicPager:
     ):
         obj = pager.ClassicPager(
             collection,
-            params={"page": page, "rows_per_page": size},
+            page=page,
+            rows_per_page=size,
         )
         assert obj.size == size
         assert obj.start == start

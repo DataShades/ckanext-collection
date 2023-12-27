@@ -15,10 +15,6 @@ class Pager(types.BasePager, shared.Domain[types.TDataCollection]):
 
     """
 
-    params: dict[str, Any] = shared.configurable_attribute(
-        default_factory=lambda self: {},
-    )
-
 
 class ClassicPager(Pager[types.TDataCollection]):
     """Limit/offset based pagination.
@@ -34,9 +30,9 @@ class ClassicPager(Pager[types.TDataCollection]):
     def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         """Use `page` and `rows_per_page` parameters."""
         super().__init__(obj, **kwargs)
-        self.page = tk.h.get_page_number(self.params, "page", self.page)
+        self.page = tk.h.get_page_number(self.attached.params, "page", self.page)
         self.rows_per_page = tk.h.get_page_number(
-            self.params,
+            self.attached.params,
             "rows_per_page",
             self.rows_per_page,
         )
