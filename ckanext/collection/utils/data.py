@@ -231,21 +231,13 @@ class ModelData(Data[types.TDataCollection]):
         if not sort:
             return stmt
 
-        desc = False
-        if sort.startswith("-"):
-            sort = sort[1:]
-            desc = True
+        column, desc = shared.parse_sort(sort)
 
-        elif len(parts := sort.split()) == 2:
-            sort, direction = parts
-
-            if direction.lower() == "desc":
-                desc = True
-
-        if sort not in self.attached.columns.sortable and sort not in stmt.columns:
-            log.warning("Unexpected sort value: %s", sort)
+        if column not in self.attached.columns.sortable and column not in stmt.columns:
+            log.warning("Unexpected sort value: %s", column)
             return stmt
 
+        sort = column
         if desc:
             sort = f"{sort} DESC"
 
@@ -258,7 +250,7 @@ class ModelData(Data[types.TDataCollection]):
         return stmt.limit(limit).offset(offset)
 
 
-class ApiData(Data[types.TDataCollection]):
+class ApiData(Data[types.TDataCollection], shared.UserTrait):
     """API data source.
 
     This base class is suitable for building API calls.
@@ -271,13 +263,26 @@ class ApiData(Data[types.TDataCollection]):
     payload: dict[str, Any] = shared.configurable_attribute(
         default_factory=lambda self: {},
     )
+    ignore_auth: bool = shared.configurable_attribute(False)
 
     def make_context(self):
-        return Context()
+        return Context(user=self.user, ignore_auth=self.ignore_auth)
 
-    def make_payload(self) -> dict[str, Any]:
+    def prepare_payload(self) -> dict[str, Any]:
+        return dict(self.payload)
+
+    def get_initial_data(self):
+        action = tk.get_action(self.action)
+        return action(self.make_context(), self.prepare_payload())
+
+
+class ApiSearchData(ApiData[types.TDataCollection]):
+    """API data source optimized for package_search-like actions."""
+
+    def prepare_payload(self) -> dict[str, Any]:
+        payload = super().prepare_payload()
         return dict(
-            self.payload or {},
+            payload,
             **self.get_filters(),
             **self.get_offsets(),
             **self.get_sort(),
@@ -297,23 +302,31 @@ class ApiData(Data[types.TDataCollection]):
         if not sort:
             return {}
 
-        direction = "asc"
-        if sort.startswith("-"):
-            sort = sort[1:]
-            direction = "desc"
+        column, desc = shared.parse_sort(sort)
 
-        if sort not in self.attached.columns.sortable:
+        if column not in self.attached.columns.sortable:
             log.warning("Unexpected sort value: %s", sort)
             return {}
 
-        return {"sort": f"{sort} {direction}"}
-
-    def get_initial_data(self):
-        action = tk.get_action(self.action)
-        return action(self.make_context(), self.make_payload())
+        direction = "desc" if desc else "asc"
+        return {"sort": f"{column} {direction}"}
 
     def compute_total(self, data: dict[str, Any]) -> int:
         return data["count"]
 
     def slice_data(self, data: dict[str, Any]):
         return data["results"]
+
+
+class ApiListData(ApiSearchData[types.TDataCollection]):
+    """API data source optimized for organization_list-like actions."""
+
+    def get_offsets(self) -> dict[str, Any]:
+        offsets = super().get_offsets()
+        return {"limit": offsets["rows"], "offset": offsets["start"]}
+
+    def compute_total(self, data: dict[str, Any]) -> int:
+        return len(data)
+
+    def slice_data(self, data: dict[str, Any]):
+        return data

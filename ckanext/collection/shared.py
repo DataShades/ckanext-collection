@@ -185,3 +185,24 @@ class Domain(AttachTrait[TDataCollection], AttrSettingsTrait):
     def __init__(self, obj: TDataCollection, /, **kwargs: Any):
         self._attach(obj)
         self._gather_settings(kwargs)
+
+
+def parse_sort(sort: str) -> tuple[str, bool]:
+    """Parse sort as column and sorting direction.
+
+    Turn `-name` and `name desc` into `(name, True)`. Everything else turns
+    into `(name, False)`.
+
+    """
+    desc = False
+    if sort.startswith("-"):
+        sort = sort[1:]
+        desc = True
+
+    elif len(parts := sort.split()) == 2:
+        sort, direction = parts
+
+        if direction.lower() == "desc":
+            desc = True
+
+    return sort, desc
