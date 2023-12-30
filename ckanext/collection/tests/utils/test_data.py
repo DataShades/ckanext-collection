@@ -12,54 +12,53 @@ from ckanext.collection.utils import Collection, data
 
 
 @pytest.fixture()
-def collection():
+def collection() -> Collection[Any]:
     return Collection("", {})
 
 
 class TestStaticData:
-    def test_settings(self, collection: Collection):
+    def test_settings(self, collection: Collection[Any]):
         dump = [{"a": 1}, {"a": 2}]
-        obj = data.StaticData(collection, initial_data=dump)
+        obj = data.StaticData[Any, Collection[Any]](collection, data=dump)
 
-        assert obj.data == dump
         assert list(obj) == dump
         assert len(obj) == len(dump)
-        assert obj.total == len(dump)
 
     def test_pagination(self):
         dump = [{"a": 1}, {"a": 2}]
 
-        collection = Collection(
+        collection = Collection[Any](
             "",
             {"page": 2, "rows_per_page": 1},
-            data_settings={"initial_data": dump},
+            data_settings={"data": dump},
             data_factory=data.StaticData,
         )
 
-        assert list(collection.data) == [dump[1]]
-        assert len(collection.data) == 1
-        assert collection.data.total == 2
+        assert list(collection) == [dump[1]]
+        assert len(collection.data) == 2
 
 
 @pytest.mark.usefixtures("clean_db")
 class TestModelData:
-    def test_empty_result(self, collection: Collection):
+    def test_empty_result(self, collection: Collection[Any]):
         obj = data.ModelData(collection, model=model.Package)
         assert obj.total == 0
 
-    def test_non_empty_result(self, package_factory: Any, collection: Collection):
+    def test_non_empty_result(self, package_factory: Any, collection: Collection[Any]):
         package_factory.create_batch(3)
         obj = data.ModelData(collection, model=model.Package)
         assert isinstance(list(obj)[0], Row)
+        assert obj.total == 3
+        assert len(list(obj)) == 3
 
-    def test_scalar(self, package: Any, collection: Collection):
+    def test_scalar(self, package: Any, collection: Collection[Any]):
         obj = data.ModelData(collection, model=model.Package)
         assert isinstance(list(obj)[0], Row)
 
         obj = data.ModelData(collection, model=model.Package, is_scalar=True)
         assert isinstance(list(obj)[0], model.Package)
 
-    def test_columns(self, package: Any, collection: Collection):
+    def test_columns(self, package: Any, collection: Collection[Any]):
         obj = data.ModelData(collection, model=model.Package)
         row = next(iter(obj))
         assert hasattr(row, "id")
@@ -74,7 +73,7 @@ class TestModelData:
         assert hasattr(row, "id")
         assert not hasattr(row, "name")
 
-    def test_joins(self, package_factory: Any, collection: Collection):
+    def test_joins(self, package_factory: Any, collection: Collection[Any]):
         parent = package_factory()
         child = package_factory(notes=parent["id"])
 
@@ -93,7 +92,7 @@ class TestModelData:
         assert row.parent == parent["name"]
         assert row.child == child["name"]
 
-    def test_filters(self, package_factory: Any, collection: Collection):
+    def test_filters(self, package_factory: Any, collection: Collection[Any]):
         pkg = package_factory(notes="x")
         package_factory(notes="y")
 
@@ -139,17 +138,15 @@ class TestModelData:
             "",
             {"sort": "id"},
             pager_settings={"page": 2, "rows_per_page": 1},
-        )
-        obj = data.ModelData(
-            collection,
-            model=model.Package,
-            is_scalar=True,
-            static_columns=[model.Package.id],
+            data_factory=data.ModelData,
+            data_settings={
+                "model": model.Package,
+                "is_scalar": True,
+                "static_columns": [model.Package.id],
+            },
         )
 
-        assert obj.total == 3
-        assert len(obj) == 1
-        assert next(iter(obj)) == ids[1]
+        assert list(collection) == [ids[1]]
 
 
 @pytest.mark.usefixtures("clean_db", "clean_index")

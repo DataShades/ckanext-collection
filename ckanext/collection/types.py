@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import abc
-from typing import Any, Iterable, Sized, TypedDict
+from collections.abc import Sized
+from typing import Any, Iterable, TypedDict
 
 from typing_extensions import TypeVar
 
-TDataCollection = TypeVar("TDataCollection", bound="BaseCollection")
+TDataCollection = TypeVar("TDataCollection", bound="BaseCollection[Any]")
+TData = TypeVar("TData")
 
 
 class BaseColumns(abc.ABC):
@@ -18,11 +20,16 @@ class BaseColumns(abc.ABC):
     labels: dict[str, str]
 
 
-class BaseData(abc.ABC, Sized, Iterable[Any]):
+class BaseData(abc.ABC, Sized, Iterable[TData]):
     """Declaration of data properties."""
 
-    total: int
-    data: Iterable[Any]
+    @abc.abstractproperty
+    def total(self) -> int:
+        ...
+
+    @abc.abstractmethod
+    def range(self, start: Any, end: Any) -> Iterable[TData]:
+        ...
 
 
 class BasePager(abc.ABC):
@@ -73,14 +80,14 @@ class BaseSerializer(abc.ABC):
         ...
 
 
-class BaseCollection(abc.ABC):
+class BaseCollection(abc.ABC, Iterable[TData]):
     """Declaration of collection properties."""
 
     name: str
     params: dict[str, Any]
 
     columns: BaseColumns
-    data: BaseData
+    data: BaseData[TData]
     filters: BaseFilters
     pager: BasePager
     serializer: BaseSerializer

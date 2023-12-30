@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Iterator
 
 from typing_extensions import Self
 
@@ -13,7 +13,7 @@ from .pager import ClassicPager, Pager
 from .serialize import Serializer
 
 
-class Collection(types.BaseCollection):
+class Collection(types.BaseCollection[types.TData]):
     """Base data collection.
 
     Contains the following information:
@@ -73,7 +73,7 @@ class Collection(types.BaseCollection):
 
     # keep these classes here to simplify overrides
     ColumnsFactory: type[Columns[Self]] = Columns
-    DataFactory: type[Data[Self]] = Data
+    DataFactory: type[Data[types.TData, Self]] = Data
     FiltersFactory: type[Filters[Self]] = Filters
     SerializerFactory: type[Serializer[Self]] = Serializer
     PagerFactory: type[Pager[Self]] = ClassicPager
@@ -133,14 +133,17 @@ class Collection(types.BaseCollection):
         """Return search filters."""
         return self.FiltersFactory(self, **kwargs)
 
-    def make_data(self, **kwargs: Any) -> Data[Self]:
+    def make_data(self, **kwargs: Any) -> Data[types.TData, Self]:
         """Return search filters."""
         return self.DataFactory(self, **kwargs)
 
+    def __iter__(self) -> Iterator[types.TData]:
+        yield from self.data.range(self.pager.start, self.pager.end)
 
-class ModelCollection(Collection):
+
+class ModelCollection(Collection[types.TData]):
     DataFactory = ModelData
 
 
-class ApiCollection(Collection):
+class ApiCollection(Collection[types.TData]):
     DataFactory = ApiData

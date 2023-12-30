@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from functools import cached_property
-from typing import Any, Iterable, cast
+from typing import Any, Callable, Iterable, Iterator, cast
 
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapper
@@ -18,75 +18,53 @@ log = logging.getLogger(__name__)
 
 
 class Data(
-    types.BaseData,
+    types.BaseData[types.TData],
     shared.Domain[types.TDataCollection],
 ):
     """Data source for collection.
 
     This class produces data for collection.
 
-    Attributes:
-      total: total number of available records
-      data: slice of all available data.
     """
 
     def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         super().__init__(obj, **kwargs)
         self.refresh_data()
 
-    def refresh_data(self):
-        """Pull and slice data, updating `total`.
-
-        This operation is similar to creating a new data object with the same
-        settings.
-
-        """
-        data = self.get_initial_data()
-
-        self.total = self.compute_total(data)
-        self.data = self.slice_data(data)
-
-    def __iter__(self):
-        return iter(self.data)
+    def __iter__(self) -> Iterator[types.TData]:
+        yield from self._data
 
     def __len__(self):
-        return len(cast(Any, self.data))
+        return self.total
 
-    def get_initial_data(self) -> Any:
-        """Return base data collection(with filters applied).
+    def refresh_data(self):
+        self._data = self.compute_data()
+        self._total = self.compute_total(self._data)
 
-        Data returned from this method will be used in `compute_total` and
-        `slice_data`. Return anything that allows computing total number of
-        records and data slice.
-
-        If you are using in-memory data source, return the whole collection and
-        compute its lenght and slice it in corresponding methods. If you are
-        working with DB, return query without limit/offset, apply `count` SQL
-        function to it in `compute_total` and add limit/offset in
-        `slice_data`. Finally, if you are working with API, like
-        `package_search`, you can return `{"count": N, "results": ...}` from
-        this method and extract fields in `compute_total`/`slice_data`.
-
-        """
+    def compute_data(self) -> Any:
         return []
 
     def compute_total(self, data: Any) -> int:
-        """Return total number of records."""
         return len(data)
 
-    def slice_data(self, data: Any):
-        """Return data slice according to pager settings."""
-        return data[self.attached.pager.start : self.attached.pager.end]
+    def range(self, start: Any, end: Any) -> Iterable[types.TData]:
+        return self._data[start:end]
+
+    @property
+    def total(self):
+        return self._total
 
 
-class StaticData(Data[types.TDataCollection]):
-    initial_data = shared.configurable_attribute(default_factory=lambda self: [])
+class StaticData(Data[types.TData, types.TDataCollection]):
+    data: Iterable[types.TData] = shared.configurable_attribute(
+        default_factory=lambda self: [],
+    )
 
-    def get_initial_data(self) -> Any:
-        return self.initial_data
+    def compute_data(self) -> Iterable[types.TData]:
+        return self.data
 
 
-class ModelData(Data[types.TDataCollection]):
+class ModelData(Data[types.TData, types.TDataCollection]):
     """DB data source.
 
     This base class is suitable for building SQL query.
@@ -110,7 +88,7 @@ class ModelData(Data[types.TDataCollection]):
         default_factory=lambda self: [],
     )
 
-    def get_initial_data(self):
+    def compute_data(self):
         """@inherit"""
         stmt = self.get_base_statement()
         stmt = self.alter_statement(stmt)
@@ -121,14 +99,23 @@ class ModelData(Data[types.TDataCollection]):
         """@inherit"""
         return self.count_statement(data)
 
-    def slice_data(self, data: Select) -> Iterable[Any]:
+    def __iter__(self) -> Iterator[types.TData]:
+        yield from self.execute_statement(self._data)
+
+    def range(self, start: int, end: int) -> Iterable[types.TData]:
         """@inherit"""
-        stmt = self.statement_with_limits(data)
+        stmt = self._data.limit(end - start).offset(start)
+        return self.execute_statement(stmt)
 
+    def execute_statement(self, stmt: Select) -> Iterable[types.TData]:
+        result: Any
         if self.is_scalar:
-            return model.Session.scalars(stmt).all()
+            result = model.Session.scalars(stmt)
 
-        return model.Session.execute(stmt).all()
+        else:
+            result = model.Session.execute(stmt)
+
+        return result
 
     def select_columns(self) -> Iterable[Any]:
         """Return list of columns for select statement."""
@@ -243,14 +230,8 @@ class ModelData(Data[types.TDataCollection]):
 
         return stmt.order_by(sa.text(sort))
 
-    def statement_with_limits(self, stmt: Select):
-        limit = self.attached.pager.size
-        offset = self.attached.pager.start
 
-        return stmt.limit(limit).offset(offset)
-
-
-class ApiData(Data[types.TDataCollection], shared.UserTrait):
+class ApiData(Data[types.TData, types.TDataCollection], shared.UserTrait):
     """API data source.
 
     This base class is suitable for building API calls.
@@ -271,12 +252,12 @@ class ApiData(Data[types.TDataCollection], shared.UserTrait):
     def prepare_payload(self) -> dict[str, Any]:
         return dict(self.payload)
 
-    def get_initial_data(self):
+    def compute_data(self):
         action = tk.get_action(self.action)
         return action(self.make_context(), self.prepare_payload())
 
 
-class ApiSearchData(ApiData[types.TDataCollection]):
+class ApiSearchData(ApiData[types.TData, types.TDataCollection]):
     """API data source optimized for package_search-like actions."""
 
     def prepare_payload(self) -> dict[str, Any]:
@@ -284,15 +265,8 @@ class ApiSearchData(ApiData[types.TDataCollection]):
         return dict(
             payload,
             **self.get_filters(),
-            **self.get_offsets(),
             **self.get_sort(),
         )
-
-    def get_offsets(self) -> dict[str, Any]:
-        return {
-            "start": self.attached.pager.start,
-            "rows": self.attached.pager.size,
-        }
 
     def get_filters(self) -> dict[str, str]:
         return {}
@@ -311,22 +285,63 @@ class ApiSearchData(ApiData[types.TDataCollection]):
         direction = "desc" if desc else "asc"
         return {"sort": f"{column} {direction}"}
 
+    def get_action(self) -> Callable[[Context, dict[str, Any]], Any]:
+        return tk.get_action(self.action)
+
+    def compute_data(self):
+        action = self.get_action()
+        return action(self.make_context(), dict(self.prepare_payload(), rows=0))
+
     def compute_total(self, data: dict[str, Any]) -> int:
         return data["count"]
 
-    def slice_data(self, data: dict[str, Any]):
-        return data["results"]
+    def range(self, start: int, end: int) -> Iterable[types.TData]:
+        """@inherit"""
+        action = self.get_action()
+        return action(
+            self.make_context(),
+            dict(self.prepare_payload(), rows=end - start, start=start),
+        )["results"]
+
+    def __iter__(self) -> Iterator[types.TData]:
+        action = self.get_action()
+        context = self.make_context()
+        start = 0
+        while True:
+            result = action(context, dict(self.prepare_payload(), start=start))
+
+            yield from result["results"]
+            start += len(result["results"])
+
+            if start >= result["count"]:
+                break
 
 
-class ApiListData(ApiSearchData[types.TDataCollection]):
+class ApiListData(ApiSearchData[types.TData, types.TDataCollection]):
     """API data source optimized for organization_list-like actions."""
 
-    def get_offsets(self) -> dict[str, Any]:
-        offsets = super().get_offsets()
-        return {"limit": offsets["rows"], "offset": offsets["start"]}
+    def range(self, start: int, end: int) -> Iterable[types.TData]:
+        """@inherit"""
+        action = self.get_action()
+        return action(
+            self.make_context(),
+            dict(self.prepare_payload(), limit=end - start, offset=start),
+        )
 
     def compute_total(self, data: dict[str, Any]) -> int:
         return len(data)
 
-    def slice_data(self, data: dict[str, Any]):
-        return data
+    def __iter__(self) -> Iterator[types.TData]:
+        action = self.get_action()
+        context = self.make_context()
+        start = 0
+        while True:
+            result = action(context, dict(self.prepare_payload(), offset=start))
+            if not result:
+                break
+
+            yield from result
+            start += len(result)
+
+            if start >= self.total:
+                break

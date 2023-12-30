@@ -10,7 +10,7 @@ from ckanext.collection.utils import Collection, serialize
 from ckanext.collection.utils.data import StaticData
 
 
-class StaticCollection(Collection):
+class StaticCollection(Collection[Any]):
     DataFactory = StaticData
 
 
@@ -20,7 +20,7 @@ def collection():
         "",
         {},
         data_settings={
-            "initial_data": [
+            "data": [
                 {"name": "a", "age": 1},
                 {"name": "b", "age": 2},
             ],
