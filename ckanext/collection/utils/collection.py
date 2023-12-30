@@ -6,8 +6,8 @@ from typing_extensions import Self
 
 from ckanext.collection import types
 
+from . import data
 from .columns import Columns
-from .data import ApiData, Data, ModelData
 from .filters import Filters
 from .pager import ClassicPager, Pager
 from .serialize import Serializer
@@ -73,7 +73,7 @@ class Collection(types.BaseCollection[types.TData]):
 
     # keep these classes here to simplify overrides
     ColumnsFactory: type[Columns[Self]] = Columns
-    DataFactory: type[Data[types.TData, Self]] = Data
+    DataFactory: type[data.Data[types.TData, Self]] = data.Data
     FiltersFactory: type[Filters[Self]] = Filters
     SerializerFactory: type[Serializer[Self]] = Serializer
     PagerFactory: type[Pager[Self]] = ClassicPager
@@ -117,6 +117,9 @@ class Collection(types.BaseCollection[types.TData]):
 
         return value
 
+    def __iter__(self) -> Iterator[types.TData]:
+        yield from self.data.range(self.pager.start, self.pager.end)
+
     def make_serializer(self, **kwargs: Any) -> Serializer[Self]:
         """Return serializer."""
         return self.SerializerFactory(self, **kwargs)
@@ -133,17 +136,26 @@ class Collection(types.BaseCollection[types.TData]):
         """Return search filters."""
         return self.FiltersFactory(self, **kwargs)
 
-    def make_data(self, **kwargs: Any) -> Data[types.TData, Self]:
+    def make_data(self, **kwargs: Any) -> data.Data[types.TData, Self]:
         """Return search filters."""
         return self.DataFactory(self, **kwargs)
 
-    def __iter__(self) -> Iterator[types.TData]:
-        yield from self.data.range(self.pager.start, self.pager.end)
+
+class StaticCollection(Collection[types.TData]):
+    DataFactory = data.StaticData
 
 
 class ModelCollection(Collection[types.TData]):
-    DataFactory = ModelData
+    DataFactory = data.ModelData
 
 
 class ApiCollection(Collection[types.TData]):
-    DataFactory = ApiData
+    DataFactory = data.ApiData
+
+
+class ApiSearchCollection(ApiCollection[types.TData]):
+    DataFactory = data.ApiSearchData
+
+
+class ApiListCollection(ApiCollection[types.TData]):
+    DataFactory = data.ApiListData

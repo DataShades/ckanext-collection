@@ -93,7 +93,9 @@ class TestHtmlSerializer:
         serializer = serialize.HtmlSerializer(collection)
         output = serializer.render().strip()
 
-        dump = json.dumps(list(collection.data), sort_keys=True)
-        expected_output = f"Dump: {dump}"
+        expected_output = (
+            """<ul><li>{"age": 1, "name": "a"}</li>"""
+            + """"<li>{"age": 2, "name": "b"}</li></ul>"""
+        )
 
         assert output == expected_output

@@ -161,16 +161,22 @@ class ChartJsSerializer(Serializer[types.TDataCollection]):
 class HtmlSerializer(Serializer[types.TDataCollection]):
     """Serialize collection into HTML document."""
 
-    template: str = shared.configurable_attribute("collection/snippets/dump.html")
+    main_template: str = shared.configurable_attribute(
+        "collection/snippets/html_main.html",
+    )
+    record_template: str = shared.configurable_attribute(
+        "collection/snippets/html_record.html",
+    )
 
     def get_data(self) -> dict[str, Any]:
         return {
             "collection": self.attached,
+            "record_template": self.record_template,
         }
 
     def stream(self):
         yield tk.render(
-            self.template,
+            self.main_template,
             self.get_data(),
         )
 
@@ -178,15 +184,18 @@ class HtmlSerializer(Serializer[types.TDataCollection]):
 class TableSerializer(HtmlSerializer[types.TDataCollection]):
     """Serialize collection into HTML table."""
 
-    templatel: str = shared.configurable_attribute("collection/snippets/table.html")
-    row_snippet: str = shared.configurable_attribute("collection/snippets/row.html")
+    main_template: str = shared.configurable_attribute(
+        "collection/snippets/table_main.html",
+    )
+    record_template: str = shared.configurable_attribute(
+        "collection/snippets/table_record.html",
+    )
 
     def get_data(self) -> dict[str, Any]:
         data = super().get_data()
         data.update(
             {
                 "table": self.attached,
-                "row_snippet": self.row_snippet,
             },
         )
         return data
