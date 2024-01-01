@@ -7,3 +7,6 @@ help:
 
 changelog:  ## compile changelog
 	git changelog -c conventional -o CHANGELOG.md
+
+vendor:
+	cp node_modules/htmx.org/dist/htmx.js ckanext/collection/assets/vendor

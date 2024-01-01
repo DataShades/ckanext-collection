@@ -1,0 +1,5 @@
+<ul>
+{%- for record in collection %}
+    {%- snippet collection.serializer.record_template, record=record, collection=collection -%}
+{% endfor -%}
+</ul>

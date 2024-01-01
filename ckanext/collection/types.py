@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import abc
 from collections.abc import Sized
-from typing import Any, Iterable, TypedDict
+from typing import Any, Callable, Iterable, TypedDict
 
-from typing_extensions import TypeVar
+from typing_extensions import TypeVar, TypeAlias
 
+CollectionFactory: TypeAlias = "Callable[[str, dict[str, Any]], BaseCollection[Any]]"
 TDataCollection = TypeVar("TDataCollection", bound="BaseCollection[Any]")
 TData = TypeVar("TData")
 

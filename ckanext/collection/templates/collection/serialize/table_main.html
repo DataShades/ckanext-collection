@@ -1,16 +1,16 @@
 <table id="collection--{{ collection.name }}--table" class="collection-table">
     <tr class="collection-table--row collection-table--header">
-        {% for col in collection.columns.names if col in collection.columns.visible %}
+        {%- for col in collection.columns.names if col in collection.columns.visible -%}
 
             <td class="collection-table--cell{% if sortable %} collection-table--cell-sortable{% endif %}">
                 <span>{{ collection.columns.labels[col] or col }}</span>
             </td>
 
-        {% endfor %}
+        {%- endfor -%}
     </tr>
 
-    {%- for record in collection %}
-        {%- snippet record_template, record=record, collection=collection -%}
-    {% endfor -%}
+    {%- for record in collection -%}
+        {% snippet collection.serializer.record_template, record=record, collection=collection %}
+    {%- endfor -%}
 
 </table>

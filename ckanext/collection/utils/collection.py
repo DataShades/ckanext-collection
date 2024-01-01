@@ -6,7 +6,7 @@ from typing_extensions import Self
 
 from ckanext.collection import types
 
-from . import data
+from .data import Data, StaticData, ModelData, ApiData, ApiSearchData, ApiListData
 from .columns import Columns
 from .filters import Filters
 from .pager import ClassicPager, Pager
@@ -73,7 +73,7 @@ class Collection(types.BaseCollection[types.TData]):
 
     # keep these classes here to simplify overrides
     ColumnsFactory: type[Columns[Self]] = Columns
-    DataFactory: type[data.Data[types.TData, Self]] = data.Data
+    DataFactory: type[Data[types.TData, Self]] = Data
     FiltersFactory: type[Filters[Self]] = Filters
     SerializerFactory: type[Serializer[Self]] = Serializer
     PagerFactory: type[Pager[Self]] = ClassicPager
@@ -136,26 +136,26 @@ class Collection(types.BaseCollection[types.TData]):
         """Return search filters."""
         return self.FiltersFactory(self, **kwargs)
 
-    def make_data(self, **kwargs: Any) -> data.Data[types.TData, Self]:
+    def make_data(self, **kwargs: Any) -> Data[types.TData, Self]:
         """Return search filters."""
         return self.DataFactory(self, **kwargs)
 
 
 class StaticCollection(Collection[types.TData]):
-    DataFactory = data.StaticData
+    DataFactory = StaticData
 
 
 class ModelCollection(Collection[types.TData]):
-    DataFactory = data.ModelData
+    DataFactory = ModelData
 
 
 class ApiCollection(Collection[types.TData]):
-    DataFactory = data.ApiData
+    DataFactory = ApiData
 
 
 class ApiSearchCollection(ApiCollection[types.TData]):
-    DataFactory = data.ApiSearchData
+    DataFactory = ApiSearchData
 
 
 class ApiListCollection(ApiCollection[types.TData]):
-    DataFactory = data.ApiListData
+    DataFactory = ApiListData

@@ -35,11 +35,14 @@ class Serializer(types.BaseSerializer, shared.Domain[types.TDataCollection]):
 
     def stream(self) -> Iterable[str] | Iterable[bytes]:
         """Iterate over fragments of the content."""
-        return ""
+        return ["", ""]
 
     def render(self) -> str | bytes:
         """Combine content fragments into a single dump."""
         return reduce(operator.add, self.stream())
+
+    def serialize_value(self, value: Any, name: str, record: Any):
+        return value
 
 
 class CsvSerializer(Serializer[types.TDataCollection]):
@@ -66,8 +69,9 @@ class CsvSerializer(Serializer[types.TDataCollection]):
 
     def prepare_row(self, row: Any, writer: csv.DictWriter[str]) -> dict[str, Any]:
         if isinstance(row, Row):
-            return dict(zip(row.keys(), row))
-        return row
+            row = dict(zip(row.keys(), row))
+
+        return {k: self.serialize_value(v, k, row) for k, v in row.items()}
 
     def stream(self) -> Iterable[str]:
         buff = io.StringIO()
@@ -95,6 +99,7 @@ class JsonlSerializer(Serializer[types.TDataCollection]):
             if isinstance(row, Row):
                 row = dict(zip(row.keys(), row))
 
+            row = {k: self.serialize_value(v, k, row) for k, v in row.items()}
             json.dump(row, buff)
             yield buff.getvalue()
             yield "\n"
@@ -108,7 +113,12 @@ class JsonSerializer(Serializer[types.TDataCollection]):
     def stream(self):
         yield json.dumps(
             [
-                dict(zip(row.keys(), row)) if isinstance(row, Row) else row
+                {
+                    k: self.serialize_value(v, k, row)
+                    for k, v in (
+                        dict(zip(row.keys(), row)) if isinstance(row, Row) else row
+                    ).items()
+                }
                 for row in self.attached.data
             ],
         )
@@ -140,7 +150,12 @@ class ChartJsSerializer(Serializer[types.TDataCollection]):
                 item = dict(zip(item.keys(), item))
 
             labels.append(item.get(self.label_column, None))
-            data.append([item.get(name, 0) for name in self.dataset_columns])
+            data.append(
+                [
+                    self.serialize_value(item.get(name, 0), name, item)
+                    for name in self.dataset_columns
+                ]
+            )
 
         datasets: list[dict[str, Any]] = [
             {
@@ -162,16 +177,15 @@ class HtmlSerializer(Serializer[types.TDataCollection]):
     """Serialize collection into HTML document."""
 
     main_template: str = shared.configurable_attribute(
-        "collection/snippets/html_main.html",
+        "collection/serialize/html_main.html",
     )
     record_template: str = shared.configurable_attribute(
-        "collection/snippets/html_record.html",
+        "collection/serialize/html_record.html",
     )
 
     def get_data(self) -> dict[str, Any]:
         return {
             "collection": self.attached,
-            "record_template": self.record_template,
         }
 
     def stream(self):
@@ -185,17 +199,46 @@ class TableSerializer(HtmlSerializer[types.TDataCollection]):
     """Serialize collection into HTML table."""
 
     main_template: str = shared.configurable_attribute(
-        "collection/snippets/table_main.html",
+        "collection/serialize/table_main.html",
     )
     record_template: str = shared.configurable_attribute(
-        "collection/snippets/table_record.html",
+        "collection/serialize/table_record.html",
     )
 
-    def get_data(self) -> dict[str, Any]:
-        data = super().get_data()
-        data.update(
-            {
-                "table": self.attached,
-            },
-        )
-        return data
+
+class HtmxTableSerializer(HtmlSerializer[types.TDataCollection]):
+    """Serialize collection into HTML table."""
+
+    main_template: str = shared.configurable_attribute(
+        "collection/serialize/htmx_table_main.html",
+    )
+    table_template: str = shared.configurable_attribute(
+        "collection/serialize/htmx_table_table.html"
+    )
+    record_template: str = shared.configurable_attribute(
+        "collection/serialize/htmx_table_record.html",
+    )
+    counter_template: str = shared.configurable_attribute(
+        "collection/serialize/htmx_table_counter.html"
+    )
+    pager_template: str = shared.configurable_attribute(
+        "collection/serialize/htmx_table_pager.html"
+    )
+    form_template: str = shared.configurable_attribute(
+        "collection/serialize/htmx_table_form.html"
+    )
+
+    searchable: str = shared.configurable_attribute(False)
+    debug: str = shared.configurable_attribute(False)
+    push_url: str = shared.configurable_attribute(False)
+
+    prefix: str = shared.configurable_attribute("collection-table")
+    base_class: str = shared.configurable_attribute("htmx-collection")
+
+    @property
+    def form_id(self):
+        return f"{self.prefix}-form--{self.attached.name}"
+
+    @property
+    def table_id(self):
+        return f"{self.prefix}-id--{self.attached.name}"

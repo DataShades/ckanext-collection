@@ -1,0 +1,50 @@
+{% set form_id = collection.serializer.form_id %}
+{% set base_class = collection.serializer.base_class %}
+
+{% block form %}
+    <form
+        class="{{ base_class }}--form" id="{{ form_id }}"
+        hx-on:htmx:config-request="
+               {% if collection.serializer.debug %}console.debug(event.detail.parameters);{% endif %}
+               {% if collection.serializer.push_url %}
+               const url = new URL(window.location)
+               url.searchParams.delete('{{ collection.name }}:page')
+               Object.entries(event.detail.parameters).forEach(([k, v]) => url.searchParams.set(k, v));
+               window.history.pushState({}, null, url);
+               {% endif %}
+               "
+        {# catch plain submission/changes as well as changes from elements that
+        live outside the form and select2-dropdowns that emit special change
+        event and require a small delay for clearing them all at once via
+        ClearFilters #}
+        hx-trigger='
+               change,
+               submit,
+               change from:[form="{{ form_id }}"],
+               collection-trigger from:[data-collection="{{ collection.name }}"],
+               change.htmx-select2 from:[form="{{ form_id }}"] delay:20'
+        hx-target="closest .{{ base_class }}"
+        hx-indicator="closest .{{ base_class }}"
+        hx-get={{ h.url_for("ckanext-collection.render", name=collection.name) }}
+        hx-swap="outerHTML"
+    >
+
+        {% block search_input %}
+            {% if collection.serializer.searchable %}
+                <span class="{{ base_class }}--form--search-icon"><i class="fa fa-search"></i></span>
+                <input name="{{ collection.name }}:q" type="text" value="{{ collection.params.q }}" placeholder="Search.."/>
+            {% endif %}
+
+        {% endblock search_input %}
+
+        {% block counter %}
+            {% snippet collection.serializer.counter_template, collection=collection %}
+        {% endblock counter %}
+
+        {# this input catches search field submissions. Without it, submission
+        will include one of page navigation links, which are also implemented
+        as a submit #}
+        <input type="submit" hidden>
+
+    </form>
+{% endblock form%}

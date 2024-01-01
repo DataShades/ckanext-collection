@@ -1,0 +1,21 @@
+version: 1
+groups:
+  - annotation: ckanext-collection
+    options:
+      - key: ckanext.collection.auth.anonymous_collections
+        type: list
+        description: |
+          Names of registered collections that are viewable by any visitor,
+          including anonymous.
+
+      - key: ckanext.collection.auth.authenticated_collections
+        type: list
+        description: |
+          Names of registered collections that are viewable by any
+          authenticated user.
+
+      - key: ckanext.collection.include_htmx_asset
+        type: bool
+        description: |
+          Add HTMX asset to pages. Enable this option if you are using CKAN
+          v2.10

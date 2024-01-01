@@ -1,0 +1,8 @@
+{% ckan_extends %}
+
+{% block scripts %}
+    {{ super() }}
+    {% if h.collection_include_htmx_asset() %}
+        {% asset "collection/htmx" %}
+    {% endif %}
+{% endblock scripts %}

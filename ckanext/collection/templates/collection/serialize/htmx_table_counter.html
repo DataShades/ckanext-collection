@@ -1,0 +1,10 @@
+{#
+collection
+#}
+
+{% set total = collection.data | length %}
+{% set base_class = collection.serializer.base_class %}
+
+<span class="{{ base_class }}--counter">
+    {{ ungettext("{total} result", "{total} results", total).format(total=total) }}
+</span>

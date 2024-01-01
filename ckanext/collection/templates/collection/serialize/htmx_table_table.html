@@ -1,0 +1,39 @@
+{% import "macros/form.html" as form %}
+{% set sort_name = collection.name ~ ":sort" %}
+{% set sort_value = collection.params.sort %}
+
+{% block table %}
+    <input name="{{ sort_name }}" type="hidden" value="{{ sort_value }}" form="{{ collection.serializer.form_id }}"/>
+
+    <table id="{{ collection.serializer.table_id }}" class="table">
+        {% block header %}
+            <tr class="collection-table--row collection-table--header">
+                {% for col in collection.columns.names if col in collection.columns.visible %}
+                    {% set is_sortable = col in collection.columns.sortable %}
+                    {% set is_current_order = sort_value == col %}
+
+                    <th class="collection-table--cell{% if is_sortable %} collection-table--cell-sortable{% endif %}">
+                        {% if is_sortable %}
+                            <button class="sort-trigger" type="button" form="{{ collection.serializer.form_id }}"
+                                    onclick="this.form['{{ sort_name }}'].value = this.value; this.form.dispatchEvent(new Event('change'))"
+                                    value="{% if is_current_order %}-{% endif %}{{ col }}">
+                                {{ collection.columns.labels[col] or col }}
+                            </button>
+
+                        {% else %}
+                            <span>{{ collection.columns.labels[col] or col }}</span>
+
+                        {% endif %}
+                    </th>
+                {% endfor %}
+            </tr>
+        {% endblock header %}
+
+        {% block body %}
+            {% for record in collection %}
+                {% snippet collection.serializer.record_template, record=record, collection=collection %}
+            {% endfor %}
+
+        {% endblock body %}
+    </table>
+{% endblock table %}

@@ -4,6 +4,13 @@
 
 Base classes for presenting data series from CKAN.
 
+## Content
+
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Config settings](#config-settings)
+* [License](#license)
+
 ## Requirements
 
 Compatibility with core CKAN versions:
@@ -28,8 +35,22 @@ To install ckanext-collection:
 
 ## Config settings
 
-None at present
+```ini
+# Names of registered collections that are viewable by any visitor, including
+# anonymous.
+# (optional, default: )
+ckanext.collection.auth.anonymous_collections =
 
+# Names of registered collections that are viewable by any authenticated
+# user.
+# (optional, default: )
+ckanext.collection.auth.authenticated_collections =
+
+# Add HTMX asset to pages. Enable this option if you are using CKAN v2.10
+# (optional, default: false)
+ckanext.collection.include_htmx_asset = false
+
+```
 
 ## License
 

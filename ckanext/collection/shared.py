@@ -6,15 +6,31 @@ from __future__ import annotations
 import abc
 import dataclasses
 import inspect
+from collections.abc import Hashable
 from typing import Any, Callable, Generic, TypeVar, cast
 
 import ckan.plugins.toolkit as tk
 
-from ckanext.collection.types import TDataCollection
+from ckanext.collection.types import TDataCollection, BaseCollection, CollectionFactory
 
 T = TypeVar("T")
 SENTINEL = object()
 
+@dataclasses.dataclass
+class Registry(Generic[T]):
+    members: dict[Hashable, T]
+
+    def reset(self):
+        self.members.clear()
+
+    def register(self, name: Hashable, member: T):
+        self.members[name] = member
+
+    def get(self, name: Hashable) -> T | None:
+        return self.members.get(name)
+
+
+collection_registry: Registry[CollectionFactory] = Registry({})
 
 class AttachTrait(abc.ABC, Generic[TDataCollection]):
     """Attach collection to the current object.
@@ -206,3 +222,8 @@ def parse_sort(sort: str) -> tuple[str, bool]:
             desc = True
 
     return sort, desc
+
+
+def get_collection(name: str, params: dict[str, Any]) -> BaseCollection[Any] | None:
+    if factory := collection_registry.get(name):
+        return factory(name, params)
