@@ -1,9 +1,11 @@
 <tr class="collection-table--row">
     {% for column in collection.columns.names if column in collection.columns.visible -%}
         <td class="collection-table--cell{% if sortable %} collection-table--cell-sortable{% endif %}">
-            <div>
-                {{ collection.serializer.serialize_value(record[column], column, record) }}
-            </div>
+            {% block value scoped %}
+                <div>
+                    {{ collection.serializer.serialize_value(record[column], column, record) }}
+                </div>
+            {% endblock %}
         </td>
     {%- endfor %}
 </tr>

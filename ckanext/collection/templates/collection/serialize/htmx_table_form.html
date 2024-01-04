@@ -29,14 +29,6 @@
         hx-swap="outerHTML"
     >
 
-        {% block search_input %}
-            {% if collection.serializer.searchable %}
-                <span class="{{ base_class }}--form--search-icon"><i class="fa fa-search"></i></span>
-                <input name="{{ collection.name }}:q" type="text" value="{{ collection.params.q }}" placeholder="Search.."/>
-            {% endif %}
-
-        {% endblock search_input %}
-
         {% block counter %}
             {% snippet collection.serializer.counter_template, collection=collection %}
         {% endblock counter %}

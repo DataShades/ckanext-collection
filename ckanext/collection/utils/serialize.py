@@ -154,7 +154,7 @@ class ChartJsSerializer(Serializer[types.TDataCollection]):
                 [
                     self.serialize_value(item.get(name, 0), name, item)
                     for name in self.dataset_columns
-                ]
+                ],
             )
 
         datasets: list[dict[str, Any]] = [
@@ -213,22 +213,21 @@ class HtmxTableSerializer(HtmlSerializer[types.TDataCollection]):
         "collection/serialize/htmx_table_main.html",
     )
     table_template: str = shared.configurable_attribute(
-        "collection/serialize/htmx_table_table.html"
+        "collection/serialize/htmx_table_table.html",
     )
     record_template: str = shared.configurable_attribute(
         "collection/serialize/htmx_table_record.html",
     )
     counter_template: str = shared.configurable_attribute(
-        "collection/serialize/htmx_table_counter.html"
+        "collection/serialize/htmx_table_counter.html",
     )
     pager_template: str = shared.configurable_attribute(
-        "collection/serialize/htmx_table_pager.html"
+        "collection/serialize/htmx_table_pager.html",
     )
     form_template: str = shared.configurable_attribute(
-        "collection/serialize/htmx_table_form.html"
+        "collection/serialize/htmx_table_form.html",
     )
 
-    searchable: str = shared.configurable_attribute(False)
     debug: str = shared.configurable_attribute(False)
     push_url: str = shared.configurable_attribute(False)
 

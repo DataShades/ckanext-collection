@@ -21,8 +21,8 @@ class Filters(
         return []
 
     filters: list[types.Filter] = shared.configurable_attribute(
-        default_factory=make_filters,
+        default_factory=lambda self: self.make_filters(),
     )
     actions: list[types.Filter] = shared.configurable_attribute(
-        default_factory=make_actions,
+        default_factory=lambda self: self.make_actions(),
     )

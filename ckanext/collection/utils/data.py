@@ -210,6 +210,14 @@ class ModelData(Data[types.TData, types.TDataCollection]):
         for cond in self.static_filters:
             stmt = stmt.where(cond)
 
+        params = self.attached.params
+        if self.model:
+            columns = self.model.__table__.c
+            for name in self.attached.columns.filterable:
+                if name not in params or name not in columns:
+                    continue
+                stmt = stmt.where(columns[name] == params[name])
+
         return stmt
 
     def statement_with_sorting(self, stmt: Select):
