@@ -2,5 +2,7 @@ from __future__ import annotations
 
 from . import config
 
+
 def collection_include_htmx_asset() -> bool:
+    """Check if HTMX needs to be added to webassets."""
     return config.include_htmx_asset()

@@ -19,7 +19,7 @@ def collection() -> Collection[Any]:
 class TestStaticData:
     def test_settings(self, collection: Collection[Any]):
         dump = [{"a": 1}, {"a": 2}]
-        obj = data.StaticData[Any, Collection[Any]](collection, data=dump)
+        obj = data.StaticData(collection, data=dump)
 
         assert list(obj) == dump
         assert len(obj) == len(dump)

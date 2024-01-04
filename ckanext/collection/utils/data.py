@@ -39,16 +39,26 @@ class Data(
         return self.total
 
     def refresh_data(self):
+        """Update data and counters.
+
+        Use this method when parameters that affect Data are changed. This is a
+        cheaper alternative of recreating the whole collection with new
+        parameters.
+
+        """
         self._data = self.compute_data()
         self._total = self.compute_total(self._data)
 
     def compute_data(self) -> Any:
+        """Produce data."""
         return []
 
     def compute_total(self, data: Any) -> int:
+        """Compute number of data records."""
         return len(data)
 
     def range(self, start: Any, end: Any) -> Iterable[types.TData]:
+        """Slice data."""
         return self._data[start:end]
 
     @property
@@ -57,6 +67,11 @@ class Data(
 
 
 class StaticData(Data[types.TData, types.TDataCollection]):
+    """Static data source.
+
+    This class turns existing iterable into a data source.
+    """
+
     data: Iterable[types.TData] = shared.configurable_attribute(
         default_factory=lambda self: [],
     )
@@ -72,8 +87,10 @@ class ModelData(Data[types.TData, types.TDataCollection]):
 
     Attributes:
       model: main model used by data source
+      is_scalar: return model instance instead of columns set.
     """
 
+    _data: Select
     model: Any = shared.configurable_attribute(None)
     is_scalar: bool = shared.configurable_attribute(False)
 
@@ -91,21 +108,18 @@ class ModelData(Data[types.TData, types.TDataCollection]):
     )
 
     def compute_data(self):
-        """@inherit"""
         stmt = self.get_base_statement()
         stmt = self.alter_statement(stmt)
         stmt = self.statement_with_filters(stmt)
         return self.statement_with_sorting(stmt)
 
     def compute_total(self, data: Select) -> int:
-        """@inherit"""
         return self.count_statement(data)
 
     def __iter__(self) -> Iterator[types.TData]:
         yield from self.execute_statement(self._data)
 
     def range(self, start: int, end: int) -> Iterable[types.TData]:
-        """@inherit"""
         stmt = self._data.limit(end - start).offset(start)
         return self.execute_statement(stmt)
 
@@ -315,7 +329,7 @@ class ApiSearchData(ApiData[types.TData, types.TDataCollection]):
             yield from result["results"]
             start += len(result["results"])
 
-            if start >= result["count"]:
+            if start >= result["count"] or not result["results"]:
                 break
 
 
@@ -329,6 +343,10 @@ class ApiListData(ApiSearchData[types.TData, types.TDataCollection]):
             self.make_context(),
             dict(self.prepare_payload(), limit=end - start, offset=start),
         )
+
+    def compute_data(self):
+        action = self.get_action()
+        return action(self.make_context(), self.prepare_payload())
 
     def compute_total(self, data: dict[str, Any]) -> int:
         return len(data)

@@ -11,7 +11,7 @@ from typing import Any, Callable, Generic, TypeVar, cast
 
 import ckan.plugins.toolkit as tk
 
-from ckanext.collection.types import TDataCollection, BaseCollection, CollectionFactory
+from ckanext.collection.types import BaseCollection, CollectionFactory, TDataCollection
 
 T = TypeVar("T")
 SENTINEL = object()
@@ -205,7 +205,7 @@ class Domain(AttachTrait[TDataCollection], AttrSettingsTrait):
         self._gather_settings(kwargs)
 
     @classmethod
-    def with_attributes(cls, **attributes: Any):
+    def with_attributes(cls: type[T], **attributes: Any) -> type[T]:
         """Create anonymous derivable of the class with overriden attributes.
 
         This is a shortcut for defining a proper subclass of the domain:
@@ -219,7 +219,7 @@ class Domain(AttachTrait[TDataCollection], AttrSettingsTrait):
         >>> # equivalent
         >>> Child = Parent.with_attributes(prop="child value")
         """
-        return type(cls.__name__, (cls,), attributes)
+        return cast("type[T]", type(cls.__name__, (cls,), attributes))
 
 
 def parse_sort(sort: str) -> tuple[str, bool]:
@@ -246,3 +246,5 @@ def parse_sort(sort: str) -> tuple[str, bool]:
 def get_collection(name: str, params: dict[str, Any]) -> BaseCollection[Any] | None:
     if factory := collection_registry.get(name):
         return factory(name, params)
+
+    return None

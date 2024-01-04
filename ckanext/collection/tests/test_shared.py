@@ -130,7 +130,7 @@ class TestDomain:
     def test_settings(self):
         class Child(shared.Domain[Any]):
             prop = shared.configurable_attribute(
-                default_factory=lambda self: self.attached
+                default_factory=lambda self: self.attached,
             )
 
         obj = Child(object())
@@ -144,20 +144,21 @@ class TestDomain:
         attributes.
 
         """
+
         class Child(shared.Domain[Any]):
             prop = shared.configurable_attribute(None)
 
         default = object()
-        Derived = Child.with_attributes(prop=shared.configurable_attribute(default))
-        obj = Derived(None)
+        derived = Child.with_attributes(prop=shared.configurable_attribute(default))
+        obj = derived(None)
         assert obj.prop is default
 
-        obj = Derived(None, prop=1)
+        obj = derived(None, prop=1)
         assert obj.prop == 1
 
-        Derived = Child.with_attributes(prop=default)
-        obj = Derived(None)
+        derived = Child.with_attributes(prop=default)
+        obj = derived(None)
         assert obj.prop is default
 
-        obj = Derived(None, prop=1)
+        obj = derived(None, prop=1)
         assert obj.prop is default

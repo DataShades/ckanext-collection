@@ -4,7 +4,7 @@ import abc
 from collections.abc import Sized
 from typing import Any, Callable, Iterable, TypedDict
 
-from typing_extensions import TypeVar, TypeAlias
+from typing_extensions import TypeAlias, TypeVar
 
 CollectionFactory: TypeAlias = "Callable[[str, dict[str, Any]], BaseCollection[Any]]"
 TDataCollection = TypeVar("TDataCollection", bound="BaseCollection[Any]")
@@ -26,10 +26,12 @@ class BaseData(abc.ABC, Sized, Iterable[TData]):
 
     @abc.abstractproperty
     def total(self) -> int:
+        """Total number of data records."""
         ...
 
     @abc.abstractmethod
     def range(self, start: Any, end: Any) -> Iterable[TData]:
+        """Slice data using specified limits."""
         ...
 
 
