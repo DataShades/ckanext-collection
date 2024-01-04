@@ -4,14 +4,15 @@ import ckan.plugins as p
 import ckan.plugins.toolkit as tk
 from ckan.common import CKANConfig
 
-from .interfaces import ICollection
 from . import shared
+from .interfaces import ICollection
 
 
 @tk.blanket.blueprints
 @tk.blanket.auth_functions
 @tk.blanket.config_declarations
 @tk.blanket.helpers
+@tk.blanket.cli
 class CollectionPlugin(p.SingletonPlugin):
     p.implements(p.IConfigurer)
     p.implements(p.IConfigurable)

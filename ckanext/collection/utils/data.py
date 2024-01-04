@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import logging
 from functools import cached_property
 from typing import Any, Callable, Iterable, Iterator, cast
@@ -273,7 +274,7 @@ class ApiData(Data[types.TData, types.TDataCollection], shared.UserTrait):
         return Context(user=self.user, ignore_auth=self.ignore_auth)
 
     def prepare_payload(self) -> dict[str, Any]:
-        return dict(self.payload)
+        return copy.deepcopy(self.payload)
 
     def compute_data(self):
         action = tk.get_action(self.action)
