@@ -16,6 +16,6 @@ class TestFilters:
         assert obj.filters == []
         assert obj.actions == []
 
-        obj = filters.Filters(collection, filters=[1, 2, 3])
+        obj = filters.Filters(collection, static_filters=[1, 2, 3])
         assert obj.filters == [1, 2, 3]
         assert obj.actions == []
