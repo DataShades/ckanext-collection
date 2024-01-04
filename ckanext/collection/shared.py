@@ -16,6 +16,7 @@ from ckanext.collection.types import TDataCollection, BaseCollection, Collection
 T = TypeVar("T")
 SENTINEL = object()
 
+
 @dataclasses.dataclass
 class Registry(Generic[T]):
     members: dict[Hashable, T]
@@ -31,6 +32,7 @@ class Registry(Generic[T]):
 
 
 collection_registry: Registry[CollectionFactory] = Registry({})
+
 
 class AttachTrait(abc.ABC, Generic[TDataCollection]):
     """Attach collection to the current object.
@@ -201,6 +203,23 @@ class Domain(AttachTrait[TDataCollection], AttrSettingsTrait):
     def __init__(self, obj: TDataCollection, /, **kwargs: Any):
         self._attach(obj)
         self._gather_settings(kwargs)
+
+    @classmethod
+    def with_attributes(cls, **attributes: Any):
+        """Create anonymous derivable of the class with overriden attributes.
+
+        This is a shortcut for defining a proper subclass of the domain:
+
+        >>> class Parent(Domain):
+        >>>     prop = "parent value"
+        >>>
+        >>> class Child(Parent):
+        >>>     prop = "child value"
+        >>>
+        >>> # equivalent
+        >>> Child = Parent.with_attributes(prop="child value")
+        """
+        return type(cls.__name__, (cls,), attributes)
 
 
 def parse_sort(sort: str) -> tuple[str, bool]:

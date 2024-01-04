@@ -8,7 +8,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <!-- insertion marker -->
 ## Unreleased
 
-<small>[Compare with latest](https://github.com/DataShades/ckanext-collection/compare/v0.0.2a2...HEAD)</small>
+<small>[Compare with latest](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a1...HEAD)</small>
+
+<!-- insertion marker -->
+## [v0.1.0a1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0a1) - 2024-01-04
+
+<small>[Compare with v0.1.0a0](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a0...v0.1.0a1)</small>
+
+## [v0.1.0a0](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0a0) - 2024-01-01
+
+<small>[Compare with v0.0.2a2](https://github.com/DataShades/ckanext-collection/compare/v0.0.2a2...v0.1.0a0)</small>
 
 ### Features
 
@@ -22,7 +31,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `_collection` attribute replaced by `attached` property ([ad1a10f](https://github.com/DataShades/ckanext-collection/commit/ad1a10fc2c122645a87f7a58f1ac9052596e6f11) by Sergey Motornyuk).
 - Filters now have only actions and filters attributes ([3f2ec4c](https://github.com/DataShades/ckanext-collection/commit/3f2ec4c61673081a36b6e2dd2a64ae09b34dfaa1) by Sergey Motornyuk).
 
-<!-- insertion marker -->
 ## [v0.0.2a2](https://github.com/DataShades/ckanext-collection/releases/tag/v0.0.2a2) - 2023-12-05
 
 <small>[Compare with v0.0.2a1](https://github.com/DataShades/ckanext-collection/compare/v0.0.2a1...v0.0.2a2)</small>

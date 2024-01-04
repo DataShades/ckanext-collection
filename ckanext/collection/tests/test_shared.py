@@ -116,3 +116,48 @@ def test_user_trait(user_factory: Any, faker: Faker, app_with_session: Any):
 
     obj._gather_settings({"user": fake_username})
     assert obj.user == fake_username
+
+
+class TestDomain:
+    def test_attachment(self):
+        class Child(shared.Domain[Any]):
+            ...
+
+        attachment = object()
+        obj = Child(attachment)
+        assert obj.attached is attachment
+
+    def test_settings(self):
+        class Child(shared.Domain[Any]):
+            prop = shared.configurable_attribute(
+                default_factory=lambda self: self.attached
+            )
+
+        obj = Child(object())
+        assert obj.attached is obj.prop
+
+        obj = Child(object(), prop=10)
+        assert obj.prop == 10
+
+    def test_with_attributes(self):
+        """Domain.with_attributes creates anonymous class with overriden
+        attributes.
+
+        """
+        class Child(shared.Domain[Any]):
+            prop = shared.configurable_attribute(None)
+
+        default = object()
+        Derived = Child.with_attributes(prop=shared.configurable_attribute(default))
+        obj = Derived(None)
+        assert obj.prop is default
+
+        obj = Derived(None, prop=1)
+        assert obj.prop == 1
+
+        Derived = Child.with_attributes(prop=default)
+        obj = Derived(None)
+        assert obj.prop is default
+
+        obj = Derived(None, prop=1)
+        assert obj.prop is default
