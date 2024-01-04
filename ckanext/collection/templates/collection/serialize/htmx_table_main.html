@@ -32,16 +32,4 @@
         </div>
 
     {% endblock main %}
-    {% block actions %}
-        {% if collection.filters.actions %}
-            <div class="mt-5 d-flex justify-content-end">
-                {% for button in collection.filters.actions %}
-                    <a class="btn btn-primary" href="{{ button.value }}">
-                        {{ button.label }}
-                    </a>
-                {% endfor %}
-            </div>
-        {% endif %}
-
-    {% endblock actions %}
 {% endblock content %}

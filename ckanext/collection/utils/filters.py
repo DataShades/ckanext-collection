@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from ckanext.collection import shared, types
 
 
@@ -20,9 +22,14 @@ class Filters(
     def make_actions(self) -> list[types.Filter]:
         return []
 
-    filters: list[types.Filter] = shared.configurable_attribute(
-        default_factory=lambda self: self.make_filters(),
+    static_filters: list[types.Filter] = shared.configurable_attribute(
+        default_factory=lambda self: [],
     )
-    actions: list[types.Filter] = shared.configurable_attribute(
-        default_factory=lambda self: self.make_actions(),
+    static_actions: list[types.Filter] = shared.configurable_attribute(
+        default_factory=lambda self: [],
     )
+
+    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
+        super().__init__(obj, **kwargs)
+        self.filters = self.static_filters or self.make_filters()
+        self.actions = self.static_actions or self.make_actions()

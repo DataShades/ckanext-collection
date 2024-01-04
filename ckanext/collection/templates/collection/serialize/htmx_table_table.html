@@ -5,14 +5,14 @@
 {% block table %}
     <input name="{{ sort_name }}" type="hidden" value="{{ sort_value }}" form="{{ collection.serializer.form_id }}"/>
 
-    <table id="{{ collection.serializer.table_id }}" class="table">
+    <table id="{{ collection.serializer.table_id }}" class="table collection-table">
         {% block header %}
             <tr class="collection-table--row collection-table--header">
                 {% for col in collection.columns.names if col in collection.columns.visible %}
                     {% set is_sortable = col in collection.columns.sortable %}
                     {% set is_current_order = sort_value == col %}
 
-                    <th class="collection-table--cell{% if is_sortable %} collection-table--cell-sortable{% endif %}">
+                    <td class="collection-table--cell{% if is_sortable %} collection-table--cell-sortable{% endif %}">
                         {% if is_sortable %}
                             <button class="sort-trigger" type="button" form="{{ collection.serializer.form_id }}"
                                     onclick="this.form['{{ sort_name }}'].value = this.value; this.form.dispatchEvent(new Event('change'))"
@@ -24,7 +24,7 @@
                             <span>{{ collection.columns.labels[col] or col }}</span>
 
                         {% endif %}
-                    </th>
+                    </td>
                 {% endfor %}
             </tr>
         {% endblock header %}

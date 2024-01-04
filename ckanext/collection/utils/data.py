@@ -7,6 +7,7 @@ from typing import Any, Callable, Iterable, Iterator, cast
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapper
 from sqlalchemy.sql import Select
+from sqlalchemy.sql.elements import Label
 
 import ckan.plugins.toolkit as tk
 from ckan import model
@@ -75,7 +76,8 @@ class ModelData(Data[types.TData, types.TDataCollection]):
 
     model: Any = shared.configurable_attribute(None)
     is_scalar: bool = shared.configurable_attribute(False)
-    static_columns: list[sa.Column[Any]] = shared.configurable_attribute(
+
+    static_columns: list[sa.Column[Any] | Label[Any]] = shared.configurable_attribute(
         default_factory=lambda self: [],
     )
     static_filters: list[Any] = shared.configurable_attribute(
@@ -209,14 +211,6 @@ class ModelData(Data[types.TData, types.TDataCollection]):
         """Add normal filter to statement."""
         for cond in self.static_filters:
             stmt = stmt.where(cond)
-
-        params = self.attached.params
-        if self.model:
-            columns = self.model.__table__.c
-            for name in self.attached.columns.filterable:
-                if name not in params or name not in columns:
-                    continue
-                stmt = stmt.where(columns[name] == params[name])
 
         return stmt
 
