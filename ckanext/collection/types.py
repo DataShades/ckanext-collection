@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import abc
 from collections.abc import Sized
-from typing import Any, Callable, Iterable, TypedDict
+from typing import Any, Callable, Generic, Iterable, TypedDict
 
 from typing_extensions import TypeAlias, TypeVar
 
 CollectionFactory: TypeAlias = "Callable[[str, dict[str, Any]], BaseCollection[Any]]"
 TDataCollection = TypeVar("TDataCollection", bound="BaseCollection[Any]")
+TFilterOptions = TypeVar("TFilterOptions")
 TData = TypeVar("TData")
 
 
@@ -99,13 +100,13 @@ class BaseCollection(abc.ABC, Iterable[TData]):
 class BaseFilters(abc.ABC):
     """Declaration of filters properties."""
 
-    filters: list[Filter]
-    actions: list[Filter]
+    filters: list[Filter[Any]]
+    actions: list[Filter[Any]]
 
 
-class Filter(TypedDict):
+class Filter(TypedDict, Generic[TFilterOptions]):
     """Filter details."""
 
     name: str
-    options: dict[str, Any]
     type: str
+    options: TFilterOptions

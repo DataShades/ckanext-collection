@@ -16,16 +16,16 @@ class Filters(
 
     """
 
-    def make_filters(self) -> list[types.Filter]:
+    def make_filters(self) -> list[types.Filter[Any]]:
         return []
 
-    def make_actions(self) -> list[types.Filter]:
+    def make_actions(self) -> list[types.Filter[Any]]:
         return []
 
-    static_filters: list[types.Filter] = shared.configurable_attribute(
+    static_filters: list[types.Filter[Any]] = shared.configurable_attribute(
         default_factory=lambda self: [],
     )
-    static_actions: list[types.Filter] = shared.configurable_attribute(
+    static_actions: list[types.Filter[Any]] = shared.configurable_attribute(
         default_factory=lambda self: [],
     )
 
