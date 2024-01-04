@@ -30,7 +30,6 @@ class Data(
 
     def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         super().__init__(obj, **kwargs)
-        self.refresh_data()
 
     def __iter__(self) -> Iterator[types.TData]:
         yield from self._data
@@ -65,6 +64,14 @@ class Data(
     def total(self):
         return self._total
 
+    @cached_property
+    def _data(self):
+        return self.compute_data()
+
+    @cached_property
+    def _total(self) -> int:
+        return self.compute_total(self._data)
+
 
 class StaticData(Data[types.TData, types.TDataCollection]):
     """Static data source.
@@ -90,7 +97,7 @@ class ModelData(Data[types.TData, types.TDataCollection]):
       is_scalar: return model instance instead of columns set.
     """
 
-    _data: Select
+    _data: cached_property[Select]
     model: Any = shared.configurable_attribute(None)
     is_scalar: bool = shared.configurable_attribute(False)
 

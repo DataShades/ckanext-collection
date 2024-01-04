@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any
+from unittest import mock
 
 import pytest
 import sqlalchemy as sa
@@ -14,6 +15,60 @@ from ckanext.collection.utils import Collection, data
 @pytest.fixture()
 def collection() -> Collection[Any]:
     return Collection("", {})
+
+
+class TestLaziness:
+    @mock.patch.object(data.Data, "compute_data", return_value=[])
+    def test_data(self, stub: mock.Mock):
+        obj = data.Data(None)
+        assert not stub.called
+
+        assert obj.total == 0
+        assert stub.called
+
+        stub.reset_mock()
+
+        obj = data.Data(None)
+        assert not stub.called
+
+        assert list(obj) == []
+        assert stub.called
+
+        stub.reset_mock()
+
+        obj = data.Data(None)
+        assert list(obj) == []
+        assert len(obj) == 0
+        assert list(obj) == []
+        assert len(obj) == 0
+
+        stub.assert_called_once()
+
+    @mock.patch.object(data.Data, "compute_total", return_value=0)
+    def test_total(self, stub: mock.Mock):
+        obj = data.Data(None)
+        assert not stub.called
+
+        assert obj.total == 0
+        assert stub.called
+
+        stub.reset_mock()
+
+        obj = data.Data(None)
+        assert not stub.called
+
+        assert obj._data == []
+        assert not stub.called
+
+        stub.reset_mock()
+
+        obj = data.Data(None)
+        assert list(obj) == []
+        assert len(obj) == 0
+        assert list(obj) == []
+        assert len(obj) == 0
+
+        stub.assert_called_once()
 
 
 class TestStaticData:
