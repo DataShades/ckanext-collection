@@ -3,8 +3,11 @@ from __future__ import annotations
 from flask import Blueprint
 
 import ckan.plugins.toolkit as tk
-from ckanext.collection import shared
+from ckan import types
+from ckan.common import streaming_response
 from ckan.logic import parse_params
+
+from ckanext.collection import config, shared
 
 bp = Blueprint("ckanext-collection", __name__)
 
@@ -24,3 +27,25 @@ def render(name: str) -> str | bytes:
         return tk.abort(404)
 
     return collection.serializer.render()
+
+
+@bp.route("/api/util/collection/<name>/export/<format>")
+def export(name: str, format: str) -> types.Response:
+    try:
+        tk.check_access("collection_view_export", {}, {"name": name})
+    except tk.NotAuthorized:
+        return tk.abort(403)
+
+    params = parse_params(tk.request.args)
+
+    collection = shared.get_collection(name, params)
+    serializer = config.serializer(format)
+
+    if not collection or not serializer:
+        return tk.abort(404)
+
+    collection.serializer = serializer(collection)
+
+    resp = streaming_response(collection.serializer.stream(), with_context=True)
+    resp.headers["Content-Disposition"] = f"attachment; filename=collection.{format}"
+    return resp

@@ -21,3 +21,23 @@ groups:
         description: |
           Add HTMX asset to pages. Enable this option if you are using CKAN
           v2.10
+
+      - key: ckanext.collection.export.csv.serializer
+        default: ckanext.collection.utils.serialize:CsvSerializer
+        description: |
+          Import path for serializer used by CSV export endpoint.
+
+      - key: ckanext.collection.export.json.serializer
+        default: ckanext.collection.utils.serialize:JsonSerializer
+        description: |
+          Import path for serializer used by JSON export endpoint.
+
+      - key: ckanext.collection.export.jsonl.serializer
+        default: ckanext.collection.utils.serialize:JsonlSerializer
+        description: |
+          Import path for serializer used by JSONl export endpoint.
+
+      - key: ckanext.collection.export.<format>.serializer
+        type: dynamic
+        description: |
+          Import path for serializer used by `format`-export endpoint.
