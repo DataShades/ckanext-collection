@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import abc
 from collections.abc import Sized
-from typing import Any, Callable, Generic, Iterable, TypedDict
+from typing import Any, Callable, Generic, Iterable
 
-from typing_extensions import TypeAlias, TypeVar
+from typing_extensions import TypeAlias, TypedDict, TypeVar
 
 CollectionFactory: TypeAlias = "Callable[[str, dict[str, Any]], BaseCollection[Any]]"
 TDataCollection = TypeVar("TDataCollection", bound="BaseCollection[Any]")
