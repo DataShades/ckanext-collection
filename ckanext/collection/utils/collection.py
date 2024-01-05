@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import Any, Iterator
+from typing import Any, Iterator, overload
 
 from typing_extensions import Self
 
-from ckanext.collection import types
+from ckanext.collection import types, shared
 
 from .data import Data, StaticData, ModelData, ApiData, ApiSearchData, ApiListData
 from .columns import Columns
@@ -78,6 +78,14 @@ class Collection(types.BaseCollection[types.TData]):
     SerializerFactory: type[Serializer[Self]] = Serializer
     PagerFactory: type[Pager[Self]] = ClassicPager
 
+    _service_names: tuple[str, ...] = (
+        "columns",
+        "pager",
+        "filters",
+        "data",
+        "serializer",
+    )
+
     def __init__(self, name: str, params: dict[str, Any], /, **kwargs: Any):
         """Use name to pick only relevant parameters.
 
@@ -96,26 +104,54 @@ class Collection(types.BaseCollection[types.TData]):
             }
         self.params = params
 
-        self.columns = self._instantiate("columns", kwargs)
-        self.pager = self._instantiate("pager", kwargs)
-        self.filters = self._instantiate("filters", kwargs)
-        self.data = self._instantiate("data", kwargs)
-        self.serializer = self._instantiate("serializer", kwargs)
+        for service in self._service_names:
+            self.replace_service(self._instantiate(service, kwargs))
 
     def _instantiate(self, name: str, kwargs: dict[str, Any]) -> Any:
         if factory := kwargs.get(f"{name}_factory"):
             fn = "".join(p.capitalize() for p in name.split("_"))
             setattr(self, fn + "Factory", factory)
 
-        value = kwargs.get(f"{name}_instance")
-        if value:
-            value.attach(self)
+        value: shared.Domain[Any] | None = kwargs.get(f"{name}_instance")
+        if value is not None:
+            value._attach(self)  # pyright: ignore [reportPrivateUsage]
 
         else:
             maker = getattr(self, f"make_{name}")
             value = maker(**kwargs.get(f"{name}_settings", {}))
 
         return value
+
+    @overload
+    def replace_service(self, service: types.BaseColumns) -> types.BaseColumns | None:
+        ...
+
+    @overload
+    def replace_service(
+        self, service: types.BaseData[Any]
+    ) -> types.BaseData[Any] | None:
+        ...
+
+    @overload
+    def replace_service(self, service: types.BasePager) -> types.BasePager | None:
+        ...
+
+    @overload
+    def replace_service(self, service: types.BaseFilters) -> types.BaseFilters | None:
+        ...
+
+    @overload
+    def replace_service(
+        self, service: types.BaseSerializer
+    ) -> types.BaseSerializer | None:
+        ...
+
+    def replace_service(self, service: types.Service) -> types.Service | None:
+        """Attach service to collection
+        """
+        old_service = getattr(self, service.service_name, None)
+        setattr(self, service.service_name, service)
+        return old_service
 
     def __iter__(self) -> Iterator[types.TData]:
         yield from self.data.range(self.pager.start, self.pager.end)

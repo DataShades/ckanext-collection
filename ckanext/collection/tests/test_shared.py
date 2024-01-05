@@ -7,7 +7,7 @@ from faker import Faker
 
 import ckan.plugins.toolkit as tk
 
-from ckanext.collection import shared
+from ckanext.collection import shared, utils
 
 
 class AttachExample(shared.AttachTrait[Any]):
@@ -23,6 +23,18 @@ def test_attached_object(obj: Any):
     example = AttachExample()
     example._attach(obj)
     assert example.attached is obj
+
+
+def test_service_attach_updates_collection():
+    """Anything can be attached as a collection to AttachTrait implementation."""
+    collection = utils.Collection("", {})
+    example = AttachExample()
+    example._attach(collection)
+    assert collection.data is not example
+
+    data = utils.Data(None)
+    data._attach(collection)
+    assert collection.data is data
 
 
 class TestAttrSettings:

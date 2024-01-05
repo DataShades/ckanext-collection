@@ -12,7 +12,16 @@ TFilterOptions = TypeVar("TFilterOptions")
 TData = TypeVar("TData")
 
 
-class BaseColumns(abc.ABC):
+class Service:
+    """Marker for service classes used by collection."""
+
+    @abc.abstractproperty
+    def service_name(self) -> str:
+        """Name of the service instance used by collection."""
+        ...
+
+
+class BaseColumns(abc.ABC, Service):
     """Declaration of columns properties"""
 
     names: list[str]
@@ -21,8 +30,12 @@ class BaseColumns(abc.ABC):
     filterable: set[str]
     labels: dict[str, str]
 
+    @property
+    def service_name(self):
+        return "columns"
 
-class BaseData(abc.ABC, Sized, Iterable[TData]):
+
+class BaseData(abc.ABC, Sized, Iterable[TData], Service):
     """Declaration of data properties."""
 
     @abc.abstractproperty
@@ -35,13 +48,17 @@ class BaseData(abc.ABC, Sized, Iterable[TData]):
         """Slice data using specified limits."""
         ...
 
+    @property
+    def service_name(self):
+        return "data"
 
-class BasePager(abc.ABC):
+
+class BasePager(abc.ABC, Service):
     """Declaration of pager properties"""
 
     params: dict[str, Any]
 
-    @property
+    @abc.abstractproperty
     def size(self) -> Any:
         """Range of the pager.
 
@@ -49,7 +66,7 @@ class BasePager(abc.ABC):
         pager, it can be a timespan within which we are searching for records.
 
         """
-        return self.start - self.end
+        ...
 
     @abc.abstractproperty
     def start(self) -> Any:
@@ -71,8 +88,12 @@ class BasePager(abc.ABC):
         """
         ...
 
+    @property
+    def service_name(self):
+        return "pager"
 
-class BaseSerializer(abc.ABC):
+
+class BaseSerializer(abc.ABC, Service):
     @abc.abstractmethod
     def stream(self) -> Iterable[str] | Iterable[bytes]:
         """Iterate over fragments of the content."""
@@ -82,6 +103,10 @@ class BaseSerializer(abc.ABC):
     def render(self) -> str | bytes:
         """Combine content fragments into a single dump."""
         ...
+
+    @property
+    def service_name(self):
+        return "serializer"
 
 
 class BaseCollection(abc.ABC, Iterable[TData]):
@@ -97,11 +122,15 @@ class BaseCollection(abc.ABC, Iterable[TData]):
     serializer: BaseSerializer
 
 
-class BaseFilters(abc.ABC):
+class BaseFilters(abc.ABC, Service):
     """Declaration of filters properties."""
 
     filters: list[Filter[Any]]
     actions: list[Filter[Any]]
+
+    @property
+    def service_name(self):
+        return "filters"
 
 
 class Filter(TypedDict, Generic[TFilterOptions]):

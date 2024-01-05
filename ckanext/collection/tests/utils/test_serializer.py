@@ -34,7 +34,6 @@ def collection():
 class TestCsvSerializer:
     def test_output(self, collection: StaticCollection):
         serializer = serialize.CsvSerializer(collection)
-        collection.serializer = serializer
 
         output = serializer.render().strip()
         nl = csv.get_dialect("excel").lineterminator
@@ -46,7 +45,6 @@ class TestCsvSerializer:
 class TestJsonlSerializer:
     def test_output(self, collection: StaticCollection):
         serializer = serialize.JsonlSerializer(collection)
-        collection.serializer = serializer
 
         output = serializer.render().strip()
         nl = "\n"
@@ -58,7 +56,6 @@ class TestJsonlSerializer:
 class TestJsonSerializer:
     def test_output(self, collection: StaticCollection):
         serializer = serialize.JsonSerializer(collection)
-        collection.serializer = serializer
 
         output = serializer.render().strip()
         expected_output = json.dumps(list(collection.data))
@@ -75,7 +72,6 @@ class TestChartJsSerializer:
             dataset_labels={"age": "Age"},
             colors={"age": "test"},
         )
-        collection.serializer = serializer
 
         output = serializer.render().strip()
 
@@ -95,7 +91,6 @@ class TestHtmlSerializer:
     @pytest.mark.usefixtures("with_request_context")
     def test_output(self, collection: StaticCollection, ckan_config: Any):
         serializer = serialize.HtmlSerializer(collection)
-        collection.serializer = serializer
         output = serializer.render().strip()
 
         expected_output = (

@@ -11,7 +11,12 @@ from typing import Any, Callable, Generic, TypeVar, cast
 
 import ckan.plugins.toolkit as tk
 
-from ckanext.collection.types import BaseCollection, CollectionFactory, TDataCollection
+from ckanext.collection.types import (
+    BaseCollection,
+    CollectionFactory,
+    TDataCollection,
+    Service,
+)
 
 T = TypeVar("T")
 SENTINEL = object()
@@ -59,6 +64,12 @@ class AttachTrait(abc.ABC, Generic[TDataCollection]):
 
     def _attach(self, obj: TDataCollection):
         self.__collection = obj
+        if isinstance(self, Service):
+            # this block allows attaching services to non-collections. Mainly
+            # it's used in tests
+            replace_service = getattr(obj, "replace_service", None)
+            if replace_service:
+                replace_service(self)
 
     @property
     def attached(self) -> TDataCollection:

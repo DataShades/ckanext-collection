@@ -39,13 +39,13 @@ def export(name: str, format: str) -> types.Response:
     params = parse_params(tk.request.args)
 
     collection = shared.get_collection(name, params)
-    serializer = config.serializer(format)
+    serializer_factory = config.serializer(format)
 
-    if not collection or not serializer:
+    if not collection or not serializer_factory:
         return tk.abort(404)
 
-    collection.serializer = serializer(collection)
+    serializer = serializer_factory(collection)
 
-    resp = streaming_response(collection.serializer.stream(), with_context=True)
+    resp = streaming_response(serializer.stream(), with_context=True)
     resp.headers["Content-Disposition"] = f"attachment; filename=collection.{format}"
     return resp
