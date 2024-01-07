@@ -1,13 +1,14 @@
 from __future__ import annotations
+import abc
 
 import copy
 import logging
 from functools import cached_property
-from typing import Any, Callable, Iterable, Iterator, cast
+from typing import Any, Callable, Generic, Iterable, Iterator, TypeVar, cast
 
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapper
-from sqlalchemy.sql import Select
+from sqlalchemy.sql.selectable import Select, GenerativeSelect
 from sqlalchemy.sql.elements import Label
 
 import ckan.plugins.toolkit as tk
@@ -17,6 +18,7 @@ from ckan.types import Context
 from ckanext.collection import shared, types
 
 log = logging.getLogger(__name__)
+TStatement = TypeVar("TStatement", bound=GenerativeSelect)
 
 
 class Data(
@@ -88,7 +90,79 @@ class StaticData(Data[types.TData, types.TDataCollection]):
         return self.data
 
 
-class ModelData(Data[types.TData, types.TDataCollection]):
+class BaseModelData(
+    Data[types.TData, types.TDataCollection],
+    Generic[TStatement, types.TData, types.TDataCollection],
+):
+    """Data source for custom SQL statement."""
+
+    _data: cached_property[TStatement]
+
+    def compute_data(self):
+        stmt = self.get_base_statement()
+        stmt = self.alter_statement(stmt)
+        stmt = self.statement_with_filters(stmt)
+        return self.statement_with_sorting(stmt)
+
+    @abc.abstractmethod
+    def get_base_statement(self) -> Any:
+        """Return statement with minimal amount of columns and filters."""
+        ...
+
+    def compute_total(self, data: TStatement) -> int:
+        return self.count_statement(data)
+
+    def __iter__(self) -> Iterator[types.TData]:
+        yield from self.execute_statement(self._data)
+
+    def range(self, start: int, end: int) -> Iterable[types.TData]:
+        stmt = self._data.limit(end - start).offset(start)
+        return self.execute_statement(stmt)
+
+    def execute_statement(self, stmt: TStatement) -> Iterable[types.TData]:
+        result: Any = model.Session.execute(stmt)
+        return result
+
+    def alter_statement(self, stmt: TStatement):
+        """Add columns, joins and unconditional filters to statement."""
+        return stmt
+
+    def count_statement(self, stmt: TStatement) -> int:
+        """Count number of items in query"""
+        return cast(
+            int,
+            model.Session.execute(
+                sa.select(sa.func.count()).select_from(stmt),
+            ).scalar(),
+        )
+
+    def statement_with_filters(self, stmt: TStatement):
+        """Add normal filter to statement."""
+        return stmt
+
+    def statement_with_sorting(self, stmt: TStatement):
+        """Specify sorting order for statement."""
+        sort = self.attached.params.get("sort")
+        if not sort:
+            return stmt
+
+        column, desc = shared.parse_sort(sort)
+
+        if (
+            column not in self.attached.columns.sortable
+            and column not in stmt.selected_columns
+        ):
+            log.warning("Unexpected sort value: %s", column)
+            return stmt
+
+        sort = column
+        if desc:
+            sort = f"{sort} DESC"
+
+        return stmt.order_by(sa.text(sort))
+
+
+class ModelData(BaseModelData[Select, types.TData, types.TDataCollection]):
     """DB data source.
 
     This base class is suitable for building SQL query.
@@ -98,7 +172,6 @@ class ModelData(Data[types.TData, types.TDataCollection]):
       is_scalar: return model instance instead of columns set.
     """
 
-    _data: cached_property[Select]
     model: Any = shared.configurable_attribute(None)
     is_scalar: bool = shared.configurable_attribute(False)
 
@@ -114,22 +187,6 @@ class ModelData(Data[types.TData, types.TDataCollection]):
     static_joins: list[tuple[str, Any, bool]] = shared.configurable_attribute(
         default_factory=lambda self: [],
     )
-
-    def compute_data(self):
-        stmt = self.get_base_statement()
-        stmt = self.alter_statement(stmt)
-        stmt = self.statement_with_filters(stmt)
-        return self.statement_with_sorting(stmt)
-
-    def compute_total(self, data: Select) -> int:
-        return self.count_statement(data)
-
-    def __iter__(self) -> Iterator[types.TData]:
-        yield from self.execute_statement(self._data)
-
-    def range(self, start: int, end: int) -> Iterable[types.TData]:
-        stmt = self._data.limit(end - start).offset(start)
-        return self.execute_statement(stmt)
 
     def execute_statement(self, stmt: Select) -> Iterable[types.TData]:
         result: Any
@@ -216,19 +273,6 @@ class ModelData(Data[types.TData, types.TDataCollection]):
 
         return self.apply_joins(stmt)
 
-    def alter_statement(self, stmt: Select):
-        """Add columns, joins and unconditional filters to statement."""
-        return stmt
-
-    def count_statement(self, stmt: Select) -> int:
-        """Count number of items in query"""
-        return cast(
-            int,
-            model.Session.execute(
-                sa.select(sa.func.count()).select_from(stmt),
-            ).scalar(),
-        )
-
     def statement_with_filters(self, stmt: Select):
         """Add normal filter to statement."""
         for cond in self.static_filters:
@@ -236,23 +280,27 @@ class ModelData(Data[types.TData, types.TDataCollection]):
 
         return stmt
 
-    def statement_with_sorting(self, stmt: Select):
-        """Specify sorting order for statement."""
-        sort = self.attached.params.get("sort")
-        if not sort:
-            return stmt
 
-        column, desc = shared.parse_sort(sort)
+class StatementModelData(BaseModelData[Select, types.TData, types.TDataCollection]):
+    """Data source for custom SQL statement."""
 
-        if column not in self.attached.columns.sortable and column not in stmt.columns:
-            log.warning("Unexpected sort value: %s", column)
-            return stmt
+    statement: Any = shared.configurable_attribute(None)
 
-        sort = column
-        if desc:
-            sort = f"{sort} DESC"
+    def get_base_statement(self):
+        """Return statement with minimal amount of columns and filters."""
+        return self.statement
 
-        return stmt.order_by(sa.text(sort))
+
+class UnionModelData(BaseModelData[Select, types.TData, types.TDataCollection]):
+    """Data source for custom SQL statement."""
+
+    statements: Iterable[GenerativeSelect] = shared.configurable_attribute(
+        default_factory=lambda self: []
+    )
+
+    def get_base_statement(self):
+        """Return statement with minimal amount of columns and filters."""
+        return sa.select(sa.union_all(*self.statements).subquery())
 
 
 class ApiData(Data[types.TData, types.TDataCollection], shared.UserTrait):

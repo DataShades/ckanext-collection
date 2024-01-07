@@ -241,3 +241,7 @@ class HtmxTableSerializer(HtmlSerializer[types.TDataCollection]):
     @property
     def table_id(self):
         return f"{self.prefix}-id--{self.attached.name}"
+
+    @property
+    def render_url(self) -> str:
+        return tk.h.url_for("ckanext-collection.render", name=self.attached.name)
