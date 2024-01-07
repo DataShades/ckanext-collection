@@ -1,4 +1,11 @@
-from .collection import Collection, ApiCollection, ModelCollection
+from .collection import (
+    Collection,
+    StaticCollection,
+    ApiCollection,
+    ModelCollection,
+    ApiListCollection,
+    ApiSearchCollection,
+)
 from .columns import Columns
 from .data import (
     Data,
@@ -24,7 +31,10 @@ from .serialize import (
 )
 
 __all__ = [
+    "StaticCollection",
     "ApiCollection",
+    "ApiListCollection",
+    "ApiSearchCollection",
     "ApiData",
     "ApiListData",
     "ApiSearchData",
