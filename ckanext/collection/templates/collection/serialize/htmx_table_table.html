@@ -4,9 +4,14 @@
 {% set sort_name = collection.name ~ ":sort" %}
 {% set sort_value = collection.params.sort %}
 
+{% block table %}
+    <input name="{{ sort_name }}" type="hidden" value="{{ sort_value }}" form="{{ collection.serializer.form_id }}"/>
+    {{ super() }}
+{% endblock table %}
+
 {% block header %}
+
     <tr class="collection-table--row collection-table--header">
-        <input name="{{ sort_name }}" type="hidden" value="{{ sort_value }}" form="{{ collection.serializer.form_id }}"/>
 
         {% for col in collection.columns.names if col in collection.columns.visible %}
             {% set is_sortable = col in collection.columns.sortable %}

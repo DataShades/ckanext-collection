@@ -229,7 +229,7 @@ class TableSerializer(HtmlSerializer[types.TDataCollection]):
         return f"{self.prefix}-id--{self.attached.name}"
 
 
-class HtmxTableSerializer(HtmlSerializer[types.TDataCollection]):
+class HtmxTableSerializer(TableSerializer[types.TDataCollection]):
     """Serialize collection into HTML table."""
 
     main_template: str = shared.configurable_attribute(
