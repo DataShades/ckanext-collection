@@ -201,9 +201,33 @@ class TableSerializer(HtmlSerializer[types.TDataCollection]):
     main_template: str = shared.configurable_attribute(
         "collection/serialize/table_main.html",
     )
+    table_template: str = shared.configurable_attribute(
+        "collection/serialize/table_table.html",
+    )
     record_template: str = shared.configurable_attribute(
         "collection/serialize/table_record.html",
     )
+    counter_template: str = shared.configurable_attribute(
+        "collection/serialize/table_counter.html",
+    )
+    pager_template: str = shared.configurable_attribute(
+        "collection/serialize/table_pager.html",
+    )
+    form_template: str = shared.configurable_attribute(
+        "collection/serialize/table_form.html",
+    )
+
+
+    prefix: str = shared.configurable_attribute("collection-table")
+    base_class: str = shared.configurable_attribute("collection")
+
+    @property
+    def form_id(self):
+        return f"{self.prefix}-form--{self.attached.name}"
+
+    @property
+    def table_id(self):
+        return f"{self.prefix}-id--{self.attached.name}"
 
 
 class HtmxTableSerializer(HtmlSerializer[types.TDataCollection]):
@@ -230,17 +254,7 @@ class HtmxTableSerializer(HtmlSerializer[types.TDataCollection]):
 
     debug: str = shared.configurable_attribute(False)
     push_url: str = shared.configurable_attribute(False)
-
-    prefix: str = shared.configurable_attribute("collection-table")
     base_class: str = shared.configurable_attribute("htmx-collection")
-
-    @property
-    def form_id(self):
-        return f"{self.prefix}-form--{self.attached.name}"
-
-    @property
-    def table_id(self):
-        return f"{self.prefix}-id--{self.attached.name}"
 
     @property
     def render_url(self) -> str:

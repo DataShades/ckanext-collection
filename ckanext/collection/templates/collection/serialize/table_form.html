@@ -1,0 +1,19 @@
+{% set form_id = collection.serializer.form_id %}
+{% set base_class = collection.serializer.base_class %}
+
+{% block form %}
+    <form
+        class="{{ base_class }}--form" id="{{ form_id }}"
+    >
+
+        {% block counter %}
+            {% snippet collection.serializer.counter_template, collection=collection %}
+        {% endblock counter %}
+
+        {# this input catches search field submissions. Without it, submission
+        will include one of page navigation links, which are also implemented
+        as a submit #}
+        <input type="submit" hidden>
+
+    </form>
+{% endblock form%}

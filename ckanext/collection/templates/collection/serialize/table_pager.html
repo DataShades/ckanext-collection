@@ -1,0 +1,37 @@
+{#
+collection
+#}
+{% set form_id = collection.serializer.form_id %}
+{% set total = collection.data | length %}
+
+<div class="pagination--pages">
+    {% set pos_first = collection.pager.start + 1 %}
+    {% set pos_last = pos_first + collection.pager.size - 1 %}
+
+    {% block position %}
+        <span class="pagination--position">{{ pos_first }} - {{ pos_last }} out of {{ total }}</span>
+    {% endblock position %}
+
+
+    {# if first item is greater that total number of items,
+    somebody is messing with pagination. Send them to the beginning
+    of the list #}
+    <a class="pagination--switch-button"
+       href="{{ h.remove_url_param(collection.name + ':page', replace=collection.pager.page - 1 if pos_first < total else 1) }}"
+            {% if collection.pager.page == 1 %} disabled{% endif %}
+    >
+        {% block prev_page %}
+            <span>&larr;</span>
+        {% endblock prev_page %}
+    </a>
+
+    <a class="pagination--switch-button" name="{{ collection.name }}:page" form="{{ form_id }}"
+       href="{{ h.remove_url_param(collection.name + ':page', replace=collection.pager.page + 1) }}"
+       {% if pos_last >= total %} disabled{% endif %}
+    >
+        {% block next_page %}
+            <span>&rarr;</span>
+        {% endblock next_page %}
+    </a>
+
+</div>
