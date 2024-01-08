@@ -217,7 +217,6 @@ class TableSerializer(HtmlSerializer[types.TDataCollection]):
         "collection/serialize/table_form.html",
     )
 
-
     prefix: str = shared.configurable_attribute("collection-table")
     base_class: str = shared.configurable_attribute("collection")
 
