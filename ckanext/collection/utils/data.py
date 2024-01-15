@@ -1,6 +1,6 @@
 from __future__ import annotations
-import abc
 
+import abc
 import copy
 import logging
 from functools import cached_property
@@ -8,8 +8,8 @@ from typing import Any, Callable, Generic, Iterable, Iterator, TypeVar, cast
 
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapper
-from sqlalchemy.sql.selectable import Select, GenerativeSelect
 from sqlalchemy.sql.elements import Label
+from sqlalchemy.sql.selectable import GenerativeSelect, Select
 
 import ckan.plugins.toolkit as tk
 from ckan import model
@@ -295,7 +295,7 @@ class UnionModelData(BaseModelData[Select, types.TData, types.TDataCollection]):
     """Data source for custom SQL statement."""
 
     statements: Iterable[GenerativeSelect] = shared.configurable_attribute(
-        default_factory=lambda self: []
+        default_factory=lambda self: [],
     )
 
     def get_base_statement(self):

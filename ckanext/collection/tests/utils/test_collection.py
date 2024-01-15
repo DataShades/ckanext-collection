@@ -1,36 +1,36 @@
 from __future__ import annotations
-from typing import Any
-import pytest
 
-from ckanext.collection.utils import *
+from typing import Any
+
+from ckanext.collection import utils
 
 
 class TestCollection:
     def test_basic_collection_creation(self):
-        obj = Collection("", {})
-        assert isinstance(obj.columns, Columns)
-        assert isinstance(obj.pager, ClassicPager)
-        assert isinstance(obj.filters, Filters)
-        assert isinstance(obj.data, Data)
-        assert isinstance(obj.serializer, Serializer)
+        obj = utils.Collection("", {})
+        assert isinstance(obj.columns, utils.Columns)
+        assert isinstance(obj.pager, utils.ClassicPager)
+        assert isinstance(obj.filters, utils.Filters)
+        assert isinstance(obj.data, utils.Data)
+        assert isinstance(obj.serializer, utils.Serializer)
 
     def test_custom_instance(self):
-        data = Data(None)
+        data = utils.Data(None)
 
-        collection = Collection("", {}, data_instance=data)
+        collection = utils.Collection("", {}, data_instance=data)
         assert collection.data is data
         assert data.attached is collection
 
     def test_custom_factory(self):
-        custom_factory = Data[Any, Any].with_attributes()
-        collection = Collection[Any]("", {}, data_factory=custom_factory)
+        custom_factory = utils.Data[Any, Any].with_attributes()
+        collection = utils.Collection[Any]("", {}, data_factory=custom_factory)
 
         assert isinstance(collection.data, custom_factory)
 
     def test_replace_service(self):
-        collection = Collection("", {})
-        data = Data(None)
-        columns = Columns(None)
+        collection = utils.Collection("", {})
+        data = utils.Data(None)
+        columns = utils.Columns(None)
 
         assert collection.data is not data
         assert collection.columns is not columns

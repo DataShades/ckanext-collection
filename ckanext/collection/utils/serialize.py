@@ -5,9 +5,12 @@ import io
 import json
 import operator
 from functools import reduce
-from typing import Any, Iterable
+from typing import Any, Iterable, cast
 
+import sqlalchemy as sa
 from sqlalchemy.engine import Row
+from sqlalchemy.exc import NoInspectionAvailable
+from sqlalchemy.orm import InstanceState
 
 import ckan.plugins.toolkit as tk
 
@@ -44,6 +47,25 @@ class Serializer(types.BaseSerializer, shared.Domain[types.TDataCollection]):
     def serialize_value(self, value: Any, name: str, record: Any):
         return value
 
+    def dictize_row(self, row: Any) -> dict[str, Any]:
+        if isinstance(row, dict):
+            return cast(Any, row)
+
+        if isinstance(row, Row):
+            return dict(zip(row.keys(), row))
+
+        try:
+            reflection = sa.inspect(row)  # pyright: ignore[reportUnknownVariableType]
+        except NoInspectionAvailable:
+            raise TypeError(type(row)) from None
+
+        if isinstance(reflection, InstanceState):
+            return {
+                attr.key: attr.value for attr in reflection.attrs  # pyright: ignore
+            }
+
+        raise TypeError(type(row))
+
 
 class CsvSerializer(Serializer[types.TDataCollection]):
     """Serialize collection into CSV document."""
@@ -68,8 +90,7 @@ class CsvSerializer(Serializer[types.TDataCollection]):
         }
 
     def prepare_row(self, row: Any, writer: csv.DictWriter[str]) -> dict[str, Any]:
-        if isinstance(row, Row):
-            row = dict(zip(row.keys(), row))
+        row = self.dictize_row(row)
 
         return {k: self.serialize_value(v, k, row) for k, v in row.items()}
 
@@ -95,10 +116,7 @@ class JsonlSerializer(Serializer[types.TDataCollection]):
 
     def stream(self) -> Iterable[str]:
         buff = io.StringIO()
-        for row in self.attached.data:
-            if isinstance(row, Row):
-                row = dict(zip(row.keys(), row))
-
+        for row in map(self.dictize_row, self.attached.data):
             row = {k: self.serialize_value(v, k, row) for k, v in row.items()}
             json.dump(row, buff)
             yield buff.getvalue()
@@ -115,9 +133,7 @@ class JsonSerializer(Serializer[types.TDataCollection]):
             [
                 {
                     k: self.serialize_value(v, k, row)
-                    for k, v in (
-                        dict(zip(row.keys(), row)) if isinstance(row, Row) else row
-                    ).items()
+                    for k, v in self.dictize_row(row).items()
                 }
                 for row in self.attached.data
             ],
@@ -145,10 +161,7 @@ class ChartJsSerializer(Serializer[types.TDataCollection]):
         labels = []
         data: list[list[int]] = []
 
-        for item in self.attached.data:
-            if isinstance(item, Row):
-                item = dict(zip(item.keys(), item))
-
+        for item in map(self.dictize_row, self.attached.data):
             labels.append(item.get(self.label_column, None))
             data.append(
                 [

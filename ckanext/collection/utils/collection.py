@@ -4,10 +4,10 @@ from typing import Any, Iterator, overload
 
 from typing_extensions import Self
 
-from ckanext.collection import types, shared
+from ckanext.collection import shared, types
 
-from .data import Data, StaticData, ModelData, ApiData, ApiSearchData, ApiListData
 from .columns import Columns
+from .data import ApiData, ApiListData, ApiSearchData, Data, ModelData, StaticData
 from .filters import Filters
 from .pager import ClassicPager, Pager
 from .serialize import Serializer
@@ -113,12 +113,12 @@ class Collection(types.BaseCollection[types.TData]):
             setattr(self, fn + "Factory", factory)
 
         value: shared.Domain[Any] | None = kwargs.get(f"{name}_instance")
-        if value is not None:
-            value._attach(self)  # pyright: ignore [reportPrivateUsage]
-
-        else:
+        if value is None:
             maker = getattr(self, f"make_{name}")
             value = maker(**kwargs.get(f"{name}_settings", {}))
+
+        else:
+            value._attach(self)  # pyright: ignore [reportPrivateUsage]
 
         return value
 
@@ -128,7 +128,8 @@ class Collection(types.BaseCollection[types.TData]):
 
     @overload
     def replace_service(
-        self, service: types.BaseData[Any]
+        self,
+        service: types.BaseData[Any],
     ) -> types.BaseData[Any] | None:
         ...
 
@@ -142,13 +143,13 @@ class Collection(types.BaseCollection[types.TData]):
 
     @overload
     def replace_service(
-        self, service: types.BaseSerializer
+        self,
+        service: types.BaseSerializer,
     ) -> types.BaseSerializer | None:
         ...
 
     def replace_service(self, service: types.Service) -> types.Service | None:
-        """Attach service to collection
-        """
+        """Attach service to collection"""
         old_service = getattr(self, service.service_name, None)
         setattr(self, service.service_name, service)
         return old_service
