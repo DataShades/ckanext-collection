@@ -6,6 +6,7 @@ import ckan.plugins.toolkit as tk
 from ckan import types
 from ckan.common import streaming_response
 from ckan.logic import parse_params
+from werkzeug.utils import secure_filename
 
 from ckanext.collection import config, shared
 
@@ -46,6 +47,8 @@ def export(name: str, format: str) -> types.Response:
 
     serializer = serializer_factory(collection)
 
+    filename = secure_filename(tk.request.args.get("filename", f"collection.{format}"))
+
     resp = streaming_response(serializer.stream(), with_context=True)
-    resp.headers["Content-Disposition"] = f"attachment; filename=collection.{format}"
+    resp.headers["Content-Disposition"] = f'attachment; filename="{filename}"'
     return resp
