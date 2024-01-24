@@ -47,3 +47,11 @@ class Columns(
 
         if self.labels is SENTINEL:
             self.labels = {c: c for c in self.names}
+
+    def get_normal_order(self, name: str) -> str:
+        """Format column name for usage as a ASC sort value."""
+        return name
+
+    def get_reverse_order(self, name: str) -> str:
+        """Format column name for usage as a DESC sort value."""
+        return f"-{name}"

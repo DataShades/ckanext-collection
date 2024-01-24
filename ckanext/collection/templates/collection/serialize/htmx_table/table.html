@@ -9,27 +9,18 @@
     {{ super() }}
 {% endblock table %}
 
-{% block header %}
+{% block cell %}
+    {% if is_sortable %}
+        {# use button that updates hidden field and submits the
+        form instead of the link, to keep all active filters #}
+        <button class="sort-trigger" type="button" form="{{ collection.serializer.form_id }}"
+                onclick="this.form['{{ sort_name }}'].value = this.value; this.form.dispatchEvent(new Event('change'))"
+                value="{{ reverse_order if sort_value == normal_order else normal_order }}">
+            {{ collection.columns.labels[col] or col }}
+        </button>
 
-    <tr class="collection-table--row collection-table--header">
+    {% else %}
+        <span>{{ collection.columns.labels[col] or col }}</span>
 
-        {% for col in collection.columns.names if col in collection.columns.visible %}
-            {% set is_sortable = col in collection.columns.sortable %}
-            {% set is_current_order = sort_value == col %}
-
-            <td class="collection-table--cell{% if is_sortable %} collection-table--cell-sortable{% endif %}">
-                {% if is_sortable %}
-                    <button class="sort-trigger" type="button" form="{{ collection.serializer.form_id }}"
-                            onclick="this.form['{{ sort_name }}'].value = this.value; this.form.dispatchEvent(new Event('change'))"
-                            value="{% if is_current_order %}-{% endif %}{{ col }}">
-                        {{ collection.columns.labels[col] or col }}
-                    </button>
-
-                {% else %}
-                    <span>{{ collection.columns.labels[col] or col }}</span>
-
-                {% endif %}
-            </td>
-        {% endfor %}
-    </tr>
-{% endblock header %}
+    {% endif %}
+{% endblock %}
