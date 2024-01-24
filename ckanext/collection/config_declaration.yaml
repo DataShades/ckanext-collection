@@ -22,6 +22,12 @@ groups:
           Add HTMX asset to pages. Enable this option if you are using CKAN
           v2.10
 
+      - key: ckanext.collection.htmx_init_modules
+        type: bool
+        description: |
+          Initialize CKAN JS modules every time HTMX fetches HTML from the
+          server.
+
       - key: ckanext.collection.export.csv.serializer
         default: ckanext.collection.utils.serialize:CsvSerializer
         description: |

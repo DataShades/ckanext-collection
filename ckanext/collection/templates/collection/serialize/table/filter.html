@@ -32,12 +32,20 @@
 
             {% endif %}
 
-            <a href="{{ url }}" class="btn btn-primary">{{ _(filter.options.label or filter.name) }}</a>
+            <div class="form-group">
+                <div class="controls">
+                    <a href="{{ url }}" class="btn btn-primary">{{ _(filter.options.label or filter.name) }}</a>
+                </div>
+            </div>
 
         {% elif filter.type == "button" %}
-            <button type="{{ filter.options.type or 'submit' }}" class="btn btn-primary">
-                {{ _(filter.options.label or filter.name) }}
-            </button>
+            <div class="form-group">
+                <div class="controls">
+                    <button type="{{ filter.options.type or 'submit' }}" class="btn btn-primary">
+                        {{ _(filter.options.label or filter.name) }}
+                    </button>
+                </div>
+            </div>
 
         {% endif %}
     </div>

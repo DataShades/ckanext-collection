@@ -7,30 +7,34 @@
 
         {% block header %}
             <tr class="collection-table--row collection-table--header">
-                {% for col in collection.columns.names if col in collection.columns.visible %}
-                    {% set is_sortable = col in collection.columns.sortable %}
-                    {% set primary_order = collection.columns.get_primary_order(col) %}
-                    {% set secondary_order = collection.columns.get_secondary_order(col) %}
+                {% block header_rows %}
 
-                    {% set is_current_order = sort_value == col %}
+                    {% for col in collection.columns.names if col in collection.columns.visible %}
+                        {% set is_sortable = col in collection.columns.sortable %}
+                        {% set primary_order = collection.columns.get_primary_order(col) %}
+                        {% set secondary_order = collection.columns.get_secondary_order(col) %}
 
-                    <td class="collection-table--cell
-                               {{- ' collection-table--cell-sortable' if is_sortable }}
-                               {{- ' collection-table--cell-sortable--primary-order' if sort_value == primary_order }}
-                               {{- ' collection-table--cell-sortable--secondary-order' if sort_value == secondary_order }}">
-                        {% block header_cell scoped %}
-                            {% if is_sortable %}
-                                <a class="sort-trigger"
-                                   href="{{ h.remove_url_param(sort_name, replace=secondary_order if sort_value == primary_order else primary_order) }}">
-                                    {{ collection.columns.labels[col] or col }}
-                                </a>
-                            {% else %}
-                                <span>{{ collection.columns.labels[col] or col }}</span>
-                            {% endif %}
-                        {% endblock header_cell %}
+                        {% set is_current_order = sort_value == col %}
 
-                    </td>
-                {% endfor %}
+                        <td class="collection-table--cell
+                                   {{- ' collection-table--cell-sortable' if is_sortable }}
+                                   {{- ' collection-table--cell-sortable--primary-order' if sort_value == primary_order }}
+                                   {{- ' collection-table--cell-sortable--secondary-order' if sort_value == secondary_order }}">
+                            {% block header_cell scoped %}
+                                {% if is_sortable %}
+                                    <a class="sort-trigger"
+                                       href="{{ h.remove_url_param(sort_name, replace=secondary_order if sort_value == primary_order else primary_order) }}">
+                                        {{ collection.columns.labels[col] or col }}
+                                    </a>
+                                {% else %}
+                                    <span>{{ collection.columns.labels[col] or col }}</span>
+                                {% endif %}
+                            {% endblock header_cell %}
+
+                        </td>
+                    {% endfor %}
+
+                {% endblock header_rows %}
             </tr>
         {% endblock header %}
 
