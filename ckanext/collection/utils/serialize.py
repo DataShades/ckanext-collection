@@ -74,9 +74,9 @@ class Serializer(types.BaseSerializer, shared.Domain[types.TDataCollection]):
 
         else:
             try:
-                reflection = sa.inspect(
+                reflection = sa.inspect(  # pyright: ignore[reportUnknownVariableType]
                     row,
-                )  # pyright: ignore[reportUnknownVariableType]
+                )
             except NoInspectionAvailable:
                 raise TypeError(type(row)) from None
 

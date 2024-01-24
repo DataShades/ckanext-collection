@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import abc
 from collections.abc import Sized
-from typing import Any, Callable, Generic, Iterable
+from typing import Any, Callable, Generic, Iterable, Sequence
 
 from typing_extensions import TypeAlias, TypedDict, TypeVar
 
@@ -136,8 +136,8 @@ class BaseCollection(abc.ABC, Iterable[TData]):
 class BaseFilters(abc.ABC, Service):
     """Declaration of filters properties."""
 
-    filters: list[Filter[Any]]
-    actions: list[Filter[Any]]
+    filters: Sequence[Filter[Any]]
+    actions: Sequence[Filter[Any]]
 
     @property
     def service_name(self):

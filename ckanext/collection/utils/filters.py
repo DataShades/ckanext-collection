@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Sequence
 
 from ckanext.collection import shared, types
 
@@ -16,16 +16,16 @@ class Filters(
 
     """
 
-    def make_filters(self) -> list[types.Filter[Any]]:
+    def make_filters(self) -> Sequence[types.Filter[Any]]:
         return []
 
-    def make_actions(self) -> list[types.Filter[Any]]:
+    def make_actions(self) -> Sequence[types.Filter[Any]]:
         return []
 
-    static_filters: list[types.Filter[Any]] = shared.configurable_attribute(
+    static_filters: Sequence[types.Filter[Any]] = shared.configurable_attribute(
         default_factory=lambda self: [],
     )
-    static_actions: list[types.Filter[Any]] = shared.configurable_attribute(
+    static_actions: Sequence[types.Filter[Any]] = shared.configurable_attribute(
         default_factory=lambda self: [],
     )
 
