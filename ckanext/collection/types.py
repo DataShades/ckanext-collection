@@ -29,6 +29,7 @@ class BaseColumns(abc.ABC, Service):
     sortable: set[str]
     filterable: set[str]
     labels: dict[str, str]
+    serializers: dict[str, list[str]]
 
     @property
     def service_name(self):
@@ -139,3 +140,6 @@ class Filter(TypedDict, Generic[TFilterOptions]):
     name: str
     type: str
     options: TFilterOptions
+
+
+ValueSerializer: TypeAlias = Callable[[Any, str, Any, BaseSerializer], Any]

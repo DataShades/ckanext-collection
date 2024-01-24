@@ -26,6 +26,9 @@ class Columns(
     sortable: set[str] = shared.configurable_attribute(SENTINEL)
     filterable: set[str] = shared.configurable_attribute(SENTINEL)
     labels: dict[str, str] = shared.configurable_attribute(SENTINEL)
+    serializers: dict[str, list[str]] = shared.configurable_attribute(
+        default_factory=lambda self: {},
+    )
 
     def __init__(self, obj: types.TDataCollection, **kwargs: Any):
         super().__init__(obj, **kwargs)

@@ -36,6 +36,10 @@ class Serializer(types.BaseSerializer, shared.Domain[types.TDataCollection]):
 
     """
 
+    value_serializers: dict[str, types.ValueSerializer] = shared.configurable_attribute(
+        default_factory=lambda self: {},
+    )
+
     def stream(self) -> Iterable[str] | Iterable[bytes]:
         """Iterate over fragments of the content."""
         return ["", ""]
@@ -45,6 +49,11 @@ class Serializer(types.BaseSerializer, shared.Domain[types.TDataCollection]):
         return reduce(operator.add, self.stream())
 
     def serialize_value(self, value: Any, name: str, record: Any):
+        for serializer_name in self.attached.columns.serializers.get(name, []):
+            if serializer_name not in self.value_serializers:
+                continue
+            value = self.value_serializers[serializer_name](value, name, record, self)
+
         return value
 
     def dictize_row(self, row: Any) -> dict[str, Any]:
@@ -188,6 +197,8 @@ class ChartJsSerializer(Serializer[types.TDataCollection]):
 
 class HtmlSerializer(Serializer[types.TDataCollection]):
     """Serialize collection into HTML document."""
+
+    ensure_dictized: str = shared.configurable_attribute(False)
 
     main_template: str = shared.configurable_attribute(
         "collection/serialize/html_main.html",

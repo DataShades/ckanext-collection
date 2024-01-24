@@ -1,9 +1,11 @@
+{% set data = collection.serializer.dictize_row(record) if collection.serializer.ensure_dictized else record %}
+
 <tr class="collection-table--row">
     {% for column in collection.columns.names if column in collection.columns.visible -%}
         <td class="collection-table--cell{% if sortable %} collection-table--cell-sortable{% endif %}">
             {% block value scoped %}
                 <div>
-                    {{ collection.serializer.serialize_value(record[column], column, record) }}
+                    {{ collection.serializer.serialize_value(data[column], column, data) }}
                 </div>
             {% endblock %}
         </td>
