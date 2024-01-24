@@ -31,6 +31,37 @@ def collection():
     )
 
 
+class TestSerializer:
+    def test_value_serializers(self, faker):
+        record = {"name": faker.word(), "age": faker.pyint(), "gender": None}
+        collection = StaticCollection(
+            "",
+            {},
+            columns_settings={
+                "serializers": {"name": [("up", {})], "age": [("xN", {"scale": 10})]},
+            },
+            serializer_settings={
+                "value_serializers": {
+                    "up": lambda value, *_: value.upper(),
+                    "xN": lambda value, options, *_: value * options["scale"],
+                },
+            },
+        )
+        assert collection.serializer.serialize_value(
+            record["name"],
+            "name",
+            record,
+        ) == str.upper(record["name"])
+        assert (
+            collection.serializer.serialize_value(record["age"], "age", record)
+            == record["age"] * 10
+        )
+        assert (
+            collection.serializer.serialize_value(record["gender"], "gender", record)
+            == record["gender"]
+        )
+
+
 class TestCsvSerializer:
     def test_output(self, collection: StaticCollection):
         serializer = serialize.CsvSerializer(collection)

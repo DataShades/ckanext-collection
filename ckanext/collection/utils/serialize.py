@@ -49,31 +49,45 @@ class Serializer(types.BaseSerializer, shared.Domain[types.TDataCollection]):
         return reduce(operator.add, self.stream())
 
     def serialize_value(self, value: Any, name: str, record: Any):
-        for serializer_name in self.attached.columns.serializers.get(name, []):
+        """Transform record's value into its serialized form."""
+        for serializer_name, options in self.attached.columns.serializers.get(name, []):
             if serializer_name not in self.value_serializers:
                 continue
-            value = self.value_serializers[serializer_name](value, name, record, self)
+            value = self.value_serializers[serializer_name](
+                value,
+                options,
+                name,
+                record,
+                self,
+            )
 
         return value
 
     def dictize_row(self, row: Any) -> dict[str, Any]:
+        """Transform single data record into serializable dictionary."""
+        result: dict[str, Any]
         if isinstance(row, dict):
-            return cast(Any, row)
+            result = cast(Any, row)
 
-        if isinstance(row, Row):
-            return dict(zip(row.keys(), row))
+        elif isinstance(row, Row):
+            result = dict(zip(row.keys(), row))
 
-        try:
-            reflection = sa.inspect(row)  # pyright: ignore[reportUnknownVariableType]
-        except NoInspectionAvailable:
-            raise TypeError(type(row)) from None
+        else:
+            try:
+                reflection = sa.inspect(
+                    row,
+                )  # pyright: ignore[reportUnknownVariableType]
+            except NoInspectionAvailable:
+                raise TypeError(type(row)) from None
 
-        if isinstance(reflection, InstanceState):
-            return {
-                attr.key: attr.value for attr in reflection.attrs  # pyright: ignore
-            }
+            if isinstance(reflection, InstanceState):
+                result = {
+                    attr.key: attr.value for attr in reflection.attrs  # pyright: ignore
+                }
+            else:
+                raise TypeError(type(row))
 
-        raise TypeError(type(row))
+        return {k: self.serialize_value(v, k, row) for k, v in result.items()}
 
 
 class CsvSerializer(Serializer[types.TDataCollection]):
@@ -99,9 +113,7 @@ class CsvSerializer(Serializer[types.TDataCollection]):
         }
 
     def prepare_row(self, row: Any, writer: csv.DictWriter[str]) -> dict[str, Any]:
-        row = self.dictize_row(row)
-
-        return {k: self.serialize_value(v, k, row) for k, v in row.items()}
+        return self.dictize_row(row)
 
     def stream(self) -> Iterable[str]:
         buff = io.StringIO()
@@ -126,7 +138,6 @@ class JsonlSerializer(Serializer[types.TDataCollection]):
     def stream(self) -> Iterable[str]:
         buff = io.StringIO()
         for row in map(self.dictize_row, self.attached.data):
-            row = {k: self.serialize_value(v, k, row) for k, v in row.items()}
             json.dump(row, buff)
             yield buff.getvalue()
             yield "\n"
@@ -139,13 +150,7 @@ class JsonSerializer(Serializer[types.TDataCollection]):
 
     def stream(self):
         yield json.dumps(
-            [
-                {
-                    k: self.serialize_value(v, k, row)
-                    for k, v in self.dictize_row(row).items()
-                }
-                for row in self.attached.data
-            ],
+            [self.dictize_row(row) for row in self.attached.data],
         )
 
 
@@ -173,10 +178,7 @@ class ChartJsSerializer(Serializer[types.TDataCollection]):
         for item in map(self.dictize_row, self.attached.data):
             labels.append(item.get(self.label_column, None))
             data.append(
-                [
-                    self.serialize_value(item.get(name, 0), name, item)
-                    for name in self.dataset_columns
-                ],
+                [item[name] for name in self.dataset_columns],
             )
 
         datasets: list[dict[str, Any]] = [

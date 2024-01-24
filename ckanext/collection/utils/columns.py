@@ -26,7 +26,10 @@ class Columns(
     sortable: set[str] = shared.configurable_attribute(SENTINEL)
     filterable: set[str] = shared.configurable_attribute(SENTINEL)
     labels: dict[str, str] = shared.configurable_attribute(SENTINEL)
-    serializers: dict[str, list[str]] = shared.configurable_attribute(
+    serializers: dict[
+        str,
+        list[tuple[str, dict[str, Any]]],
+    ] = shared.configurable_attribute(
         default_factory=lambda self: {},
     )
 

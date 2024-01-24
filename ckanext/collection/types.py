@@ -29,7 +29,7 @@ class BaseColumns(abc.ABC, Service):
     sortable: set[str]
     filterable: set[str]
     labels: dict[str, str]
-    serializers: dict[str, list[str]]
+    serializers: dict[str, list[tuple[str, dict[str, Any]]]]
 
     @property
     def service_name(self):
@@ -109,6 +109,16 @@ class BaseSerializer(abc.ABC, Service):
     def service_name(self):
         return "serializer"
 
+    @abc.abstractmethod
+    def serialize_value(self, value: Any, name: str, record: Any):
+        """Transform record's value into its serialized form."""
+        ...
+
+    @abc.abstractmethod
+    def dictize_row(self, row: Any) -> dict[str, Any]:
+        """Transform single data record into serializable dictionary."""
+        ...
+
 
 class BaseCollection(abc.ABC, Iterable[TData]):
     """Declaration of collection properties."""
@@ -142,4 +152,7 @@ class Filter(TypedDict, Generic[TFilterOptions]):
     options: TFilterOptions
 
 
-ValueSerializer: TypeAlias = Callable[[Any, str, Any, BaseSerializer], Any]
+ValueSerializer: TypeAlias = Callable[
+    [Any, "dict[str, Any]", str, Any, BaseSerializer],
+    Any,
+]
