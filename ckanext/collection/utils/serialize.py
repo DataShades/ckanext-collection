@@ -203,10 +203,10 @@ class HtmlSerializer(Serializer[types.TDataCollection]):
     ensure_dictized: str = shared.configurable_attribute(False)
 
     main_template: str = shared.configurable_attribute(
-        "collection/serialize/html_main.html",
+        "collection/serialize/html/main.html",
     )
     record_template: str = shared.configurable_attribute(
-        "collection/serialize/html_record.html",
+        "collection/serialize/html/record.html",
     )
 
     def get_data(self) -> dict[str, Any]:
@@ -225,22 +225,22 @@ class TableSerializer(HtmlSerializer[types.TDataCollection]):
     """Serialize collection into HTML table."""
 
     main_template: str = shared.configurable_attribute(
-        "collection/serialize/table_main.html",
+        "collection/serialize/table/main.html",
     )
     table_template: str = shared.configurable_attribute(
-        "collection/serialize/table_table.html",
+        "collection/serialize/table/table.html",
     )
     record_template: str = shared.configurable_attribute(
-        "collection/serialize/table_record.html",
+        "collection/serialize/table/record.html",
     )
     counter_template: str = shared.configurable_attribute(
-        "collection/serialize/table_counter.html",
+        "collection/serialize/table/counter.html",
     )
     pager_template: str = shared.configurable_attribute(
-        "collection/serialize/table_pager.html",
+        "collection/serialize/table/pager.html",
     )
     form_template: str = shared.configurable_attribute(
-        "collection/serialize/table_form.html",
+        "collection/serialize/table/form.html",
     )
 
     prefix: str = shared.configurable_attribute("collection-table")
@@ -259,22 +259,22 @@ class HtmxTableSerializer(TableSerializer[types.TDataCollection]):
     """Serialize collection into HTML table."""
 
     main_template: str = shared.configurable_attribute(
-        "collection/serialize/htmx_table_main.html",
+        "collection/serialize/htmx_table/main.html",
     )
     table_template: str = shared.configurable_attribute(
-        "collection/serialize/htmx_table_table.html",
+        "collection/serialize/htmx_table/table.html",
     )
     record_template: str = shared.configurable_attribute(
-        "collection/serialize/htmx_table_record.html",
+        "collection/serialize/htmx_table/record.html",
     )
     counter_template: str = shared.configurable_attribute(
-        "collection/serialize/htmx_table_counter.html",
+        "collection/serialize/htmx_table/counter.html",
     )
     pager_template: str = shared.configurable_attribute(
-        "collection/serialize/htmx_table_pager.html",
+        "collection/serialize/htmx_table/pager.html",
     )
     form_template: str = shared.configurable_attribute(
-        "collection/serialize/htmx_table_form.html",
+        "collection/serialize/htmx_table/form.html",
     )
 
     debug: str = shared.configurable_attribute(False)
