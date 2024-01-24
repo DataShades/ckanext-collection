@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import abc
 from collections.abc import Sized
-from typing import Any, Callable, Generic, Iterable, Sequence
+from typing import Any, Callable, Generic, Iterable, Literal, Sequence, Union
 
-from typing_extensions import TypeAlias, TypedDict, TypeVar
+from typing_extensions import NotRequired, TypeAlias, TypedDict, TypeVar
 
 CollectionFactory: TypeAlias = "Callable[[str, dict[str, Any]], BaseCollection[Any]]"
 TDataCollection = TypeVar("TDataCollection", bound="BaseCollection[Any]")
@@ -28,6 +28,7 @@ class BaseColumns(abc.ABC, Service):
     visible: set[str]
     sortable: set[str]
     filterable: set[str]
+    searchable: set[str]
     labels: dict[str, str]
     serializers: dict[str, list[tuple[str, dict[str, Any]]]]
 
@@ -148,8 +149,56 @@ class Filter(TypedDict, Generic[TFilterOptions]):
     """Filter details."""
 
     name: str
-    type: str
+    type: Any
     options: TFilterOptions
+
+
+class _SelectOptions(TypedDict):
+    text: str
+    value: str
+
+
+class SelectFilterOptions(TypedDict):
+    label: str
+    options: Sequence[_SelectOptions]
+
+
+class InputFilterOptions(TypedDict):
+    label: str
+    placeholder: NotRequired[str]
+    type: NotRequired[str]
+
+
+class ButtonFilterOptions(TypedDict):
+    label: str
+    type: NotRequired[str]
+
+
+class StaticLinkFilterOptions(TypedDict):
+    label: str
+    href: str
+
+
+class DynamicLinkFilterOptions(TypedDict):
+    label: str
+    endpoint: str
+    kwargs: dict[str, Any]
+
+
+class SelectFilter(Filter[SelectFilterOptions]):
+    type: Literal["select"]
+
+
+class InputFilter(Filter[InputFilterOptions]):
+    type: Literal["input"]
+
+
+class ButtonFilter(Filter[ButtonFilterOptions]):
+    type: Literal["button"]
+
+
+class LinkFilter(Filter[Union[StaticLinkFilterOptions, DynamicLinkFilterOptions]]):
+    type: Literal["link"]
 
 
 ValueSerializer: TypeAlias = Callable[

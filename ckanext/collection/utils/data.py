@@ -97,6 +97,8 @@ class BaseModelData(
     """Data source for custom SQL statement."""
 
     _data: cached_property[TStatement]
+    use_naive_filters: bool = shared.configurable_attribute(False)
+    use_naive_search: bool = shared.configurable_attribute(False)
 
     def compute_data(self):
         stmt = self.get_base_statement()
@@ -136,8 +138,38 @@ class BaseModelData(
             ).scalar(),
         )
 
-    def statement_with_filters(self, stmt: TStatement):
+    def statement_with_filters(self, stmt: TStatement) -> TStatement:
         """Add normal filter to statement."""
+        if not isinstance(stmt, Select):
+            return stmt
+
+        params = self.attached.params
+        if self.use_naive_filters:
+            stmt = stmt.where(
+                sa.and_(
+                    sa.true(),
+                    *[
+                        stmt.selected_columns[name] == params[name]
+                        for name in self.attached.columns.filterable
+                        if name in params
+                        and params[name] != ""
+                        and name in stmt.selected_columns
+                    ],
+                ),
+            )
+
+        if self.use_naive_search and (q := params.get("q")):
+            stmt = stmt.where(
+                sa.or_(
+                    sa.false(),
+                    *[
+                        stmt.selected_columns[name].ilike(f"%{q}%")
+                        for name in self.attached.columns.searchable
+                        if name in stmt.selected_columns
+                    ],
+                ),
+            )
+
         return stmt
 
     def statement_with_sorting(self, stmt: TStatement):

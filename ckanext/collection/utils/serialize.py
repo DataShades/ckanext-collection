@@ -242,6 +242,9 @@ class TableSerializer(HtmlSerializer[types.TDataCollection]):
     form_template: str = shared.configurable_attribute(
         "collection/serialize/table/form.html",
     )
+    filter_template: str = shared.configurable_attribute(
+        "collection/serialize/table/filter.html",
+    )
 
     prefix: str = shared.configurable_attribute("collection-table")
     base_class: str = shared.configurable_attribute("collection")
@@ -275,6 +278,9 @@ class HtmxTableSerializer(TableSerializer[types.TDataCollection]):
     )
     form_template: str = shared.configurable_attribute(
         "collection/serialize/htmx_table/form.html",
+    )
+    filter_template: str = shared.configurable_attribute(
+        "collection/serialize/htmx_table/filter.html",
     )
 
     debug: str = shared.configurable_attribute(False)

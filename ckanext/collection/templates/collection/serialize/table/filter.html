@@ -1,0 +1,44 @@
+{% import 'macros/form.html' as form %}
+
+{#% set form_id = collection.serializer.form_id %#}
+{% set base_class = collection.serializer.base_class %}
+
+{% for filter in collection.filters.filters %}
+    {% set name = collection.name ~ ":" ~ filter.name %}
+
+    <div class="{{ base_class }}--filter">
+        {% if filter.type == "input" %}
+            {{ form.input(name,
+                label=_(filter.options.label or filter.name),
+                value=request.args[name],
+                placeholder=_(filter.options.placeholder) if filter.options.placeholder else null,
+                type=filter.options.type or 'text') }}
+
+        {% elif filter.type == "select" %}
+            {{ form.select(name,
+                label=_(filter.options.label or filter.name),
+                options=filter.options.options or [],
+                selected=request.args[name]) }}
+
+        {% elif filter.type == "link" %}
+            {% if filter.options.href %}
+                {% set url = filter.options.href %}
+
+            {% elif filter.options.endpoint %}
+                {% set url = h.url_for(filter.options.endpoint, **(filter.options.kwargs or {})) %}
+
+            {% else %}
+                {% set url = "" %}
+
+            {% endif %}
+
+            <a href="{{ url }}" class="btn btn-primary">{{ _(filter.options.label or filter.name) }}</a>
+
+        {% elif filter.type == "button" %}
+            <button type="{{ filter.options.type or 'submit' }}" class="btn btn-primary">
+                {{ _(filter.options.label or filter.name) }}
+            </button>
+
+        {% endif %}
+    </div>
+{% endfor %}

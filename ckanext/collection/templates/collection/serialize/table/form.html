@@ -3,8 +3,14 @@
 
 {% block form %}
     <form
-        class="{{ base_class }}--form" id="{{ form_id }}"
+        {% block form_attrs %}
+            class="{{ base_class }}--form" id="{{ form_id }}"
+        {% endblock form_attrs %}
     >
+
+        {% block filters %}
+            {% snippet collection.serializer.filter_template, collection=collection %}
+        {% endblock filters %}
 
         {% block counter %}
             {% snippet collection.serializer.counter_template, collection=collection %}
