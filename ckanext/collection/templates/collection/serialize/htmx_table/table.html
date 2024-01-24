@@ -9,13 +9,13 @@
     {{ super() }}
 {% endblock table %}
 
-{% block cell %}
+{% block header_cell %}
     {% if is_sortable %}
         {# use button that updates hidden field and submits the
         form instead of the link, to keep all active filters #}
         <button class="sort-trigger" type="button" form="{{ collection.serializer.form_id }}"
                 onclick="this.form['{{ sort_name }}'].value = this.value; this.form.dispatchEvent(new Event('change'))"
-                value="{{ reverse_order if sort_value == normal_order else normal_order }}">
+                value="{{ secondary_order if sort_value == primary_order else primary_order }}">
             {{ collection.columns.labels[col] or col }}
         </button>
 

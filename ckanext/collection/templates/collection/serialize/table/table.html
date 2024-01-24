@@ -9,25 +9,25 @@
             <tr class="collection-table--row collection-table--header">
                 {% for col in collection.columns.names if col in collection.columns.visible %}
                     {% set is_sortable = col in collection.columns.sortable %}
-                    {% set normal_order = collection.columns.get_normal_order(col) %}
-                    {% set reverse_order = collection.columns.get_reverse_order(col) %}
+                    {% set primary_order = collection.columns.get_primary_order(col) %}
+                    {% set secondary_order = collection.columns.get_secondary_order(col) %}
 
                     {% set is_current_order = sort_value == col %}
 
                     <td class="collection-table--cell
                                {{- ' collection-table--cell-sortable' if is_sortable }}
-                               {{- ' collection-table--cell-sortable--asc' if sort_value == normal_order }}
-                               {{- ' collection-table--cell-sortable--desc' if sort_value == reverse_order }}">
-                        {% block cell scoped %}
+                               {{- ' collection-table--cell-sortable--primary-order' if sort_value == primary_order }}
+                               {{- ' collection-table--cell-sortable--secondary-order' if sort_value == secondary_order }}">
+                        {% block header_cell scoped %}
                             {% if is_sortable %}
                                 <a class="sort-trigger"
-                                   href="{{ h.remove_url_param(sort_name, replace=reverse_order if sort_value == normal_order else normal_order) }}">
+                                   href="{{ h.remove_url_param(sort_name, replace=secondary_order if sort_value == primary_order else primary_order) }}">
                                     {{ collection.columns.labels[col] or col }}
                                 </a>
                             {% else %}
                                 <span>{{ collection.columns.labels[col] or col }}</span>
                             {% endif %}
-                        {% endblock cell %}
+                        {% endblock header_cell %}
 
                     </td>
                 {% endfor %}

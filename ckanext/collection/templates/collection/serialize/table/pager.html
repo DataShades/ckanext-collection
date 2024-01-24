@@ -1,37 +1,49 @@
 {#
 collection
 #}
-{% set form_id = collection.serializer.form_id %}
+
 {% set total = collection.data | length %}
 
+{% set pos_first = collection.pager.start + 1 %}
+{% set pos_last = pos_first + collection.pager.size - 1 %}
+
+{% set current_page_number = collection.pager.page %}
+{# if first item is greater that total number of items,
+somebody is messing with pagination. Send them to the beginning
+of the list #}
+{% set prev_page_number = [current_page_number - 1 if pos_first < total else 1, 1]|max %}
+{% set next_page_number = current_page_number + 1 %}
+
 <div class="pagination--pages">
-    {% set pos_first = collection.pager.start + 1 %}
-    {% set pos_last = pos_first + collection.pager.size - 1 %}
 
     {% block position %}
         <span class="pagination--position">{{ pos_first }} - {{ pos_last }} out of {{ total }}</span>
     {% endblock position %}
 
 
-    {# if first item is greater that total number of items,
-    somebody is messing with pagination. Send them to the beginning
-    of the list #}
-    <a class="pagination--switch-button"
-       href="{{ h.remove_url_param(collection.name + ':page', replace=collection.pager.page - 1 if pos_first < total else 1) }}"
-            {% if collection.pager.page == 1 %} disabled{% endif %}
-    >
-        {% block prev_page %}
-            <span>&larr;</span>
-        {% endblock prev_page %}
-    </a>
+    {% block prev_page_link %}
+        <a class="pagination--switch-button"
+           href="{{ h.remove_url_param(collection.name + ':page', replace=prev_page_number) }}"
+           {% if current_page_number == 1 %} hidden{% endif %}
+        >
+            {% block prev_page %}
+                <span>&larr;</span>
+            {% endblock prev_page %}
+        </a>
+    {% endblock prev_page_link %}
 
-    <a class="pagination--switch-button" name="{{ collection.name }}:page" form="{{ form_id }}"
-       href="{{ h.remove_url_param(collection.name + ':page', replace=collection.pager.page + 1) }}"
-       {% if pos_last >= total %} disabled{% endif %}
-    >
-        {% block next_page %}
-            <span>&rarr;</span>
-        {% endblock next_page %}
-    </a>
+    {% block mid_pages_links %}
+    {% endblock mid_pages_links %}
+
+    {% block next_page_link %}
+        <a class="pagination--switch-button" name="{{ collection.name }}:page"
+           href="{{ h.remove_url_param(collection.name + ':page', replace=next_page_number) }}"
+           {% if pos_last >= total %} hidden{% endif %}
+        >
+            {% block next_page %}
+                <span>&rarr;</span>
+            {% endblock next_page %}
+        </a>
+    {% endblock next_page_link %}
 
 </div>

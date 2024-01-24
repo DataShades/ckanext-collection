@@ -17,7 +17,8 @@
                 <div class="{{ base_class }}--pagination">
                     <div class="pagination--size">
                         <span>Rows per page:</span>
-                        <select name="{{ collection.name }}:rows_per_page" form="{{ collection.serializer.form_id }}">
+                        <select name="{{ collection.name }}:rows_per_page" form="{{ collection.serializer.form_id }}"
+                                onchange="this.form.submit()">
                             {% for size in [5, 10, 20, 50] %}
                                 <option{% if size == collection.pager.size %} selected{% endif %}>{{ size }}</option>
                             {% endfor %}
