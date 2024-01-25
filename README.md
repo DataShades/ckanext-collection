@@ -10,6 +10,7 @@ Base classes for viewing data series from CKAN.
 * [Installation](#installation)
 * [Usage](#usage)
   * [Overview](#overview)
+  * [Collection intialization](#collection-intialization)
   * [Services](#services)
     * [Common logic](#common-logic)
     * [Data service](#data-service)
@@ -17,6 +18,29 @@ Base classes for viewing data series from CKAN.
     * [Serializer service](#serializer-service)
     * [Columns service](#columns-service)
     * [Filters service](#filters-service)
+  * [Service implementations and usage examples](#custom-service-implementations-and-usage-examples)
+    * [Data](#data)
+    * [StaticData](#static-data)
+    * [BaseModelData](#base-model-data)
+    * [StatementModelData](#statement-model-data)
+    * [ModelData](#model-data)
+    * [UnionModelData](#union-model-data)
+    * [ApiData](#api-data)
+    * [ApiSearchData](#api-search-data)
+    * [ApiListData](#api-list-data)
+    * [Pager](#pager)
+    * [ClassicPager](#classic-pager)
+    * [Columns](#columns)
+    * [Filters](#filters)
+    * [Serializer](#serializer)
+    * [CsvSerializer](#csv-serializer)
+    * [JsonlSerializer](#jsonl-serializer)
+    * [JsonSerializer](#json-serializer)
+    * [HtmlSerializer](#html-serializer)
+    * [TableSerializer](#table-serializer)
+    * [HtmxTableSerializer](#htmx-table-serializer)
+
+
 * [Config settings](#config-settings)
 * [License](#license)
 
@@ -91,7 +115,10 @@ service. To modify it, we can pass a named argument called `data_settings` to
 the collection's constructor:
 
 ```python
-col = StaticCollection("name", {}, data_settings={"data": [1,2,3]})
+col = StaticCollection(
+    "name", {},
+    data_settings={"data": [1,2,3]}
+)
 ```
 
 Now try again iterating over the collection and now you'll see the result:
@@ -125,7 +152,11 @@ a number of columns, but we'll set its value to `True` and receive model
 instance for every record instead:
 
 ```python
-col = ModelCollection("", {}, data_settings={"is_scalar": True, "model": model.User})
+col = ModelCollection(
+    "", {},
+    data_settings={"is_scalar": True, "model": model.User}
+)
+
 for user in col:
   assert isinstance(user, model.User)
   print(f"{user.name}, {user.email}")
@@ -137,7 +168,11 @@ contain `count` and `results` keys. Its data-service accepts `action` attribute
 with the name of API action that produces the data:
 
 ```python
-col = ApiSearchCollection("", {}, data_settings={"action": "package_search"})
+col = ApiSearchCollection(
+    "", {},
+    data_settings={"action": "package_search"}
+)
+
 for pkg in col:
   print(f"{pkg['id']}: {pkg['title']}")
 ```
@@ -147,7 +182,11 @@ to use `limit` and `offset` parameters for pagination and their result must be
 represented by a list.
 
 ```python
-col = ApiListCollection("", {}, data_settings={"action": "package_list"})
+col = ApiListCollection(
+    "", {},
+    data_settings={"action": "package_list"}
+)
+
 for name in col:
   print(name)
 ```
@@ -156,7 +195,11 @@ for name in col:
 return all records at once, as list.
 
 ```python
-col = ApiCollection("", {}, data_settings={"action": "user_list"})
+col = ApiCollection(
+    "", {},
+    data_settings={"action": "user_list"}
+)
+
 for user in col:
   print(user["name"])
 ```
@@ -198,8 +241,14 @@ from ckan.plugins import toolkit as tk
 
 params = parse_params(tk.request.args)
 
-users = ModelCollection("users", params, data_settings={"model": model.User})
-packages = ModelCollection("packages", params, data_settings={"model": model.Package})
+users = ModelCollection(
+    "users", params,
+    data_settings={"model": model.User}
+)
+packages = ModelCollection(
+    "packages", params,
+    data_settings={"model": model.Package}
+)
 
 assert users.pager.page == 2
 assert packages.pager.page == 5
@@ -311,7 +360,11 @@ collection constructor and it will be passed down into corresponding service
 factory:
 
 ```python
-col = Collection("name", {}, data_factory=StaticData, data_settings={"data": [1, 2, 3]})
+col = Collection(
+    "name", {},
+    data_factory=StaticData,
+    data_settings={"data": [1, 2, 3]}
+)
 assert list(col) == [1, 2, 3]
 ```
 
@@ -325,7 +378,10 @@ this case you should define a new class that extends Collection and declares
 class MyCollection(Collection):
     DataFactory = StaticData
 
-col = MyCollection("name", {}, data_settings={"data": [1, 2, 3]})
+col = MyCollection(
+    "name", {},
+    data_settings={"data": [1, 2, 3]}
+)
 assert list(col) == [1, 2, 3]
 ```
 
@@ -376,7 +432,10 @@ assert col.data.attached is col
 assert col.pager.attached is col
 assert col.columns.attached is col
 
-another_col = Collection("another-name", {}, data_instance=col.data)
+another_col = Collection(
+    "another-name", {},
+    data_instance=col.data
+)
 assert col.data.attached is not col
 assert col.data.attached is another_col
 assert col.data is another_col.data
@@ -458,7 +517,8 @@ assert col.data.range(-3, None) == "xyz"
 
 ```
 
-If you need more complex data source, make sure you defined `__iter__`, `total`, and `range`:
+If you need more complex data source, make sure you defined `__iter__`,
+`total`, and `range`:
 
 ```python
 class CustomData(Data):
@@ -481,7 +541,6 @@ class CustomData(Data):
             if name > end:
                 break
             yield name
-        yield from range(start, end)
 
 ```
 
@@ -507,7 +566,11 @@ Because of these values you see only first 10 records from data when iterating
 the collection. Let's change pager settings:
 
 ```python
-col = StaticCollection("name", {}, data_settings={"data": range(1, 100)}, pager_settings={"page": 3, "rows_per_page": 6})
+col = StaticCollection(
+    "name", {},
+    data_settings={"data": range(1, 100)},
+    pager_settings={"page": 3, "rows_per_page": 6}
+)
 assert list(col) == [13, 14, 15, 16, 17, 18]
 ```
 
@@ -518,10 +581,18 @@ parameters(second argument of the collection constructor). But in this case,
 pager will use only items that has `<collection name>:` prefix:
 
 ```python
-col = StaticCollection("xxx", {"xxx:page": 3, "xxx:rows_per_page": 6}, data_settings={"data": range(1, 100)})
+col = StaticCollection(
+    "xxx",
+    {"xxx:page": 3, "xxx:rows_per_page": 6},
+    data_settings={"data": range(1, 100)}
+)
 assert list(col) == [13, 14, 15, 16, 17, 18]
 
-col = StaticCollection("xxx", {"page": 3, "rows_per_page": 6}, data_settings={"data": range(1, 100)})
+col = StaticCollection(
+    "xxx",
+    {"page": 3, "rows_per_page": 6},
+    data_settings={"data": range(1, 100)}
+)
 assert list(col) == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 ```
@@ -588,6 +659,71 @@ used, but you can put into it details about batch or record-level actions and
 use these details to extend one of standard serializers. For example,
 ckanext-admin-panel defines allowed actions (remove, restore, hide) for content
 and creates custom templates that are referring these actions.
+
+
+### Service implementations and usage examples
+
+TBA
+
+#### Data
+TBA
+
+#### StaticData
+TBA
+
+#### BaseModelData
+TBA
+
+#### StatementModelData
+TBA
+
+#### ModelData
+TBA
+
+#### UnionModelData
+TBA
+
+#### ApiData
+TBA
+
+#### ApiSearchData
+TBA
+
+#### ApiListData
+TBA
+
+#### Pager
+TBA
+
+#### ClassicPager
+TBA
+
+#### Columns
+TBA
+
+#### Filters
+TBA
+
+#### Serializer
+TBA
+
+#### CsvSerializer
+TBA
+
+#### JsonlSerializer
+TBA
+
+#### JsonSerializer
+TBA
+
+#### HtmlSerializer
+TBA
+
+#### TableSerializer
+TBA
+
+#### HtmxTableSerializer
+TBA
 
 ## Config settings
 
