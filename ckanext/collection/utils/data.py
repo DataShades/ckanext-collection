@@ -310,7 +310,7 @@ class ModelData(BaseModelData[Select, types.TData, types.TDataCollection]):
         for cond in self.static_filters:
             stmt = stmt.where(cond)
 
-        return stmt
+        return super().statement_with_filters(stmt)
 
 
 class StatementModelData(BaseModelData[Select, types.TData, types.TDataCollection]):
