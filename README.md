@@ -18,27 +18,27 @@ Base classes for viewing data series from CKAN.
     * [Serializer service](#serializer-service)
     * [Columns service](#columns-service)
     * [Filters service](#filters-service)
-  * [Service implementations and usage examples](#custom-service-implementations-and-usage-examples)
+  * [Service implementations and usage examples](#service-implementations-and-usage-examples)
     * [Data](#data)
-    * [StaticData](#static-data)
-    * [BaseModelData](#base-model-data)
-    * [StatementModelData](#statement-model-data)
-    * [ModelData](#model-data)
-    * [UnionModelData](#union-model-data)
-    * [ApiData](#api-data)
-    * [ApiSearchData](#api-search-data)
-    * [ApiListData](#api-list-data)
+    * [StaticData](#staticdata)
+    * [BaseModelData](#basemodeldata)
+    * [StatementModelData](#statementmodeldata)
+    * [ModelData](#modeldata)
+    * [UnionModelData](#unionmodeldata)
+    * [ApiData](#apidata)
+    * [ApiSearchData](#apisearchdata)
+    * [ApiListData](#apilistdata)
     * [Pager](#pager)
-    * [ClassicPager](#classic-pager)
+    * [ClassicPager](#classicpager)
     * [Columns](#columns)
     * [Filters](#filters)
     * [Serializer](#serializer)
-    * [CsvSerializer](#csv-serializer)
-    * [JsonlSerializer](#jsonl-serializer)
-    * [JsonSerializer](#json-serializer)
-    * [HtmlSerializer](#html-serializer)
-    * [TableSerializer](#table-serializer)
-    * [HtmxTableSerializer](#htmx-table-serializer)
+    * [CsvSerializer](#csvserializer)
+    * [JsonlSerializer](#jsonlserializer)
+    * [JsonSerializer](#jsonserializer)
+    * [HtmlSerializer](#htmlserializer)
+    * [TableSerializer](#tableserializer)
+    * [HtmxTableSerializer](#htmxtableserializer)
 
 
 * [Config settings](#config-settings)
@@ -488,6 +488,8 @@ which configurable attributes are initialized is not strictly defined. At the
 moment of writing this manual, configurable attributes were initialized in
 alphabetical order. But this implementation detail may change in future without
 notice.
+
+TODO: with_attributes
 
 #### Data service
 
