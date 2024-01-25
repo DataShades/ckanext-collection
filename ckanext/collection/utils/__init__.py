@@ -1,33 +1,34 @@
 from .collection import (
-    Collection,
-    StaticCollection,
     ApiCollection,
-    ModelCollection,
     ApiListCollection,
     ApiSearchCollection,
+    Collection,
+    ModelCollection,
+    StaticCollection,
 )
 from .columns import Columns
 from .data import (
-    Data,
-    ModelData,
-    UnionModelData,
-    StatementModelData,
-    BaseModelData,
     ApiData,
     ApiListData,
     ApiSearchData,
+    BaseModelData,
+    Data,
+    ModelData,
+    StatementModelData,
+    StaticData,
+    UnionModelData,
 )
 from .filters import Filters
-from .pager import Pager, ClassicPager
+from .pager import ClassicPager, Pager
 from .serialize import (
-    Serializer,
-    CsvSerializer,
-    JsonSerializer,
-    JsonlSerializer,
     ChartJsSerializer,
+    CsvSerializer,
     HtmlSerializer,
-    TableSerializer,
     HtmxTableSerializer,
+    JsonlSerializer,
+    JsonSerializer,
+    Serializer,
+    TableSerializer,
 )
 
 __all__ = [
@@ -54,6 +55,7 @@ __all__ = [
     "UnionModelData",
     "StatementModelData",
     "BaseModelData",
+    "StaticData",
     "Pager",
     "Serializer",
     "TableSerializer",
