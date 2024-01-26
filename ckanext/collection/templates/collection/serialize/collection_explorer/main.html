@@ -1,0 +1,20 @@
+{% if not request.headers["hx-request"] %}
+    {% extends "page.html" %}
+    {% asset "collection/htmx" %}
+{% endif %}
+
+{% block main_content %}
+    <ul hx-boost="true" hx-target="#collection-outlet" hx-push-url="false">
+        {%- for record in collection %}
+            <li>
+                <a href="{{ h.url_for('ckanext-collection.render', name=record) }}">
+                    {{ record }}
+                </a>
+            </li>
+        {% endfor -%}
+    </ul>
+
+    <div id="collection-outlet">
+    </div>
+
+{% endblock %}

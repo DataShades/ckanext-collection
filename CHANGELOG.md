@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [v0.1.1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.1) - 2024-01-26
+
+<small>[Compare with v0.1.1a0](https://github.com/DataShades/ckanext-collection/compare/v0.1.1a0...v0.1.1)</small>
+
+## [v0.1.1a0](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.1a0) - 2024-01-25
+
+<small>[Compare with v0.1.0](https://github.com/DataShades/ckanext-collection/compare/v0.1.0...v0.1.1a0)</small>
+
+### Bug Fixes
+
+- fix ModelData statement_with_filters method ([3c6cb1c](https://github.com/DataShades/ckanext-collection/commit/3c6cb1cfad74ac653b8e2e9a1a223016381e9d99) by mutantsan).
+
 ## [v0.1.0](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0) - 2024-01-25
 
 <small>[Compare with v0.1.0a10](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a10...v0.1.0)</small>

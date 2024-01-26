@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from ckanext.collection import utils
+import pytest
+
+from ckan.tests.helpers import call_action
+
+from ckanext.collection import config, shared, utils
 
 
 class TestCollection:
@@ -40,3 +44,25 @@ class TestCollection:
 
         assert collection.data is data
         assert collection.columns is columns
+
+
+@pytest.mark.usefixtures("with_plugins")
+class TestCollectionExplorerCollection:
+    @pytest.mark.ckan_config(config.CONFIG_ANNONYMOUS, "hello")
+    def test_only_accessible_collections_are_visible(
+        self,
+        collection_registry: shared.Registry[Any],
+    ):
+        collection_registry.register("hello", utils.Collection)
+        collection_registry.register("world", utils.Collection)
+
+        explorer = utils.CollectionExplorerCollection("", {})
+        assert set(explorer) == {"hello"}
+
+        user = call_action("get_site_user")
+        explorer = utils.CollectionExplorerCollection(
+            "",
+            {},
+            data_settings={"user": user["name"]},
+        )
+        assert set(explorer) == {"hello", "world"}

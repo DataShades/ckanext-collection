@@ -6,21 +6,26 @@ import ckan.plugins.toolkit as tk
 
 from ckanext.collection import types
 
+CONFIG_ANNONYMOUS = "ckanext.collection.auth.anonymous_collections"
+CONFIG_AUTHENTICATED = "ckanext.collection.auth.authenticated_collections"
+CONFIG_INCLUDE_ASSET = "ckanext.collection.include_htmx_asset"
+CONFIG_INIT_MODULES = "ckanext.collection.htmx_init_modules"
+
 
 def anonymous_collections() -> list[str]:
-    return tk.config["ckanext.collection.auth.anonymous_collections"]
+    return tk.config[CONFIG_ANNONYMOUS]
 
 
 def authenticated_collections() -> list[str]:
-    return tk.config["ckanext.collection.auth.authenticated_collections"]
+    return tk.config[CONFIG_AUTHENTICATED]
 
 
 def include_htmx_asset() -> bool:
-    return tk.config["ckanext.collection.include_htmx_asset"]
+    return tk.config[CONFIG_INCLUDE_ASSET]
 
 
 def htmx_init_modules() -> bool:
-    return tk.config["ckanext.collection.htmx_init_modules"]
+    return tk.config[CONFIG_INIT_MODULES]
 
 
 def serializer(format: str) -> type[types.BaseSerializer] | None:

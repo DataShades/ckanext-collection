@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from typing import Any, Iterator, overload
+from typing import Any, Iterable, Iterator, overload
 
 from typing_extensions import Self
+
+from ckan.authz import is_authorized_boolean
 
 from ckanext.collection import shared, types
 
@@ -10,7 +12,7 @@ from .columns import Columns
 from .data import ApiData, ApiListData, ApiSearchData, Data, ModelData, StaticData
 from .filters import Filters
 from .pager import ClassicPager, Pager
-from .serialize import Serializer
+from .serialize import HtmlSerializer, Serializer
 
 
 class Collection(types.BaseCollection[types.TData]):
@@ -196,3 +198,23 @@ class ApiSearchCollection(ApiCollection[types.TData]):
 
 class ApiListCollection(ApiCollection[types.TData]):
     DataFactory = ApiListData
+
+
+class CollectionExplorerCollection(Collection[str]):
+    class DataFactory(Data[str, "CollectionExplorerCollection"], shared.UserTrait):
+        def compute_data(self) -> Iterable[str]:
+            return [
+                str(name)
+                for name in shared.collection_registry.members
+                if name != self.attached.name
+                and is_authorized_boolean(
+                    "collection_view_render",
+                    {"user": self.user},
+                    {"name": name},
+                )
+            ]
+
+    class SerializerFactory(HtmlSerializer["CollectionExplorerCollection"]):
+        main_template: str = shared.configurable_attribute(
+            "collection/serialize/collection_explorer/main.html",
+        )
