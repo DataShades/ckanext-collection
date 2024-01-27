@@ -172,14 +172,14 @@ class Filter(TypedDict, Generic[TFilterOptions]):
     options: TFilterOptions
 
 
-class _SelectOptions(TypedDict):
+class SelectOption(TypedDict):
     text: str
     value: str
 
 
 class SelectFilterOptions(TypedDict):
     label: str
-    options: Sequence[_SelectOptions]
+    options: Sequence[SelectOption]
 
 
 class InputFilterOptions(TypedDict):

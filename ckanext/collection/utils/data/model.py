@@ -73,6 +73,7 @@ class BaseSaData(
 
     def statement_with_filters(self, stmt: TStatement) -> TStatement:
         """Add normal filter to statement."""
+
         if not isinstance(stmt, Select):
             return stmt
 

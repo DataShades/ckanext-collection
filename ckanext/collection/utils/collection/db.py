@@ -8,6 +8,7 @@ from ckanext.collection import types
 from ckanext.collection.utils.columns import TableColunns
 from ckanext.collection.utils.data import TableData
 from ckanext.collection.utils.db_connection import DbConnection
+from ckanext.collection.utils.filters import TableFilters
 
 from .base import Collection
 
@@ -17,6 +18,7 @@ class DbCollection(Collection[types.TData], types.BaseDbCollection[types.TData])
     DbConnectionFactory: type[DbConnection[Self]] = DbConnection
     DataFactory = TableData
     ColumnsFactory = TableColunns
+    FiltersFactory = TableFilters
 
     def make_db_connection(self, **kwargs: Any) -> DbConnection[Self]:
         """Return connection."""

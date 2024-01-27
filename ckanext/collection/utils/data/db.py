@@ -15,4 +15,7 @@ class TableData(BaseSaData[Select, types.TData, types.TDbCollection]):
         return self.attached.db_connection.engine.execute(stmt)
 
     def get_base_statement(self):
-        return sa.select(sa.text("*")).select_from(sa.table(self.table))
+        columns = self.attached.db_connection.inspector.get_columns(self.table)
+        return sa.select(*[sa.column(c["name"]) for c in columns]).select_from(
+            sa.table(self.table),
+        )

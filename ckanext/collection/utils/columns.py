@@ -65,10 +65,14 @@ class Columns(
 
 class TableColunns(Columns[types.TDbCollection]):
     table: str = shared.configurable_attribute()
+    filterable: set[str] = shared.configurable_attribute(
+        default_factory=lambda self: set(),
+    )
 
     def apply_names(self):
         self.names = [
             c["name"]
             for c in self.attached.db_connection.inspector.get_columns(self.table)
         ]
+
         super().apply_names()

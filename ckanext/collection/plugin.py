@@ -49,8 +49,12 @@ class CollectionPlugin(p.SingletonPlugin):
                     n,
                     p,
                     db_connection_settings={"engine": model.meta.engine},
-                    columns_settings={"table": "activity"},
-                    data_settings={"table": "activity"},
+                    columns_settings={
+                        "table": "package",
+                        "filterable": {"type", "state", "private"},
+                    },
+                    data_settings={"table": "package", "use_naive_filters": True},
+                    filters_settings={"table": "package"},
                     serializer_factory=HtmxTableSerializer,
                 ),
             }

@@ -22,7 +22,7 @@ from .data import (
     UnionModelData,
 )
 from .db_connection import DbConnection, UrlDbConnection
-from .filters import Filters
+from .filters import Filters, TableFilters
 from .pager import ClassicPager, Pager
 from .serialize import (
     ChartJsSerializer,
@@ -55,6 +55,7 @@ __all__ = [
     "CsvSerializer",
     "Data",
     "Filters",
+    "TableFilters",
     "HtmlSerializer",
     "HtmxTableSerializer",
     "JsonSerializer",
