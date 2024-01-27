@@ -4,10 +4,13 @@ import abc
 from collections.abc import Sized
 from typing import Any, Callable, Generic, Iterable, Literal, Sequence, Union
 
+import sqlalchemy as sa
+from sqlalchemy.engine import Engine
 from typing_extensions import NotRequired, TypeAlias, TypedDict, TypeVar
 
 CollectionFactory: TypeAlias = "Callable[[str, dict[str, Any]], BaseCollection[Any]]"
 TDataCollection = TypeVar("TDataCollection", bound="BaseCollection[Any]")
+TDbCollection = TypeVar("TDbCollection", bound="BaseDbCollection[Any]")
 TFilterOptions = TypeVar("TFilterOptions")
 TData = TypeVar("TData")
 
@@ -121,6 +124,17 @@ class BaseSerializer(abc.ABC, Service):
         ...
 
 
+class BaseFilters(abc.ABC, Service):
+    """Declaration of filters properties."""
+
+    filters: Sequence[Filter[Any]]
+    actions: Sequence[Filter[Any]]
+
+    @property
+    def service_name(self):
+        return "filters"
+
+
 class BaseCollection(abc.ABC, Iterable[TData]):
     """Declaration of collection properties."""
 
@@ -134,15 +148,20 @@ class BaseCollection(abc.ABC, Iterable[TData]):
     serializer: BaseSerializer
 
 
-class BaseFilters(abc.ABC, Service):
-    """Declaration of filters properties."""
-
-    filters: Sequence[Filter[Any]]
-    actions: Sequence[Filter[Any]]
+class BaseDbConnection(abc.ABC, Service):
+    engine: Engine
 
     @property
     def service_name(self):
-        return "filters"
+        return "db_connection"
+
+    @property
+    def inspector(self):
+        return sa.inspect(self.engine)
+
+
+class BaseDbCollection(BaseCollection[TData]):
+    db_connection: BaseDbConnection
 
 
 class Filter(TypedDict, Generic[TFilterOptions]):

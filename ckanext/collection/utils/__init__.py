@@ -4,6 +4,7 @@ from .collection import (
     ApiSearchCollection,
     Collection,
     CollectionExplorerCollection,
+    DbCollection,
     ModelCollection,
     StaticCollection,
 )
@@ -17,8 +18,10 @@ from .data import (
     ModelData,
     StatementModelData,
     StaticData,
+    TableData,
     UnionModelData,
 )
+from .db_connection import DbConnection, UrlDbConnection
 from .filters import Filters
 from .pager import ClassicPager, Pager
 from .serialize import (
@@ -33,6 +36,10 @@ from .serialize import (
 )
 
 __all__ = [
+    "DbCollection",
+    "TableData",
+    "DbConnection",
+    "UrlDbConnection",
     "ApiCollection",
     "ApiData",
     "ApiListCollection",

@@ -14,8 +14,8 @@ import ckan.plugins.toolkit as tk
 from ckanext.collection.types import (
     BaseCollection,
     CollectionFactory,
-    TDataCollection,
     Service,
+    TDataCollection,
 )
 
 T = TypeVar("T")
@@ -146,11 +146,12 @@ class AttrSettingsTrait:
             type(self),
             lambda attr: isinstance(attr, _InitAttr),
         ):
+            attr: _InitAttr
             if k in kwargs:
                 setattr(self, k, kwargs.pop(k))
 
             else:
-                setattr(self, k, attr.get_default(self))
+                setattr(self, k, attr.get_default(self, k))
 
 
 @dataclasses.dataclass
@@ -162,14 +163,18 @@ class _InitAttr:
         if self.default is not self.default_factory:
             return
 
-        msg = "Either `default` or `default_factory` must be provided"
-        raise ValueError(msg)
+    def get_default(self, obj: Any, name: str):
+        if self.default is not SENTINEL:
+            return self.default
 
-    def get_default(self, obj: Any):
-        if self.default is SENTINEL:
+        if self.default_factory is not SENTINEL:
             return self.default_factory(obj)
 
-        return self.default
+        msg = (
+            f"__init__() of {obj.__class__.__name__} missing "
+            + f"1 required keyword-only argument: '{name}'"
+        )
+        raise TypeError(msg)
 
 
 def configurable_attribute(

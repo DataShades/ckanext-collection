@@ -18,19 +18,23 @@ Base classes for viewing data series from CKAN.
     * [Serializer service](#serializer-service)
     * [Columns service](#columns-service)
     * [Filters service](#filters-service)
-  * [Service implementations and usage examples](#service-implementations-and-usage-examples)
+  * [Core classes and usage examples](#core-classes-and-usage-examples)
+    * [Collection](#collection)
+    * [DbCollection](#dbcollection)
     * [Data](#data)
     * [StaticData](#staticdata)
-    * [BaseModelData](#basemodeldata)
-    * [StatementModelData](#statementmodeldata)
+    * [BaseSaData](#basesadata)
+    * [StatementSaData](#statementsadata)
+    * [UnionSaData](#unionsadata)
     * [ModelData](#modeldata)
-    * [UnionModelData](#unionmodeldata)
+    * [TableData](#tabledata)
     * [ApiData](#apidata)
     * [ApiSearchData](#apisearchdata)
     * [ApiListData](#apilistdata)
     * [Pager](#pager)
     * [ClassicPager](#classicpager)
     * [Columns](#columns)
+    * [TableColumns](#tablecolumns)
     * [Filters](#filters)
     * [Serializer](#serializer)
     * [CsvSerializer](#csvserializer)
@@ -663,7 +667,7 @@ ckanext-admin-panel defines allowed actions (remove, restore, hide) for content
 and creates custom templates that are referring these actions.
 
 
-### Service implementations and usage examples
+### Core classes and usage examples
 
 TBA
 
@@ -673,16 +677,16 @@ TBA
 #### StaticData
 TBA
 
-#### BaseModelData
+#### BaseSaData
 TBA
 
-#### StatementModelData
+#### StatementSaData
+TBA
+
+#### UnionSaData
 TBA
 
 #### ModelData
-TBA
-
-#### UnionModelData
 TBA
 
 #### ApiData

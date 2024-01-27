@@ -1,18 +1,15 @@
 from __future__ import annotations
 
-from typing import Any, Iterable, Iterator, overload
+from typing import Any, Iterator, overload
 
 from typing_extensions import Self
 
-from ckan.authz import is_authorized_boolean
-
 from ckanext.collection import shared, types
-
-from .columns import Columns
-from .data import ApiData, ApiListData, ApiSearchData, Data, ModelData, StaticData
-from .filters import Filters
-from .pager import ClassicPager, Pager
-from .serialize import HtmlSerializer, Serializer
+from ckanext.collection.utils.columns import Columns
+from ckanext.collection.utils.data import Data
+from ckanext.collection.utils.filters import Filters
+from ckanext.collection.utils.pager import ClassicPager, Pager
+from ckanext.collection.utils.serialize import Serializer
 
 
 class Collection(types.BaseCollection[types.TData]):
@@ -178,43 +175,3 @@ class Collection(types.BaseCollection[types.TData]):
     def make_data(self, **kwargs: Any) -> Data[types.TData, Self]:
         """Return search filters."""
         return self.DataFactory(self, **kwargs)
-
-
-class StaticCollection(Collection[types.TData]):
-    DataFactory = StaticData
-
-
-class ModelCollection(Collection[types.TData]):
-    DataFactory = ModelData
-
-
-class ApiCollection(Collection[types.TData]):
-    DataFactory = ApiData
-
-
-class ApiSearchCollection(ApiCollection[types.TData]):
-    DataFactory = ApiSearchData
-
-
-class ApiListCollection(ApiCollection[types.TData]):
-    DataFactory = ApiListData
-
-
-class CollectionExplorerCollection(Collection[str]):
-    class DataFactory(Data[str, "CollectionExplorerCollection"], shared.UserTrait):
-        def compute_data(self) -> Iterable[str]:
-            return [
-                str(name)
-                for name in shared.collection_registry.members
-                if name != self.attached.name
-                and is_authorized_boolean(
-                    "collection_view_render",
-                    {"user": self.user},
-                    {"name": name},
-                )
-            ]
-
-    class SerializerFactory(HtmlSerializer["CollectionExplorerCollection"]):
-        main_template: str = shared.configurable_attribute(
-            "collection/serialize/collection_explorer/main.html",
-        )

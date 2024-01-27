@@ -39,7 +39,9 @@ class Columns(
 
     def __init__(self, obj: types.TDataCollection, **kwargs: Any):
         super().__init__(obj, **kwargs)
+        self.apply_names()
 
+    def apply_names(self):
         if self.visible is SENTINEL:
             self.visible = {c for c in self.names if c not in self.hidden}
 
@@ -59,3 +61,14 @@ class Columns(
     def get_secondary_order(self, name: str) -> str:
         """Format column name for usage as a secondary order value."""
         return f"-{name}"
+
+
+class TableColunns(Columns[types.TDbCollection]):
+    table: str = shared.configurable_attribute()
+
+    def apply_names(self):
+        self.names = [
+            c["name"]
+            for c in self.attached.db_connection.inspector.get_columns(self.table)
+        ]
+        super().apply_names()
