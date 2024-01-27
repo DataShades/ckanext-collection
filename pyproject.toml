@@ -53,6 +53,11 @@ filterwarnings = [
                "ignore::DeprecationWarning",
 ]
 
+[tool.git-changelog]
+output = "CHANGELOG.md"
+convention = "conventional"
+parse-trailers = true
+
 [tool.pyright]
 pythonVersion = "3.8"
 include = ["ckanext"]

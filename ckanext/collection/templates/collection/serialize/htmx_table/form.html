@@ -20,7 +20,8 @@
                                change,
                                submit,
                                change from:[form="{{ form_id }}"],
-                               collection-trigger from:[data-collection="{{ collection.name }}"],
+                               collection-refresh from:body,
+                               collection-refresh from:#{{ form_id }},
                                change.htmx-select2 from:[form="{{ form_id }}"] delay:20'
     hx-target="closest .{{ base_class }}"
     hx-indicator="closest .{{ base_class }}"

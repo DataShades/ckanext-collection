@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from typing import Any
+import enum
+from typing import Any, cast
 
 from ckanext.collection import shared, types
 
 SENTINEL = object()
+ALL = object()
+NOT_HIDDEN = object()
+NONE = object()
 
 
 class Columns(
@@ -20,15 +24,18 @@ class Columns(
       labels: UI labels for columns
     """
 
+    class Default(enum.Enum):
+        ALL = enum.auto()
+        NOT_HIDDEN = enum.auto()
+        NONE = enum.auto()
+
     names: list[str] = shared.configurable_attribute(default_factory=lambda self: [])
     hidden: set[str] = shared.configurable_attribute(default_factory=lambda self: set())
-    visible: set[str] = shared.configurable_attribute(SENTINEL)
-    sortable: set[str] = shared.configurable_attribute(SENTINEL)
-    filterable: set[str] = shared.configurable_attribute(SENTINEL)
-    searchable: set[str] = shared.configurable_attribute(
-        default_factory=lambda self: set(),
-    )
-    labels: dict[str, str] = shared.configurable_attribute(SENTINEL)
+    visible: set[str] = shared.configurable_attribute(Default.NOT_HIDDEN)
+    sortable: set[str] = shared.configurable_attribute(Default.ALL)
+    filterable: set[str] = shared.configurable_attribute(Default.ALL)
+    searchable: set[str] = shared.configurable_attribute(Default.NONE)
+    labels: dict[str, str] = shared.configurable_attribute(Default.ALL)
 
     serializers: dict[
         str,
@@ -39,20 +46,37 @@ class Columns(
 
     def __init__(self, obj: types.TDataCollection, **kwargs: Any):
         super().__init__(obj, **kwargs)
-        self.apply_names()
+        self.configure_attributes()
 
-    def apply_names(self):
-        if self.visible is SENTINEL:
-            self.visible = {c for c in self.names if c not in self.hidden}
+    def configure_attributes(self):
+        if self.hidden is self.Default.ALL:
+            self.hidden = set(self.names)
+        elif isinstance(self.hidden, self.Default):
+            self.hidden = set()
 
-        if self.sortable is SENTINEL:
-            self.sortable = set(self.names)
+        self.visible = self._compute_set(self.visible)
 
-        if self.filterable is SENTINEL:
-            self.filterable = set(self.names)
+        if not self.hidden:
+            self.hidden = set(self.names) - self.visible
 
-        if self.labels is SENTINEL:
-            self.labels = {c: c for c in self.names}
+        self.sortable = self._compute_set(self.sortable)
+        self.filterable = self._compute_set(self.filterable)
+        self.searchable = self._compute_set(self.searchable)
+
+        if isinstance(self.labels, self.Default):
+            self.labels = {c: c for c in self._compute_set(self.labels)}
+
+    def _compute_set(self, value: Default | set[str]):
+        if value is self.Default.NONE:
+            return cast("set[str]", set())
+
+        if value is self.Default.ALL:
+            return {c for c in self.names}
+
+        if value is self.Default.NOT_HIDDEN:
+            return {c for c in self.names if c not in self.hidden}
+
+        return value
 
     def get_primary_order(self, name: str) -> str:
         """Format column name for usage as a primary order value."""
@@ -66,13 +90,13 @@ class Columns(
 class TableColunns(Columns[types.TDbCollection]):
     table: str = shared.configurable_attribute()
     filterable: set[str] = shared.configurable_attribute(
-        default_factory=lambda self: set(),
+        default_factory=lambda self: NONE,
     )
 
-    def apply_names(self):
+    def configure_attributes(self):
         self.names = [
             c["name"]
             for c in self.attached.db_connection.inspector.get_columns(self.table)
         ]
 
-        super().apply_names()
+        super().configure_attributes()
