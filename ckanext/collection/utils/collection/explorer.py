@@ -17,7 +17,7 @@ from .base import Collection
 from .db import DbCollection
 
 
-class ExplorerSerializer(HtmlSerializer[types.TDataCollection], unstable=True):
+class ExplorerSerializer(HtmlSerializer[types.TDataCollection]):
     extend_page_template: bool = shared.configurable_attribute(
         default_factory=lambda self: tk.request
         and not tk.request.headers.get("hx-request"),
@@ -102,8 +102,11 @@ class DbExplorer(DbCollection[Any]):
             if isinstance(tables, str):
                 tables = [tables]
 
+            hidden = self.attached.params.get("hidden", "").split(",")
+            hidden = set(filter(None, map(str.strip, hidden)))
+
             visible = self.attached.params.get("visible", "").split(",")
-            visible = set(filter(None, map(str.strip, visible)))
+            visible = set(filter(None, map(str.strip, visible))) - hidden
 
             allowed_filters = self.attached.params.get("allowed_filters", "").split(",")
             allowed_filters = set(filter(None, map(str.strip, allowed_filters)))
@@ -127,7 +130,8 @@ class DbExplorer(DbCollection[Any]):
                     ),
                     columns_factory=TableColumns.with_attributes(
                         table=name,
-                        visible=visible or TableColumns.Default.ALL,
+                        visible=visible or TableColumns.Default.NOT_HIDDEN,
+                        hidden=hidden,
                         filterable=allowed_filters,
                         searchable=searchable_fields,
                     ),
@@ -175,6 +179,14 @@ class DbExplorer(DbCollection[Any]):
                     type="input",
                     options={
                         "label": "Visible columns(leave empty to show all columns)",
+                        "placeholder": "comma-separated",
+                    },
+                ),
+                types.InputFilter(
+                    name="hidden",
+                    type="input",
+                    options={
+                        "label": "Hidden columns",
                         "placeholder": "comma-separated",
                     },
                 ),

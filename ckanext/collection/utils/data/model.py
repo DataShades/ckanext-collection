@@ -120,18 +120,19 @@ class BaseSaData(
 
         column, desc = shared.parse_sort(sort)
 
-        if (
-            column not in self.attached.columns.sortable
-            and column not in stmt.selected_columns
-        ):
+        if column not in self.attached.columns.sortable:
             log.warning("Unexpected sort value: %s", column)
             return stmt
 
-        sort = column
-        if desc:
-            sort = f"{sort} DESC"
+        if column not in stmt.selected_columns:
+            sort = column
+            if desc:
+                sort = f"{sort} DESC"
+            return stmt.order_by(sa.text(sort))
 
-        return stmt.order_by(sa.text(sort))
+        col_object = stmt.selected_columns[column]
+
+        return stmt.order_by(col_object.desc() if desc else col_object.asc())
 
 
 class StatementSaData(BaseSaData[Select, types.TData, types.TDataCollection]):
