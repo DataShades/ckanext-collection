@@ -162,7 +162,7 @@ class TestModelData:
     def test_sorting(self, package_factory: Any):
         ids = sorted([pkg["id"] for pkg in package_factory.create_batch(3)])
 
-        collection = Collection("", {})
+        collection = Collection("", {}, columns_settings={"sortable": {"id"}})
         obj = data.ModelData(
             collection,
             model=model.Package,
