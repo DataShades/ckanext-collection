@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Iterable, Sequence
+from typing import Any, Iterable
 
 import ckan.plugins.toolkit as tk
 from ckan.authz import is_authorized_boolean
@@ -64,7 +64,7 @@ class CollectionExplorer(Collection[Any]):
             ),
         )
 
-        def make_filters(self) -> Sequence[types.Filter[Any]]:
+        def make_filters(self) -> Iterable[types.Filter[Any]]:
             return [
                 types.SelectFilter(
                     name="collection",
@@ -157,7 +157,7 @@ class DbExplorer(DbCollection[Any]):
             default_factory=lambda self: [],
         )
 
-        def make_filters(self) -> Sequence[types.Filter[Any]]:
+        def make_filters(self) -> Iterable[types.Filter[Any]]:
             tables = self.static_tables
             if not tables:
                 tables = self.attached.db_connection.inspector.get_table_names()

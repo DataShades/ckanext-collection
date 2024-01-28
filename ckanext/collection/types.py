@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import abc
 from collections.abc import Sized
-from typing import Any, Callable, Generic, Iterable, Literal, Protocol, Sequence, Union
+from typing import Any, Callable, Generic, Iterable, Literal, Protocol, Union
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Engine
@@ -139,8 +139,8 @@ class BaseSerializer(abc.ABC, Service):
 class BaseFilters(abc.ABC, Service):
     """Declaration of filters properties."""
 
-    filters: Sequence[Filter[Any]]
-    actions: Sequence[Filter[Any]]
+    filters: Iterable[Filter[Any]]
+    actions: Iterable[Filter[Any]]
 
     @property
     def service_name(self):
@@ -191,7 +191,7 @@ class SelectOption(TypedDict):
 
 class SelectFilterOptions(TypedDict):
     label: str
-    options: Sequence[SelectOption]
+    options: Iterable[SelectOption]
 
 
 class InputFilterOptions(TypedDict):

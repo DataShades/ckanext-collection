@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Sequence
+from typing import Any, Iterable
 
 import sqlalchemy as sa
 
@@ -18,16 +18,16 @@ class Filters(
 
     """
 
-    def make_filters(self) -> Sequence[types.Filter[Any]]:
+    def make_filters(self) -> Iterable[types.Filter[Any]]:
         return []
 
-    def make_actions(self) -> Sequence[types.Filter[Any]]:
+    def make_actions(self) -> Iterable[types.Filter[Any]]:
         return []
 
-    static_filters: Sequence[types.Filter[Any]] = shared.configurable_attribute(
+    static_filters: Iterable[types.Filter[Any]] = shared.configurable_attribute(
         default_factory=lambda self: [],
     )
-    static_actions: Sequence[types.Filter[Any]] = shared.configurable_attribute(
+    static_actions: Iterable[types.Filter[Any]] = shared.configurable_attribute(
         default_factory=lambda self: [],
     )
 
@@ -44,7 +44,7 @@ class DbFilters(Filters[types.TDbCollection]):
 class TableFilters(DbFilters[types.TDbCollection]):
     table: str = shared.configurable_attribute()
 
-    def make_filters(self) -> Sequence[types.Filter[Any]]:
+    def make_filters(self) -> Iterable[types.Filter[Any]]:
         return [
             filter
             for c in self.attached.db_connection.inspector.get_columns(self.table)

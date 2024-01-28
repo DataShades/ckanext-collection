@@ -7,46 +7,50 @@
     {% set name = collection.name ~ ":" ~ filter.name %}
 
     <div class="{{ base_class }}--filter">
-        {% if filter.type == "input" %}
-            {{ form.input(name,
-                label=_(filter.options.label or filter.name),
-                value=request.args[name],
-                placeholder=_(filter.options.placeholder) if filter.options.placeholder else null,
-                type=filter.options.type or 'text') }}
+        {% block filter_widget scoped %}
+            {% if filter.type == "input" %}
+                {{ form.input(name,
+                    label=_(filter.options.label or filter.name),
+                    value=request.args[name],
+                    placeholder=_(filter.options.placeholder) if filter.options.placeholder else null,
+                    type=filter.options.type or 'text') }}
 
-        {% elif filter.type == "select" %}
-            {{ form.select(name,
-                label=_(filter.options.label or filter.name),
-                options=filter.options.options or [],
-                selected=request.args[name]) }}
+            {% elif filter.type == "select" %}
+                {{ form.select(name,
+                    label=_(filter.options.label or filter.name),
+                    options=filter.options.options or [],
+                    selected=request.args[name],
+                ) }}
 
-        {% elif filter.type == "link" %}
-            {% if filter.options.href %}
-                {% set url = filter.options.href %}
+            {% elif filter.type == "link" %}
+                {% if filter.options.href %}
+                    {% set url = filter.options.href %}
 
-            {% elif filter.options.endpoint %}
-                {% set url = h.url_for(filter.options.endpoint, **(filter.options.kwargs or {})) %}
+                {% elif filter.options.endpoint %}
+                    {% set url = h.url_for(filter.options.endpoint, **(filter.options.kwargs or {})) %}
 
-            {% else %}
-                {% set url = "" %}
+                {% else %}
+                    {% set url = "" %}
+
+                {% endif %}
+
+                <div class="form-group">
+                    <div class="controls">
+                        <a href="{{ url }}" class="btn btn-primary">{{ _(filter.options.label or filter.name) }}</a>
+                    </div>
+                </div>
+
+            {% elif filter.type == "button" %}
+                <div class="form-group">
+                    <div class="controls">
+                        <button type="{{ filter.options.type or 'submit' }}" class="btn btn-primary">
+                            {{ _(filter.options.label or filter.name) }}
+                        </button>
+                    </div>
+                </div>
 
             {% endif %}
+        {% endblock filter_widget %}
 
-            <div class="form-group">
-                <div class="controls">
-                    <a href="{{ url }}" class="btn btn-primary">{{ _(filter.options.label or filter.name) }}</a>
-                </div>
-            </div>
-
-        {% elif filter.type == "button" %}
-            <div class="form-group">
-                <div class="controls">
-                    <button type="{{ filter.options.type or 'submit' }}" class="btn btn-primary">
-                        {{ _(filter.options.label or filter.name) }}
-                    </button>
-                </div>
-            </div>
-
-        {% endif %}
     </div>
 {% endfor %}
