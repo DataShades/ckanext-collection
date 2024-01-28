@@ -7,6 +7,7 @@ from typing import Any, Generic, Iterable, Iterator, TypeVar, cast
 
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapper
+from sqlalchemy.sql import ColumnElement
 from sqlalchemy.sql.elements import Label
 from sqlalchemy.sql.selectable import GenerativeSelect, Select
 
@@ -71,6 +72,12 @@ class BaseSaData(
         count_stmt: Select = sa.select(sa.func.count()).select_from(stmt)
         return cast(int, self._execute(count_stmt).scalar())
 
+    def _into_clause(self, column: ColumnElement[Any], value: Any):
+        if isinstance(value, list):
+            return column.in_(value)
+
+        return column == value
+
     def statement_with_filters(self, stmt: TStatement) -> TStatement:
         """Add normal filter to statement."""
 
@@ -83,7 +90,7 @@ class BaseSaData(
                 sa.and_(
                     sa.true(),
                     *[
-                        stmt.selected_columns[name] == params[name]
+                        self._into_clause(stmt.selected_columns[name], params[name])
                         for name in self.attached.columns.filterable
                         if name in params
                         and params[name] != ""
