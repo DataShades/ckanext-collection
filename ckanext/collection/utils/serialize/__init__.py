@@ -5,7 +5,7 @@ import io
 import json
 import operator
 from functools import reduce
-from typing import Any, Iterable, cast
+from typing import Any, Callable, Iterable, cast
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Row
@@ -15,6 +15,26 @@ from sqlalchemy.orm import InstanceState
 import ckan.plugins.toolkit as tk
 
 from ckanext.collection import shared, types
+
+
+def basic_row_dictizer(row: Any) -> dict[str, Any]:
+    if isinstance(row, dict):
+        return cast("dict[str, Any]", row)
+
+    if isinstance(row, Row):
+        return dict(zip(row.keys(), row))
+
+    try:
+        reflection = sa.inspect(  # pyright: ignore[reportUnknownVariableType]
+            row,
+        )
+    except NoInspectionAvailable:
+        raise TypeError(type(row)) from None
+
+    if isinstance(reflection, InstanceState):
+        return {attr.key: attr.value for attr in reflection.attrs}  # pyright: ignore
+
+    raise TypeError(type(row))
 
 
 class Serializer(types.BaseSerializer, shared.Domain[types.TDataCollection]):
@@ -38,6 +58,9 @@ class Serializer(types.BaseSerializer, shared.Domain[types.TDataCollection]):
 
     value_serializers: dict[str, types.ValueSerializer] = shared.configurable_attribute(
         default_factory=lambda self: {},
+    )
+    row_dictizer: Callable[[Any], dict[str, Any]] = shared.configurable_attribute(
+        basic_row_dictizer,
     )
 
     def stream(self) -> Iterable[str] | Iterable[bytes]:
@@ -65,27 +88,7 @@ class Serializer(types.BaseSerializer, shared.Domain[types.TDataCollection]):
 
     def dictize_row(self, row: Any) -> dict[str, Any]:
         """Transform single data record into serializable dictionary."""
-        result: dict[str, Any]
-        if isinstance(row, dict):
-            result = cast(Any, row)
-
-        elif isinstance(row, Row):
-            result = dict(zip(row.keys(), row))
-
-        else:
-            try:
-                reflection = sa.inspect(  # pyright: ignore[reportUnknownVariableType]
-                    row,
-                )
-            except NoInspectionAvailable:
-                raise TypeError(type(row)) from None
-
-            if isinstance(reflection, InstanceState):
-                result = {
-                    attr.key: attr.value for attr in reflection.attrs  # pyright: ignore
-                }
-            else:
-                raise TypeError(type(row))
+        result = self.row_dictizer(row)
 
         return {k: self.serialize_value(v, k, row) for k, v in result.items()}
 
