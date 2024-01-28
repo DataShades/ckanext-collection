@@ -93,7 +93,7 @@ class BaseSaData(
             )
 
         if self.use_naive_search:
-            if q := params.get("q") and "q" not in self.attached.columns.searchable:
+            if (q := params.get("q")) and "q" not in self.attached.columns.searchable:
                 stmt = stmt.where(
                     sa.or_(
                         sa.false(),
