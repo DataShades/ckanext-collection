@@ -1,0 +1,16 @@
+scheming_version: 2
+schema_id: ckanext-collection-ap-config
+fields:
+  - field_name: ckanext.collection.auth.anonymous_collections
+    label: Anonymous collections
+    placeholder: first-collection second-collection
+    help_text: |
+      Space-separated names of registered collections that are viewable by any
+      visitor, including anonymous.
+
+  - field_name: ckanext.collection.auth.authenticated_collections
+    label: Authenticated collections
+    placeholder: first-collection second-collection
+    help_text: |
+      Space-separated names of registered collections that are viewable by any
+      authenticated user.

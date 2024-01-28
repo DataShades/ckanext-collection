@@ -1,16 +1,31 @@
 from __future__ import annotations
 
 from flask import Blueprint
+from werkzeug.utils import secure_filename
 
 import ckan.plugins.toolkit as tk
 from ckan import types
 from ckan.common import streaming_response
 from ckan.logic import parse_params
-from werkzeug.utils import secure_filename
 
 from ckanext.collection import config, shared
 
 bp = Blueprint("ckanext-collection", __name__)
+
+
+try:
+    from ckanext.ap_main.views.generics import ApConfigurationPageView
+
+    class ApConfiguration(ApConfigurationPageView):
+        pass
+
+    bp.add_url_rule(
+        "/admin-panel/config/collection",
+        view_func=ApConfiguration.as_view("ap_config", "ckanext-collection-ap-config"),
+    )
+
+except ImportError:
+    pass
 
 
 @bp.route("/api/util/collection/<name>/render")

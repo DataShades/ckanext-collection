@@ -43,9 +43,9 @@ Base classes for viewing data series from CKAN.
     * [HtmlSerializer](#htmlserializer)
     * [TableSerializer](#tableserializer)
     * [HtmxTableSerializer](#htmxtableserializer)
-
-
 * [Config settings](#config-settings)
+* [Integrations](#integrations)
+  * [ckanext-admin-panel](#ckanext-admin-panel)
 * [License](#license)
 
 ## Requirements
@@ -768,6 +768,18 @@ ckanext.collection.export.jsonl.serializer = ckanext.collection.utils.serialize:
 # (optional, default: )
 ckanext.collection.export.<format>.serializer =
 
+```
+
+## Integrations
+
+### [ckanext-admin-panel](https://github.com/mutantsan/ckanext-admin-panel)
+
+To enable configuration form of ckanext-collection in the admin panel, enable
+the following arbitrary schema
+
+```ini
+scheming.arbitrary_schemas =
+    ckanext.collection:ap_config.yaml
 ```
 
 ## License

@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import operator
+from dataclasses import is_dataclass
+from typing import Any
+
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
 from ckan.common import CKANConfig
@@ -7,13 +11,55 @@ from ckan.common import CKANConfig
 from . import shared
 from .interfaces import CollectionFactory, ICollection
 
+try:
+    from ckanext.ap_main.interfaces import IAdminPanel
+    from ckanext.ap_main.types import ConfigurationItem, SectionConfig
+
+    class ApImplementation(p.SingletonPlugin):  # pyright: ignore[reportRedeclaration]
+        p.implements(IAdminPanel, inherit=True)
+
+        def register_config_sections(
+            self,
+            config_list: list[SectionConfig],
+        ) -> list[SectionConfig]:
+            """Extension will receive the list of section config objects."""
+            config_page = ConfigurationItem(
+                name="Collections",
+                info="ckanext-collection configuration",
+                blueprint="ckanext-collection.ap_config",
+            )
+            getter: Any = (
+                operator.attrgetter
+                if is_dataclass(SectionConfig)
+                else operator.itemgetter
+            )
+
+            for section in config_list:
+                if getter("name")(section) == "Basic site settings":
+                    getter("configs")(section).append(config_page)
+                    break
+            else:
+                config_list.append(
+                    SectionConfig(  # type: ignore
+                        name="Basic site settings",
+                        configs=[config_page],
+                    ),
+                )
+
+            return config_list
+
+except ImportError:
+
+    class ApImplementation(p.SingletonPlugin):
+        pass
+
 
 @tk.blanket.blueprints
 @tk.blanket.auth_functions
 @tk.blanket.config_declarations
 @tk.blanket.helpers
 @tk.blanket.cli
-class CollectionPlugin(p.SingletonPlugin):
+class CollectionPlugin(ApImplementation, p.SingletonPlugin):
     p.implements(p.IConfigurer)
     p.implements(p.IConfigurable)
     p.implements(ICollection, inherit=True)
