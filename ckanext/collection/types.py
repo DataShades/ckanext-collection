@@ -203,17 +203,20 @@ class InputFilterOptions(TypedDict):
 class ButtonFilterOptions(TypedDict):
     label: str
     type: NotRequired[str]
+    attrs: NotRequired[dict[str, Any]]
 
 
 class StaticLinkFilterOptions(TypedDict):
     label: str
     href: str
+    attrs: NotRequired[dict[str, Any]]
 
 
 class DynamicLinkFilterOptions(TypedDict):
     label: str
     endpoint: str
     kwargs: dict[str, Any]
+    attrs: NotRequired[dict[str, Any]]
 
 
 class SelectFilter(Filter[SelectFilterOptions]):
