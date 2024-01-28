@@ -92,17 +92,23 @@ class BaseSaData(
                 ),
             )
 
-        if self.use_naive_search and (q := params.get("q")):
-            stmt = stmt.where(
-                sa.or_(
-                    sa.false(),
-                    *[
-                        stmt.selected_columns[name].ilike(f"%{q}%")
-                        for name in self.attached.columns.searchable
-                        if name in stmt.selected_columns
-                    ],
-                ),
-            )
+        if self.use_naive_search:
+            if q := params.get("q") and "q" not in self.attached.columns.searchable:
+                stmt = stmt.where(
+                    sa.or_(
+                        sa.false(),
+                        *[
+                            stmt.selected_columns[name].ilike(f"%{q}%")
+                            for name in self.attached.columns.searchable
+                            if name in stmt.selected_columns
+                        ],
+                    ),
+                )
+            for name in self.attached.columns.searchable:
+                if name not in params or name not in stmt.selected_columns:
+                    continue
+                value = params[name]
+                stmt = stmt.where(stmt.selected_columns[name].ilike(f"%{value}%"))
 
         return stmt
 

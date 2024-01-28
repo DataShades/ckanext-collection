@@ -37,7 +37,11 @@ class Filters(
         self.actions = self.static_actions or self.make_actions()
 
 
-class TableFilters(Filters[types.TDbCollection]):
+class DbFilters(Filters[types.TDbCollection]):
+    pass
+
+
+class TableFilters(DbFilters[types.TDbCollection]):
     table: str = shared.configurable_attribute()
 
     def make_filters(self) -> Sequence[types.Filter[Any]]:
@@ -52,7 +56,10 @@ class TableFilters(Filters[types.TDbCollection]):
             if isinstance(column["type"], sa.Boolean):
                 return self._boolean_filter(column)
 
-            return self._distinct_filter(column)
+            return self._input_filter(column)
+
+        if column["name"] in self.attached.columns.searchable:
+            return self._input_filter(column)
 
         return None
 
@@ -90,5 +97,14 @@ class TableFilters(Filters[types.TDbCollection]):
             options=types.SelectFilterOptions(
                 label=self._filter_label(column),
                 options=options,
+            ),
+        )
+
+    def _input_filter(self, column: dict[str, Any]) -> types.Filter[Any]:
+        return types.InputFilter(
+            name=column["name"],
+            type="input",
+            options=types.InputFilterOptions(
+                label=self._filter_label(column),
             ),
         )

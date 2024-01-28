@@ -287,6 +287,9 @@ class HtmxTableSerializer(TableSerializer[types.TDataCollection]):
     push_url: str = shared.configurable_attribute(False)
     base_class: str = shared.configurable_attribute("htmx-collection")
 
-    @property
-    def render_url(self) -> str:
-        return tk.h.url_for("ckanext-collection.render", name=self.attached.name)
+    render_url: str = shared.configurable_attribute(
+        default_factory=lambda self: tk.h.url_for(
+            "ckanext-collection.render",
+            name=self.attached.name,
+        ),
+    )

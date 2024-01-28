@@ -6,6 +6,7 @@ from __future__ import annotations
 import abc
 import dataclasses
 import inspect
+import logging
 from collections.abc import Hashable
 from typing import Any, Callable, Generic, TypeVar, cast
 
@@ -18,6 +19,7 @@ from ckanext.collection.types import (
     TDataCollection,
 )
 
+log = logging.getLogger(__name__)
 T = TypeVar("T")
 SENTINEL = object()
 
@@ -259,8 +261,12 @@ def parse_sort(sort: str) -> tuple[str, bool]:
     return sort, desc
 
 
-def get_collection(name: str, params: dict[str, Any]) -> BaseCollection[Any] | None:
+def get_collection(
+    name: str,
+    params: dict[str, Any],
+    **kwargs: Any,
+) -> BaseCollection[Any] | None:
     if factory := collection_registry.get(name):
-        return factory(name, params)
+        return factory(name, params, **kwargs)
 
     return None

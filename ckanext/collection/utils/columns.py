@@ -5,11 +5,6 @@ from typing import Any, cast
 
 from ckanext.collection import shared, types
 
-SENTINEL = object()
-ALL = object()
-NOT_HIDDEN = object()
-NONE = object()
-
 
 class Columns(
     types.BaseColumns,
@@ -87,10 +82,14 @@ class Columns(
         return f"-{name}"
 
 
-class TableColunns(Columns[types.TDbCollection]):
+class DbColumns(Columns[types.TDbCollection]):
+    pass
+
+
+class TableColumns(DbColumns[types.TDbCollection]):
     table: str = shared.configurable_attribute()
     filterable: set[str] = shared.configurable_attribute(
-        default_factory=lambda self: NONE,
+        default_factory=lambda self: self.Default.NONE,
     )
 
     def configure_attributes(self):
@@ -98,5 +97,4 @@ class TableColunns(Columns[types.TDbCollection]):
             c["name"]
             for c in self.attached.db_connection.inspector.get_columns(self.table)
         ]
-
         super().configure_attributes()

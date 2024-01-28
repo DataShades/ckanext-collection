@@ -6,7 +6,7 @@ from ckanext.collection.utils.data import StaticData
 from .api import ApiCollection, ApiListCollection, ApiSearchCollection
 from .base import Collection
 from .db import DbCollection
-from .explorer import CollectionExplorerCollection
+from .explorer import CollectionExplorer, DbExplorer
 from .model import ModelCollection
 
 __all__ = [
@@ -16,7 +16,8 @@ __all__ = [
     "ApiSearchCollection",
     "ApiListCollection",
     "ModelCollection",
-    "CollectionExplorerCollection",
+    "CollectionExplorer",
+    "DbExplorer",
 ]
 
 

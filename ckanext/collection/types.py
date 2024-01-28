@@ -2,13 +2,25 @@ from __future__ import annotations
 
 import abc
 from collections.abc import Sized
-from typing import Any, Callable, Generic, Iterable, Literal, Sequence, Union
+from typing import Any, Callable, Generic, Iterable, Literal, Protocol, Sequence, Union
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Engine
 from typing_extensions import NotRequired, TypeAlias, TypedDict, TypeVar
 
-CollectionFactory: TypeAlias = "Callable[[str, dict[str, Any]], BaseCollection[Any]]"
+
+# CollectionFactory: TypeAlias = "Callable[[str, dict[str, Any]], BaseCollection[Any]]"
+class CollectionFactory(Protocol):
+    def __call__(
+        self,
+        name: str,
+        params: dict[str, Any],
+        /,
+        **kwargs: Any,
+    ) -> BaseCollection[Any]:
+        ...
+
+
 TDataCollection = TypeVar("TDataCollection", bound="BaseCollection[Any]")
 TDbCollection = TypeVar("TDbCollection", bound="BaseDbCollection[Any]")
 TFilterOptions = TypeVar("TFilterOptions")

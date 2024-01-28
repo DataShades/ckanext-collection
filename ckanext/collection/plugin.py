@@ -35,27 +35,14 @@ class CollectionPlugin(p.SingletonPlugin):
 
     def get_collection_factories(self) -> dict[str, CollectionFactory]:
         if tk.config["debug"]:
-            from ckan import model
-
-            from .utils import (
-                CollectionExplorerCollection,
-                DbCollection,
-                HtmxTableSerializer,
-            )
+            from .utils import CkanDbConnection, CollectionExplorer, DbExplorer
 
             return {
-                "collection-explorer": CollectionExplorerCollection,
-                "core-db-explorer": lambda n, p: DbCollection(
+                "collection-explorer": CollectionExplorer,
+                "core-db-explorer": lambda n, p, **kwargs: DbExplorer(
                     n,
                     p,
-                    db_connection_settings={"engine": model.meta.engine},
-                    columns_settings={
-                        "table": "package",
-                        "filterable": {"type", "state", "private"},
-                    },
-                    data_settings={"table": "package", "use_naive_filters": True},
-                    filters_settings={"table": "package"},
-                    serializer_factory=HtmxTableSerializer,
+                    **dict(kwargs, db_connection_factory=CkanDbConnection),
                 ),
             }
 

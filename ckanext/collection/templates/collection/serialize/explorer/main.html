@@ -1,0 +1,47 @@
+{% if collection.serializer.extend_page_template %}
+    {% extends "page.html" %}
+    {% asset "collection/htmx" %}
+{% endif %}
+
+{% import "macros/form.html" as form %}
+
+{% block main_content %}
+    <div class="explorer-collection--container" id="explorer-collection-{{ collection.name }}" hx-swap-oob="true">
+        {% block explorer_filters %}
+            <form hx-get="{{ h.url_for('ckanext-collection.render', name=collection.name) }}" hx-trigger="change,submit" >
+                {% for filter in collection.filters.filters %}
+                    {% set name = collection.name ~ ":" ~ filter.name %}
+
+                    {% if filter.type == "input" %}
+                        {{ form.input(name,
+                            label=_(filter.options.label or filter.name),
+                            value=request.args[name],
+                            placeholder=_(filter.options.placeholder) if filter.options.placeholder else null,
+                            type=filter.options.type or 'text') }}
+
+                    {% elif filter.type == "select" %}
+                        {{ form.select(name,
+                            label=_(filter.options.label or filter.name),
+                            options=filter.options.options or [],
+                            selected=request.args[name]) }}
+
+                    {% endif %}
+                {% endfor %}
+            </form>
+        {% endblock explorer_filters%}
+
+        {% block explorer_items %}
+            <div class="explorer-collection--list">
+                {% for item in collection %}
+                    {% block explorer_item scoped %}
+                        <div class="explorer-collection--item">
+                            {{ item.serializer.render() | safe }}
+                        </div>
+                    {% endblock explorer_item %}
+
+                {% endfor %}
+            </div>
+        {% endblock explorer_items %}
+
+    </div>
+{% endblock %}

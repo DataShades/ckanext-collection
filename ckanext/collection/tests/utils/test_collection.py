@@ -47,7 +47,14 @@ class TestCollection:
 
 
 @pytest.mark.usefixtures("with_plugins")
-class TestCollectionExplorerCollection:
+class TestCollectionExplorer:
+    def extract_names(self, collection: utils.Collection[Any]):
+        return {
+            f["value"]
+            for f in collection.filters.filters[0]["options"]["options"]
+            if f["value"]
+        }
+
     @pytest.mark.ckan_config(config.CONFIG_ANNONYMOUS, "hello")
     def test_only_accessible_collections_are_visible(
         self,
@@ -56,13 +63,14 @@ class TestCollectionExplorerCollection:
         collection_registry.register("hello", utils.Collection)
         collection_registry.register("world", utils.Collection)
 
-        explorer = utils.CollectionExplorerCollection("", {})
-        assert set(explorer) == {"hello"}
+        explorer = utils.CollectionExplorer("", {})
+
+        assert self.extract_names(explorer) == {"hello"}
 
         user = call_action("get_site_user")
-        explorer = utils.CollectionExplorerCollection(
+        explorer = utils.CollectionExplorer(
             "",
             {},
-            data_settings={"user": user["name"]},
+            filters_settings={"user": user["name"]},
         )
-        assert set(explorer) == {"hello", "world"}
+        assert self.extract_names(explorer) == {"hello", "world"}

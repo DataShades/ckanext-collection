@@ -3,25 +3,32 @@ from .collection import (
     ApiListCollection,
     ApiSearchCollection,
     Collection,
-    CollectionExplorerCollection,
+    CollectionExplorer,
     DbCollection,
+    DbExplorer,
     ModelCollection,
     StaticCollection,
 )
-from .columns import Columns
+from .columns import Columns, DbColumns, TableColumns
 from .data import (
     ApiData,
     ApiListData,
     ApiSearchData,
     BaseModelData,
     Data,
+    DbData,
     ModelData,
     StatementModelData,
     StaticData,
     TableData,
     UnionModelData,
 )
-from .db_connection import DbConnection, UrlDbConnection
+from .db_connection import (
+    CkanDbConnection,
+    DatastoreDbConnection,
+    DbConnection,
+    UrlDbConnection,
+)
 from .filters import Filters, TableFilters
 from .pager import ClassicPager, Pager
 from .serialize import (
@@ -36,7 +43,10 @@ from .serialize import (
 )
 
 __all__ = [
+    "CkanDbConnection",
+    "DatastoreDbConnection",
     "DbCollection",
+    "DbData",
     "TableData",
     "DbConnection",
     "UrlDbConnection",
@@ -50,8 +60,11 @@ __all__ = [
     "ChartJsSerializer",
     "ClassicPager",
     "Collection",
-    "CollectionExplorerCollection",
+    "CollectionExplorer",
+    "DbExplorer",
     "Columns",
+    "DbColumns",
+    "TableColumns",
     "CsvSerializer",
     "Data",
     "Filters",

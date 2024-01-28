@@ -147,6 +147,13 @@ class Collection(types.BaseCollection[types.TData]):
     ) -> types.BaseSerializer | None:
         ...
 
+    @overload
+    def replace_service(
+        self,
+        service: types.BaseDbConnection,
+    ) -> types.BaseDbConnection | None:
+        ...
+
     def replace_service(self, service: types.Service) -> types.Service | None:
         """Attach service to collection"""
         old_service = getattr(self, service.service_name, None)

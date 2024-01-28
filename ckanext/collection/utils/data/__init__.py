@@ -7,7 +7,7 @@ from ckanext.collection import shared, types
 
 from .api import ApiData, ApiListData, ApiSearchData
 from .base import Data
-from .db import TableData
+from .db import DbData, TableData
 from .model import BaseSaData, ModelData, StatementSaData, UnionSaData
 
 __all__ = [
@@ -22,6 +22,7 @@ __all__ = [
     "StatementModelData",
     "BaseSaData",
     "BaseModelData",
+    "DbData",
     "ModelData",
 ]
 
