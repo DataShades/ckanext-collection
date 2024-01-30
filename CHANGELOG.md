@@ -6,6 +6,33 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.1.2a0](https://github.com/DataShades/ckanext-collection/releases/tag/0.1.2a0) - 2024-01-30
+
+<small>[Compare with v0.1.1](https://github.com/DataShades/ckanext-collection/compare/v0.1.1...0.1.2a0)</small>
+
+### Features
+
+- add static_columns to table data ([9d5cd80](https://github.com/DataShades/ckanext-collection/commit/9d5cd80411c3b975561ba1186f2f8250ec5b7d65) by Sergey Motornyuk).
+- add attrs to link and button filter options ([8a184fe](https://github.com/DataShades/ckanext-collection/commit/8a184fe8a3f6313f2924182794445bd77aa2c7ef) by Sergey Motornyuk).
+- serializers has row_dictizer attribute ([883f3d7](https://github.com/DataShades/ckanext-collection/commit/883f3d73946008a6736a183686ac3f918800f1c4) by Sergey Motornyuk).
+- register configuration in ckanext-amdin-panel ([8c8f5ca](https://github.com/DataShades/ckanext-collection/commit/8c8f5ca14853174c28a4c0e8f68bc9acaa816985) by Sergey Motornyuk).
+- Collection and DB explorers MVP ([5b8b0bd](https://github.com/DataShades/ckanext-collection/commit/5b8b0bd2fda237d9c5aa139cf52937787d90f334) by Sergey Motornyuk).
+- collection-refresh event on body or htmx form_id reloads collection ([9c8619d](https://github.com/DataShades/ckanext-collection/commit/9c8619d81827718d0cd01ccfe225fd6ccfabbd0d) by Sergey Motornyuk).
+- TableFilters ([d7f1ff2](https://github.com/DataShades/ckanext-collection/commit/d7f1ff28d0913dea0a3ac88b6faf078800487770) by Sergey Motornyuk).
+- DbCollection(TableData, TableColumns, DbConnection) ([48a1b24](https://github.com/DataShades/ckanext-collection/commit/48a1b24a17398eed64d0a6b487daf39e9221a877) by Sergey Motornyuk).
+- register collection-explorer collection in debug mode ([42e547f](https://github.com/DataShades/ckanext-collection/commit/42e547fe953a0d5bc3922127c90668df98e1f94c) by Sergey Motornyuk).
+
+### Bug Fixes
+
+- naive filters cannot use IN operator ([a26b3b7](https://github.com/DataShades/ckanext-collection/commit/a26b3b7054758c0ff2559d781fe43d9378344193) by Sergey Motornyuk).
+- naive search with q does not work with model ([aa46d0c](https://github.com/DataShades/ckanext-collection/commit/aa46d0c9f7066b14477c6a8d43be1fd52a4337f5) by Sergey Motornyuk).
+- non-sortable columns are still sorted in model data ([353691d](https://github.com/DataShades/ckanext-collection/commit/353691df25e0b0ec64b3765cc59e506d04422c9c) by Sergey Motornyuk).
+- HtmxTableSerializer reloads the page when page size changed ([feaa86c](https://github.com/DataShades/ckanext-collection/commit/feaa86c04ce38fec507ff53d2841eb6b708ebce2) by Sergey Motornyuk).
+
+### Code Refactoring
+
+- use Iterable instead of Sequence for filters ([f047ed0](https://github.com/DataShades/ckanext-collection/commit/f047ed0ffcbe39d51a5300a32dc6017dd1fa09d5) by Sergey Motornyuk).
+
 ## [v0.1.1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.1) - 2024-01-26
 
 <small>[Compare with v0.1.1a0](https://github.com/DataShades/ckanext-collection/compare/v0.1.1a0...v0.1.1)</small>
