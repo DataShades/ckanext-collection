@@ -8,7 +8,7 @@
             {% endblock form %}
 
             {% block table %}
-                <div class="{{ base_class }}--table">
+                <div class="{{ base_class }}--table" data-collection-name="{{ collection.name }}">
                     {% snippet collection.serializer.table_template, collection=collection %}
                 </div>
             {% endblock table %}

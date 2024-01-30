@@ -5,7 +5,7 @@
         {% for column in collection.columns.names if column in collection.columns.visible -%}
             <td class="collection-table--cell{% if sortable %} collection-table--cell-sortable{% endif %}">
                 {% block value scoped %}
-                    <div>
+                    <div data-collection-column="{{ column }}">
                         {{ data[column] }}
                     </div>
                 {% endblock %}
