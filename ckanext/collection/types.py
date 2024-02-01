@@ -24,6 +24,7 @@ class CollectionFactory(Protocol):
 TDataCollection = TypeVar("TDataCollection", bound="BaseCollection[Any]")
 TDbCollection = TypeVar("TDbCollection", bound="BaseDbCollection[Any]")
 TFilterOptions = TypeVar("TFilterOptions")
+TSerialized = TypeVar("TSerialized")
 TData = TypeVar("TData")
 
 
@@ -112,13 +113,7 @@ class BasePager(abc.ABC, Service):
 
 class BaseSerializer(abc.ABC, Service):
     @abc.abstractmethod
-    def stream(self) -> Iterable[str] | Iterable[bytes]:
-        """Iterate over fragments of the content."""
-        ...
-
-    @abc.abstractmethod
-    def render(self) -> str | bytes:
-        """Combine content fragments into a single dump."""
+    def serialize(self) -> Any:
         ...
 
     @property

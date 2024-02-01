@@ -81,11 +81,21 @@ class CollectionPlugin(ApImplementation, p.SingletonPlugin):
 
     def get_collection_factories(self) -> dict[str, CollectionFactory]:
         if tk.config["debug"]:
-            from .utils import CollectionExplorer, DatastoreDbConnection, DbExplorer
+            from .utils import (
+                CkanDbConnection,
+                CollectionExplorer,
+                DatastoreDbConnection,
+                DbExplorer,
+            )
 
             return {
                 "collection-explorer": CollectionExplorer,
                 "core-db-explorer": lambda n, p, **kwargs: DbExplorer(
+                    n,
+                    p,
+                    **dict(kwargs, db_connection_factory=CkanDbConnection),
+                ),
+                "datastore-db-explorer": lambda n, p, **kwargs: DbExplorer(
                     n,
                     p,
                     **dict(kwargs, db_connection_factory=DatastoreDbConnection),

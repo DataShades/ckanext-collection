@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import abc
 import csv
 import io
 import json
@@ -15,6 +16,19 @@ from sqlalchemy.orm import InstanceState
 import ckan.plugins.toolkit as tk
 
 from ckanext.collection import shared, types
+
+__all__ = [
+    "Serializer",
+    "StreamingSerializer",
+    "RenderableSerializer",
+    "CsvSerializer",
+    "JsonlSerializer",
+    "JsonSerializer",
+    "ChartJsSerializer",
+    "HtmlSerializer",
+    "TableSerializer",
+    "HtmxTableSerializer",
+]
 
 
 def basic_row_dictizer(row: Any) -> dict[str, Any]:
@@ -37,7 +51,10 @@ def basic_row_dictizer(row: Any) -> dict[str, Any]:
     raise TypeError(type(row))
 
 
-class Serializer(types.BaseSerializer, shared.Domain[types.TDataCollection]):
+class Serializer(
+    types.BaseSerializer,
+    shared.Domain[types.TDataCollection],
+):
     """Abstract collection serializer.
 
     Its`stream` produces iterable of collection records in the format that has
@@ -63,13 +80,9 @@ class Serializer(types.BaseSerializer, shared.Domain[types.TDataCollection]):
         basic_row_dictizer,
     )
 
-    def stream(self) -> Iterable[str] | Iterable[bytes]:
-        """Iterate over fragments of the content."""
-        return ["", ""]
-
-    def render(self) -> str | bytes:
-        """Combine content fragments into a single dump."""
-        return reduce(operator.add, self.stream())
+    def serialize(self) -> Any:
+        """Return serialized data."""
+        return None
 
     def serialize_value(self, value: Any, name: str, record: Any):
         """Transform record's value into its serialized form."""
@@ -93,7 +106,23 @@ class Serializer(types.BaseSerializer, shared.Domain[types.TDataCollection]):
         return {k: self.serialize_value(v, k, row) for k, v in result.items()}
 
 
-class CsvSerializer(Serializer[types.TDataCollection]):
+class StreamingSerializer(Serializer[types.TDataCollection]):
+    @abc.abstractmethod
+    def stream(self) -> Iterable[Any]:
+        """Iterate over fragments of the content."""
+        raise NotImplementedError
+
+    def serialize(self):
+        return reduce(operator.add, self.stream())
+
+
+class RenderableSerializer(StreamingSerializer[types.TDataCollection]):
+    def render(self) -> str:
+        """Combine content fragments into a single dump."""
+        return self.serialize()
+
+
+class CsvSerializer(StreamingSerializer[types.TDataCollection]):
     """Serialize collection into CSV document."""
 
     def get_writer(self, buff: io.StringIO):
@@ -135,7 +164,7 @@ class CsvSerializer(Serializer[types.TDataCollection]):
             buff.truncate()
 
 
-class JsonlSerializer(Serializer[types.TDataCollection]):
+class JsonlSerializer(StreamingSerializer[types.TDataCollection]):
     """Serialize collection into JSONL lines."""
 
     def stream(self) -> Iterable[str]:
@@ -148,7 +177,7 @@ class JsonlSerializer(Serializer[types.TDataCollection]):
             buff.truncate()
 
 
-class JsonSerializer(Serializer[types.TDataCollection]):
+class JsonSerializer(StreamingSerializer[types.TDataCollection]):
     """Serialize collection into single JSON document."""
 
     def stream(self):
@@ -157,7 +186,7 @@ class JsonSerializer(Serializer[types.TDataCollection]):
         )
 
 
-class ChartJsSerializer(Serializer[types.TDataCollection]):
+class ChartJsSerializer(StreamingSerializer[types.TDataCollection]):
     """Serialize collection into data source for ChartJS module of
     ckanext-charts.
 
@@ -200,7 +229,7 @@ class ChartJsSerializer(Serializer[types.TDataCollection]):
         )
 
 
-class HtmlSerializer(Serializer[types.TDataCollection]):
+class HtmlSerializer(RenderableSerializer[types.TDataCollection]):
     """Serialize collection into HTML document."""
 
     ensure_dictized: str = shared.configurable_attribute(False)

@@ -9,6 +9,7 @@ from ckan.common import streaming_response
 from ckan.logic import parse_params
 
 from ckanext.collection import config, shared
+from ckanext.collection.utils.serialize import StreamingSerializer
 
 bp = Blueprint("ckanext-collection", __name__)
 
@@ -42,7 +43,7 @@ def render(name: str) -> str | bytes:
     if not collection:
         return tk.abort(404)
 
-    return collection.serializer.render()
+    return collection.serializer.serialize()
 
 
 @bp.route("/api/util/collection/<name>/export")
@@ -69,6 +70,9 @@ def export(name: str, format: str | None = None) -> types.Response:
     else:
         serializer = collection.serializer
         filename = "collection"
+
+    if not isinstance(serializer, StreamingSerializer):
+        return tk.abort(409, "This collection does not support streaming export")
 
     filename = secure_filename(tk.request.args.get("filename", filename))
 
