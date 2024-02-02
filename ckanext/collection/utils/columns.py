@@ -19,7 +19,7 @@ class Columns(
       labels: UI labels for columns
     """
 
-    class Default(enum.Enum):
+    class Default(shared.Sentinel, enum.Enum):
         ALL = enum.auto()
         NOT_HIDDEN = enum.auto()
         NONE = enum.auto()

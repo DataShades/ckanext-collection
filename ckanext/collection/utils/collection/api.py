@@ -1,18 +1,17 @@
 from __future__ import annotations
 
-from ckanext.collection import types
 from ckanext.collection.utils.data import ApiData, ApiListData, ApiSearchData
 
 from .base import Collection
 
 
-class ApiCollection(Collection[types.TData]):
+class ApiCollection(Collection):
     DataFactory = ApiData
 
 
-class ApiSearchCollection(ApiCollection[types.TData]):
+class ApiSearchCollection(ApiCollection):
     DataFactory = ApiSearchData
 
 
-class ApiListCollection(ApiCollection[types.TData]):
+class ApiListCollection(ApiCollection):
     DataFactory = ApiListData

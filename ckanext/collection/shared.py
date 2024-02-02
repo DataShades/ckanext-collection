@@ -21,7 +21,13 @@ from ckanext.collection.types import (
 
 log = logging.getLogger(__name__)
 T = TypeVar("T")
-SENTINEL = object()
+
+
+class Sentinel:
+    ...
+
+
+SENTINEL: Any = Sentinel()
 
 
 @dataclasses.dataclass
@@ -159,7 +165,7 @@ class AttrSettingsTrait:
 @dataclasses.dataclass
 class _InitAttr:
     default: Any = SENTINEL
-    default_factory: Callable[[Any], Any] = cast(Any, SENTINEL)
+    default_factory: Callable[[Any], Any] = SENTINEL
 
     def __post_init__(self):
         if self.default is not self.default_factory:
@@ -180,8 +186,8 @@ class _InitAttr:
 
 
 def configurable_attribute(
-    default: T | object = SENTINEL,
-    default_factory: Callable[[Any], T] | object = SENTINEL,
+    default: T | Sentinel = SENTINEL,
+    default_factory: Callable[[Any], T] = SENTINEL,
 ) -> T:
     """Declare configurable attribute.
 
@@ -203,7 +209,7 @@ class UserTrait(AttrSettingsTrait):
     """
 
     user = configurable_attribute(
-        default_factory=lambda str: tk.current_user.name if tk.current_user else "",
+        default_factory=lambda self: tk.current_user.name if tk.current_user else "",
     )
 
 
@@ -265,7 +271,7 @@ def get_collection(
     name: str,
     params: dict[str, Any],
     **kwargs: Any,
-) -> BaseCollection[Any] | None:
+) -> BaseCollection | None:
     if factory := collection_registry.get(name):
         return factory(name, params, **kwargs)
 

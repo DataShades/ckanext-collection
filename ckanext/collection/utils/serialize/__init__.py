@@ -6,7 +6,7 @@ import io
 import json
 import operator
 from functools import reduce
-from typing import Any, Callable, Iterable, cast
+from typing import Any, Callable, Generic, Iterable, cast
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Row
@@ -54,6 +54,7 @@ def basic_row_dictizer(row: Any) -> dict[str, Any]:
 class Serializer(
     types.BaseSerializer,
     shared.Domain[types.TDataCollection],
+    Generic[types.TSerialized, types.TDataCollection],
 ):
     """Abstract collection serializer.
 
@@ -80,9 +81,9 @@ class Serializer(
         basic_row_dictizer,
     )
 
-    def serialize(self) -> Any:
+    def serialize(self) -> types.TSerialized:
         """Return serialized data."""
-        return None
+        return cast(types.TSerialized, None)
 
     def serialize_value(self, value: Any, name: str, record: Any):
         """Transform record's value into its serialized form."""
@@ -106,9 +107,9 @@ class Serializer(
         return {k: self.serialize_value(v, k, row) for k, v in result.items()}
 
 
-class StreamingSerializer(Serializer[types.TDataCollection]):
+class StreamingSerializer(Serializer[types.TSerialized, types.TDataCollection]):
     @abc.abstractmethod
-    def stream(self) -> Iterable[Any]:
+    def stream(self) -> Iterable[types.TSerialized]:
         """Iterate over fragments of the content."""
         raise NotImplementedError
 
@@ -116,13 +117,17 @@ class StreamingSerializer(Serializer[types.TDataCollection]):
         return reduce(operator.add, self.stream())
 
 
-class RenderableSerializer(StreamingSerializer[types.TDataCollection]):
+class RenderableSerializer(StreamingSerializer[str, types.TDataCollection]):
+    def stream(self) -> Iterable[str]:
+        """Iterate over fragments of the content."""
+        yield ""
+
     def render(self) -> str:
         """Combine content fragments into a single dump."""
         return self.serialize()
 
 
-class CsvSerializer(StreamingSerializer[types.TDataCollection]):
+class CsvSerializer(StreamingSerializer[str, types.TDataCollection]):
     """Serialize collection into CSV document."""
 
     def get_writer(self, buff: io.StringIO):
@@ -164,7 +169,7 @@ class CsvSerializer(StreamingSerializer[types.TDataCollection]):
             buff.truncate()
 
 
-class JsonlSerializer(StreamingSerializer[types.TDataCollection]):
+class JsonlSerializer(StreamingSerializer[str, types.TDataCollection]):
     """Serialize collection into JSONL lines."""
 
     def stream(self) -> Iterable[str]:
@@ -177,7 +182,7 @@ class JsonlSerializer(StreamingSerializer[types.TDataCollection]):
             buff.truncate()
 
 
-class JsonSerializer(StreamingSerializer[types.TDataCollection]):
+class JsonSerializer(StreamingSerializer[str, types.TDataCollection]):
     """Serialize collection into single JSON document."""
 
     def stream(self):
@@ -186,7 +191,7 @@ class JsonSerializer(StreamingSerializer[types.TDataCollection]):
         )
 
 
-class ChartJsSerializer(StreamingSerializer[types.TDataCollection]):
+class ChartJsSerializer(StreamingSerializer[str, types.TDataCollection]):
     """Serialize collection into data source for ChartJS module of
     ckanext-charts.
 
@@ -232,7 +237,7 @@ class ChartJsSerializer(StreamingSerializer[types.TDataCollection]):
 class HtmlSerializer(RenderableSerializer[types.TDataCollection]):
     """Serialize collection into HTML document."""
 
-    ensure_dictized: str = shared.configurable_attribute(False)
+    ensure_dictized: bool = shared.configurable_attribute(False)
 
     main_template: str = shared.configurable_attribute(
         "collection/serialize/html/main.html",
@@ -315,8 +320,8 @@ class HtmxTableSerializer(TableSerializer[types.TDataCollection]):
         "collection/serialize/htmx_table/filter.html",
     )
 
-    debug: str = shared.configurable_attribute(False)
-    push_url: str = shared.configurable_attribute(False)
+    debug: bool = shared.configurable_attribute(False)
+    push_url: bool = shared.configurable_attribute(False)
     base_class: str = shared.configurable_attribute("htmx-collection")
 
     render_url: str = shared.configurable_attribute(

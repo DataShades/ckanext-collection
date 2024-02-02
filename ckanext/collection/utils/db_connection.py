@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Engine
@@ -33,7 +33,7 @@ class UrlDbConnection(DbConnection[types.TDbCollection]):
 
 class CkanDbConnection(DbConnection[types.TDbCollection]):
     engine: Engine = shared.configurable_attribute(
-        default_factory=lambda self: model.meta.engine,
+        default_factory=lambda self: cast(Engine, model.meta.engine),
     )
 
 

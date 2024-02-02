@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from ckanext.collection import types
 from ckanext.collection.utils.data import StaticData
 
 from .api import ApiCollection, ApiListCollection, ApiSearchCollection
@@ -22,5 +21,5 @@ __all__ = [
 ]
 
 
-class StaticCollection(Collection[types.TData]):
+class StaticCollection(Collection):
     DataFactory = StaticData

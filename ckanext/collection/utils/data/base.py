@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 from functools import cached_property
-from typing import Any, Iterable, Iterator
+from typing import Any, Generic, Iterable, Iterator
 
 from ckanext.collection import shared, types
 
 
 class Data(
-    types.BaseData[types.TData],
+    types.BaseData,
     shared.Domain[types.TDataCollection],
+    Generic[types.TData, types.TDataCollection],
 ):
     """Data source for collection.
 

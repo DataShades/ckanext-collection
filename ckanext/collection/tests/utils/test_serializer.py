@@ -10,7 +10,7 @@ from ckanext.collection.utils import Collection, serialize
 from ckanext.collection.utils.data import StaticData
 
 
-class StaticCollection(Collection[Any]):
+class StaticCollection(Collection):
     DataFactory = StaticData
 
 
@@ -66,7 +66,7 @@ class TestCsvSerializer:
     def test_output(self, collection: StaticCollection):
         serializer = serialize.CsvSerializer(collection)
 
-        output = serializer.render().strip()
+        output = serializer.serialize().strip()
         nl = csv.get_dialect("excel").lineterminator
         expected_output = nl.join(["name,age", "a,1", "b,2"])
 
@@ -77,7 +77,7 @@ class TestJsonlSerializer:
     def test_output(self, collection: StaticCollection):
         serializer = serialize.JsonlSerializer(collection)
 
-        output = serializer.render().strip()
+        output = serializer.serialize().strip()
         nl = "\n"
         expected_output = nl.join(map(json.dumps, collection.data))
 
@@ -88,7 +88,7 @@ class TestJsonSerializer:
     def test_output(self, collection: StaticCollection):
         serializer = serialize.JsonSerializer(collection)
 
-        output = serializer.render().strip()
+        output = serializer.serialize().strip()
         expected_output = json.dumps(list(collection.data))
 
         assert output == expected_output
@@ -104,7 +104,7 @@ class TestChartJsSerializer:
             colors={"age": "test"},
         )
 
-        output = serializer.render().strip()
+        output = serializer.serialize().strip()
 
         expected_output = json.dumps(
             {

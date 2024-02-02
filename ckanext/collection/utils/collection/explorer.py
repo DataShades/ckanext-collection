@@ -27,7 +27,7 @@ class ExplorerSerializer(HtmlSerializer[types.TDataCollection]):
     )
 
 
-class CollectionExplorer(Collection[Any]):
+class CollectionExplorer(Collection):
     """Collection of all registered collections.
 
     It exists for debugging and serves as an example of non-canonical usage of
@@ -87,7 +87,7 @@ class CollectionExplorer(Collection[Any]):
             ]
 
 
-class DbExplorer(DbCollection[Any]):
+class DbExplorer(DbCollection):
     SerializerFactory = ExplorerSerializer.with_attributes(
         main_template="collection/serialize/db_explorer/main.html",
     )

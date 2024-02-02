@@ -17,12 +17,13 @@ class CollectionFactory(Protocol):
         params: dict[str, Any],
         /,
         **kwargs: Any,
-    ) -> BaseCollection[Any]:
+    ) -> BaseCollection:
         ...
 
 
-TDataCollection = TypeVar("TDataCollection", bound="BaseCollection[Any]")
-TDbCollection = TypeVar("TDbCollection", bound="BaseDbCollection[Any]")
+TCollection = TypeVar("TCollection", bound="BaseCollection")
+TDataCollection = TypeVar("TDataCollection", bound="BaseCollection")
+TDbCollection = TypeVar("TDbCollection", bound="BaseDbCollection")
 TFilterOptions = TypeVar("TFilterOptions")
 TSerialized = TypeVar("TSerialized")
 TData = TypeVar("TData")
@@ -53,7 +54,7 @@ class BaseColumns(abc.ABC, Service):
         return "columns"
 
 
-class BaseData(abc.ABC, Sized, Iterable[TData], Service):
+class BaseData(abc.ABC, Sized, Iterable[Any], Service):
     """Declaration of data properties."""
 
     @abc.abstractproperty
@@ -62,7 +63,7 @@ class BaseData(abc.ABC, Sized, Iterable[TData], Service):
         ...
 
     @abc.abstractmethod
-    def range(self, start: Any, end: Any) -> Iterable[TData]:
+    def range(self, start: Any, end: Any) -> Iterable[Any]:
         """Slice data using specified limits."""
         ...
 
@@ -142,14 +143,14 @@ class BaseFilters(abc.ABC, Service):
         return "filters"
 
 
-class BaseCollection(abc.ABC, Iterable[TData]):
+class BaseCollection(abc.ABC, Iterable[Any]):
     """Declaration of collection properties."""
 
     name: str
     params: dict[str, Any]
 
     columns: BaseColumns
-    data: BaseData[TData]
+    data: BaseData
     filters: BaseFilters
     pager: BasePager
     serializer: BaseSerializer
@@ -167,7 +168,7 @@ class BaseDbConnection(abc.ABC, Service):
         return sa.inspect(self.engine)
 
 
-class BaseDbCollection(BaseCollection[TData]):
+class BaseDbCollection(BaseCollection):
     db_connection: BaseDbConnection
 
 

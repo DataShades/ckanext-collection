@@ -12,7 +12,7 @@ from ckanext.collection.utils.pager import ClassicPager, Pager
 from ckanext.collection.utils.serialize import Serializer
 
 
-class Collection(types.BaseCollection[types.TData]):
+class Collection(types.BaseCollection):
     """Base data collection.
 
     Contains the following information:
@@ -72,9 +72,9 @@ class Collection(types.BaseCollection[types.TData]):
 
     # keep these classes here to simplify overrides
     ColumnsFactory: type[Columns[Self]] = Columns
-    DataFactory: type[Data[types.TData, Self]] = Data
+    DataFactory: type[Data[Any, Self]] = Data
     FiltersFactory: type[Filters[Self]] = Filters
-    SerializerFactory: type[Serializer[Self]] = Serializer
+    SerializerFactory: type[Serializer[Any, Self]] = Serializer
     PagerFactory: type[Pager[Self]] = ClassicPager
 
     _service_names: tuple[str, ...] = (
@@ -126,10 +126,7 @@ class Collection(types.BaseCollection[types.TData]):
         ...
 
     @overload
-    def replace_service(
-        self,
-        service: types.BaseData[Any],
-    ) -> types.BaseData[Any] | None:
+    def replace_service(self, service: types.BaseData) -> types.BaseData | None:
         ...
 
     @overload
@@ -160,10 +157,10 @@ class Collection(types.BaseCollection[types.TData]):
         setattr(self, service.service_name, service)
         return old_service
 
-    def __iter__(self) -> Iterator[types.TData]:
+    def __iter__(self) -> Iterator[Any]:
         yield from self.data.range(self.pager.start, self.pager.end)
 
-    def make_serializer(self, **kwargs: Any) -> Serializer[Self]:
+    def make_serializer(self, **kwargs: Any) -> Serializer[Any, Self]:
         """Return serializer."""
         return self.SerializerFactory(self, **kwargs)
 
@@ -179,6 +176,6 @@ class Collection(types.BaseCollection[types.TData]):
         """Return search filters."""
         return self.FiltersFactory(self, **kwargs)
 
-    def make_data(self, **kwargs: Any) -> Data[types.TData, Self]:
+    def make_data(self, **kwargs: Any) -> Data[Any, Self]:
         """Return search filters."""
         return self.DataFactory(self, **kwargs)

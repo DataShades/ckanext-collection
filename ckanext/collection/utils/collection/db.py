@@ -13,7 +13,7 @@ from ckanext.collection.utils.filters import DbFilters
 from .base import Collection
 
 
-class DbCollection(Collection[types.TData], types.BaseDbCollection[types.TData]):
+class DbCollection(Collection, types.BaseDbCollection):
     _service_names: tuple[str, ...] = ("db_connection",) + Collection._service_names
     DbConnectionFactory: type[DbConnection[Self]] = DbConnection
     DataFactory = DbData
