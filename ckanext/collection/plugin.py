@@ -54,6 +54,11 @@ except ImportError:
         pass
 
 
+register_collection_signal = tk.signals.ckanext.signal(
+    "collection:register_collections",
+)
+
+
 @tk.blanket.blueprints
 @tk.blanket.auth_functions
 @tk.blanket.config_declarations
@@ -62,6 +67,7 @@ except ImportError:
 class CollectionPlugin(ApImplementation, p.SingletonPlugin):
     p.implements(p.IConfigurer)
     p.implements(p.IConfigurable)
+    # p.implements(p.ISignal)
     p.implements(ICollection, inherit=True)
 
     # IConfigurer
@@ -77,6 +83,10 @@ class CollectionPlugin(ApImplementation, p.SingletonPlugin):
 
         for plugin in p.PluginImplementations(ICollection):
             for name, factory in plugin.get_collection_factories().items():
+                shared.collection_registry.register(name, factory)
+
+        for _, factories in register_collection_signal.send():
+            for name, factory in factories.items():
                 shared.collection_registry.register(name, factory)
 
     def get_collection_factories(self) -> dict[str, CollectionFactory]:
