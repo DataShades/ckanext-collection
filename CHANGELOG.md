@@ -6,9 +6,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## [0.1.2a0](https://github.com/DataShades/ckanext-collection/releases/tag/0.1.2a0) - 2024-01-30
+## [v0.1.2a1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.2a1) - 2024-02-21
 
-<small>[Compare with v0.1.1](https://github.com/DataShades/ckanext-collection/compare/v0.1.1...0.1.2a0)</small>
+<small>[Compare with v0.1.2a0](https://github.com/DataShades/ckanext-collection/compare/v0.1.2a0...v0.1.2a1)</small>
+
+### Features
+
+- register collections via `collection:register_collections` signal ([6db3be0](https://github.com/DataShades/ckanext-collection/commit/6db3be0121ee9f8a05c40b6ac71fb13a5e6334cf) by Sergey Motornyuk).
+- Serializer has serialize method, stream and render moved to Streaming and Renderable serializers ([d749f36](https://github.com/DataShades/ckanext-collection/commit/d749f361cc40c0f431d94a383aeb24af8833fb52) by Sergey Motornyuk).
+
+### Code Refactoring
+
+- remove generic type from collection ([8497e1e](https://github.com/DataShades/ckanext-collection/commit/8497e1e3ee8a6810806f1ed83f3b6baf64604235) by Sergey Motornyuk).
+
+## [v0.1.2a0](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.2a0) - 2024-01-30
+
+<small>[Compare with v0.1.1](https://github.com/DataShades/ckanext-collection/compare/v0.1.1...v0.1.2a0)</small>
 
 ### Features
 
