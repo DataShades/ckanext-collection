@@ -229,7 +229,12 @@ class Domain(AttachTrait[TDataCollection], AttrSettingsTrait):
         self._gather_settings(kwargs)
 
     @classmethod
-    def with_attributes(cls: type[T], **attributes: Any) -> type[T]:
+    def with_attributes(
+        cls: type[T],
+        name: str | None = None,
+        /,
+        **attributes: Any,
+    ) -> type[T]:
         """Create anonymous derivable of the class with overriden attributes.
 
         This is a shortcut for defining a proper subclass of the domain:
@@ -239,11 +244,12 @@ class Domain(AttachTrait[TDataCollection], AttrSettingsTrait):
         >>>
         >>> class Child(Parent):
         >>>     prop = "child value"
+        >>>     custom = "custom value"
         >>>
         >>> # equivalent
-        >>> Child = Parent.with_attributes(prop="child value")
+        >>> Child = Parent.with_attributes(prop="child value", custom="custom value")
         """
-        return cast("type[T]", type(cls.__name__, (cls,), attributes))
+        return cast("type[T]", type(name or cls.__name__, (cls,), attributes))
 
 
 def parse_sort(sort: str) -> tuple[str, bool]:

@@ -9,6 +9,7 @@ Base classes for viewing data series from CKAN.
 * [Requirements](#requirements)
 * [Installation](#installation)
 * [Usage](#usage)
+* [Documentation](#documentation)
   * [Overview](#overview)
   * [Collection intialization](#collection-intialization)
   * [Services](#services)
@@ -72,6 +73,72 @@ To install ckanext-collection:
 
 ## Usage
 
+Collections can be registered via `ckanext.collection.interfaces.ICollection`
+or via CKAN signals. Registered collection can be initialized anywhere in code
+using helper and can be used in a number of generic endpoints that render
+collection as HTML of export it into different formats.
+
+Registration via interface:
+
+```python
+from ckanext.collection.interfaces import CollectionFactory, ICollection
+
+
+class MyPlugin(p.SingletonPlugin):
+    p.implements(ICollection, inherit=True)
+
+    def get_collection_factories(self) -> dict[str, CollectionFactory]:
+        return {
+            "my-collection": MyCollection,
+        }
+
+```
+
+`get_collection_factories` returns a dictionary with collection names(letters,
+digits, underscores and hyphens are allowed) as keys, and collection factories
+as values. In most generic case, collection factory is just a collection
+class. But you can use any function with signature `(str, dict[str, Any],
+**Any) -> Collection` as a factory. For example, the following function is a
+valid collection factory and it can be returned from `get_collection_factories`
+
+```python
+def my_factory(name: str, params: dict[str, Any], **kwargs: Any):
+    """Collection that shows 100 numbers per page"""
+    params.setdefault("rows_per_page", 100)
+    return MyCollection(name, params, **kwargs)
+```
+
+If you want to register a collection only if collection plugin is enabled, you
+can use CKAN signals instead of wrapping import from ckanext-collection into
+try except block:
+
+```python
+
+class MyPlugin(p.SingletonPlugin):
+    p.implements(p.ISignal)
+
+    def get_signal_subscriptions(self) -> types.SignalMapping:
+        return {
+            tk.signals.ckanext.signal("collection:register_collections"): [
+                self.collect_collection_factories,
+            ],
+        }
+
+    def collect_collection_factories(self, sender: None):
+        return {
+            "my-collection": MyCollection,
+        }
+
+```
+
+Data returned from the signal subscription is exactly the same as from
+`ICollection.get_collection_factories`. The only difference, signal
+subscription accepts `sender` argument which is always `None`, due to internal
+implementation of signals.
+
+
+## Documentation
+
 ### Overview
 
 The goal of this plugin is to supply you with generic classes for processing
@@ -113,10 +180,10 @@ contains nothing.
 
 
 To fix this problem, we have to configure a part of the collection responsible
-for data production using **settings**. Collection divides its internal logic
-between a number of *services*, and service that we need is called **data**
-service. To modify it, we can pass a named argument called `data_settings` to
-the collection's constructor:
+for data production using its **settings**. Collection divides its internal
+logic between a number of configurable *services*, and service that we need is
+called **data** service. To modify it, we can pass a named argument called
+`data_settings` to the collection's constructor:
 
 ```python
 col = StaticCollection(
@@ -152,8 +219,8 @@ interaction.
 attributes of its data-service: `model` and `is_scalar`. The former sets actual
 model that collection processes, while the latter controls, how we work with
 every individual record. By default, `ModelCollection` returns every record as
-a number of columns, but we'll set its value to `True` and receive model
-instance for every record instead:
+a number of columns, but we'll set `is_scalar=True` and receive model instance
+for every record instead:
 
 ```python
 col = ModelCollection(
@@ -220,10 +287,11 @@ collections with the same name, you'll get two identical IDs on the page.
 Params are usually used by data and pager service for searching, sorting,
 etc. Collection does not keep all the params. Instead, it stores only items
 with key prefixed by `<name>:`. I.e, if collection has name `hello`, and you
-pass `{"hello:a": 1, "b": 2, "world:c": 3}`, collection will remove `b` and
-`world:c` members. As for `hello:a`, collection strips `<name>:` prefix from
-it. So, in the end, collection stores `{"a": 1}`.  You can check params of the
-collection using `params` attribute:
+pass `{"hello:a": 1, "b": 2, "world:c": 3}`, collection will remove `b`(because
+it has no collection name plus colon prefix) and `world:c` members(because it
+uses `world` instead of `hello` in prefix). As for `hello:a`, collection strips
+`<name>:` prefix from it. So, in the end, collection stores `{"a": 1}`.  You
+can check params of the collection using `params` attribute:
 
 ```python
 col = Collection("hello", {"hello:a": 1, "b": 2, "world:c": 3})
@@ -282,9 +350,11 @@ Collection contains the following services:
   filters can define configuration of dropdowns and input fields from the data
   search form.
 
-**Note**: You can define more services in custom collections. The list above enumerates
-all the services that are available in the base collection and in all
-collections shipped with the current extension.
+**Note**: You can define more services in custom collections. The list above
+enumerates all the services that are available in the base collection and in
+all collections shipped with the current extension. For example, one of
+built-in collections, `DbCollection` has additional service called
+`db_connection` that can communicate with DB.
 
 
 When a collection is created, it creates an instance of each service using
@@ -293,20 +363,24 @@ that extend it already have all details for initializing every service:
 
 ```python
 col = Collection("name", {})
-print(f"""{col.data=},
-{col.pager=},
-{col.serializer=},
-{col.columns=},
-{col.filters=}""")
+print(f"""Services:
+  {col.data=},
+  {col.pager=},
+  {col.serializer=},
+  {col.columns=},
+  {col.filters=}""")
 
 assert list(col) == []
 ```
 
 This collection has no data. We can initialize an instance of `StaticData` and
-replace the data service of the collection with it. Every service has one
-required argument: collection that will use the service. All other arguments
-are used as a service settings and must be passed by name. Remember, all the
-classes used in this manual are available inside `ckanext.collection.utils`:
+replace the existing data service of the collection with new `StaticData`
+instance.
+
+Every service has one required argument: collection that owns the service. All
+other arguments are used as a service settings and must be passed by
+name. Remember, all the classes used in this manual are available inside
+`ckanext.collection.utils`:
 
 ```python
 static_data = StaticData(col, data=[1,2,3])
@@ -322,11 +396,11 @@ constructor. It must be the collection that is going to use the service. Some
 services may work even if you pass a random value as the first argument, but
 it's an exceptional situation and one shouldn't rely on it.
 
-If existing collection is no longer and you are going to create a new one, you
-probably want to reuse a service from an existing collection. Just to avoid
-creating the service and calling `Collection.replace_service`, which will save
-you two lines of code. In this case, use `<service>_instance` parameter of the
-collection constructor:
+If existing collection is no longer used and you are going to create a new one,
+you sometimes want to reuse a service from an existing collection. Just to
+avoid creating the service and calling `Collection.replace_service`, which will
+save you two lines of code. In this case, use `<service>_instance` parameter of
+the collection constructor:
 
 ```python
 another_col = Collection("another-name", {}, data_instance=col.data)
@@ -335,11 +409,12 @@ assert list(another_col) == [1, 2, 3]
 
 If you do such thing, make sure you are not using old collection anymore. You
 just transfered one of its services to another collection, so there is no
-guarantees it will function properly. If you want to use a custom factory for
-the service, instead of transfering a service instance, it's better to
-customize service factory. You can tell which class to use for making an
-instance of a service using `<service>_factory` parameter of the collection
-contstructor:
+guarantees that old collection with detached service will function properly.
+
+It's usually better to customize service factory, instead of passing existing
+customized instance of the service around. You can tell which class to use for
+making an instance of a service using `<service>_factory` parameter of the
+collection contstructor:
 
 ```python
 col = Collection("name", {}, data_factory=StaticData)
@@ -358,6 +433,11 @@ col = Collection("name", {}, data_factory=StaticData)
 col.data.data = [1, 2, 3]
 assert list(col) == [1, 2, 3]
 ```
+
+**Note**: `data` service caches its data. If you already accessed data property
+from the `StaticData`, assigning an new value doesn't have any effect because
+of the cache. You have to call `col.data.refresh_data()` after assigning to
+rebuild the cache.
 
 But there is a better way. You can pass `<service>_settings` dictionary to the
 collection constructor and it will be passed down into corresponding service
@@ -423,10 +503,10 @@ collection. It will always use `StaticData` with `data` set to `[1, 2, 3]`
 #### Common logic
 
 All services share a few common features. First of all, all services contain a
-reference to the collection that users/owns the service. Only one collection
-can own the service. If you move service from one collection to another, you
-must never use the old collection, that no longer owns the service. Depending
-on internal implementation of the service, it may work without changes, but we
+reference to the collection that uses/owns the service. Only one collection can
+own the service. If you move service from one collection to another, you must
+never use the old collection, that no longer owns the service. Depending on
+internal implementation of the service, it may work without changes, but we
 recommend removing such collections. At any point you can get the collection
 that owns the service via `attached` attribute of the service:
 
@@ -481,7 +561,7 @@ accept a single argument - a new service that is instantiated at the moment:
 ```python
 class MyData(StaticData):
     ref = 42
-    i_am_real = configurable_attribute(default_factory=lambda self: self.ref * 10)
+    i_am_real = shared.configurable_attribute(default_factory=lambda self: self.ref * 10)
 
 data = MyData(col, data=[])
 assert data.i_am_real == 420
@@ -490,7 +570,7 @@ assert data.i_am_real == 420
 Never use another configurable attributes in the `default_factory` - order in
 which configurable attributes are initialized is not strictly defined. At the
 moment of writing this manual, configurable attributes were initialized in
-alphabetical order. But this implementation detail may change in future without
+alphabetical order, but this implementation detail may change in future without
 notice.
 
 TODO: with_attributes
