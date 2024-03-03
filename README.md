@@ -585,11 +585,12 @@ This service produces the data for collection. Every data service must:
 * define `range(start: Any, end: Any)` method that returns slice of the data
 
 Base class for data services - `Data` - already contains a simple version of
-this logic. You have to define only one methods to make you custom
+this logic. You need to define only one method to make you custom
 implementations: `compute_data()`. When data if accessed for the first time,
 `compute_data` is called. Its result cached and used for iteration in
 for-loops, slicing via `range` method and size measurement via `total`
 property.
+
 
 ```python
 class CustomData(Data):
@@ -615,13 +616,13 @@ class CustomData(Data):
         return len(self.names)
 
     def __iter__(self):
-        yield from self.names
+        yield from sorted(self.names)
 
     def range(self, start: Any, end: Any):
         if not isinstance(start, str) or not isinstance(end, str):
             return []
 
-        for name in names:
+        for name in self:
             if name < start:
                 continue
             if name > end:
@@ -685,39 +686,38 @@ assert list(col) == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 #### Serializer service
 
-Serializer converts data into textual or binary representation. Serializers are
-main users of columns service, because it contains details about specific data
-columns. And serializers often iterate data service directly(ignoring `range`
-method), to serialize all available records. The only required method for
-serializer is `stream`. This method must return an iterable of `str` or `byte`
-fragments of the serialized data. And there must be at least one fragment. Even
-if there is no data, serializer must return at least `''` or `b'` from
-`stream`.
+Serializer converts data into textual, binary or any other alternative
+representation. For example, if you want to compute records produced by the
+`data` service of the collection into pandas' DataFrame, you should probably
+use serializer.
+
+Serializers are main users of columns service, because it contains details
+about specific data columns. And serializers often iterate data service
+directly(ignoring `range` method), to serialize all available records.
+
+The only required method for serializer is `serialize`. This method must return
+an data from `data` service transformed into format provided by serializer. For
+example, `JsonSerializer` returns string with JSON-encoded data.
+
+You are not restricted by textual or binary formats. Serializer that transforms
+data into pandas' DataFrame is completely valid version of the serializer.
 
 ```python
 class NewLineSerializer(Serializer):
-    def stream(self):
+    def serialize(self):
+        result = ""
         for item in self.attached.data:
-            yield str(item) + "\n"
+            result += str(item) + "\n"
+
+        return result
 
 col = StaticCollection(
     "name", {},
     serializer_factory=NewLineSerializer,
     data_settings={"data": [1, 2, 3]}
 )
-assert "".join(col.serializer.stream()) == "1\n2\n3\n"
+assert "".join(col.serializer.serialize()) == "1\n2\n3\n"
 ```
-
-Serializer also has `render` method, that combines all fragments from `stream`
-into a single sequence:
-
-```python
-assert col.serializer.render() == "1\n2\n3\n"
-```
-
-Use `render` only when you are sure that you have enough memory for all the
-serialized records. In most cases it will be wiser to send streaming response
-to client using `stream` generator.
 
 #### Columns service
 

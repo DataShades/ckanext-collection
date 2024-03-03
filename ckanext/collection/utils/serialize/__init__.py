@@ -56,21 +56,17 @@ class Serializer(
     shared.Domain[types.TDataCollection],
     Generic[types.TSerialized, types.TDataCollection],
 ):
-    """Abstract collection serializer.
+    """Base collection serializer.
 
-    Its`stream` produces iterable of collection records in the format that has
-    sense for the serializer. Example:
+    For any derived implementation, `serialize` must transfrom data of the
+    collection into expected format. Example:
 
     >>> def stream(self):
     >>>     for record in self.attached.data:
     >>>         yield yaml.dump(record)
-
-    By default, all chunks are combined into single dump via `render` method,
-    which combines fragments using addition operator. If this strategy doesn't
-    work, override `render`:
-
-    >>> def render(self):
-    >>>     return "\n---\n".join(self.stream())
+    >>>
+    >>> def serialize(self):
+    >>>     return "---\n".join(self.stream())
 
     """
 
