@@ -192,8 +192,9 @@ class TestModelData:
         collection = Collection(
             "",
             {"sort": "id"},
-            pager_settings={"page": 2, "rows_per_page": 1},
+            pager_settings={"page": 2, "rows_per_page": 1, "sort": "id"},
             data_factory=data.ModelData,
+            columns_settings={"sortable": "id"},
             data_settings={
                 "model": model.Package,
                 "is_scalar": True,

@@ -4,7 +4,7 @@
 
 [tool.ruff]
 target-version = "py38"
-select = [
+lint.select = [
        "B",  # likely bugs and design problems
        "BLE",  # do not catch blind exception
        "C40",  # better list/set/dict comprehensions
@@ -29,13 +29,14 @@ select = [
        "TRY",  # better exceptions
        "UP",  # upgrade syntax for newer versions of the language
 ]
-ignore = [
+
+lint.ignore = [
        "E712", # comparison to bool: violated by SQLAlchemy filters
        "PT004", # fixture does not return anything, add leading underscore: violated by clean_db
        "PLC1901", # simplify comparison to empty string: violated by SQLAlchemy filters
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "ckanext/collection/tests*" = ["S", "PL"]
 "ckanext/collection/tests/test_readme.py" = ["F403", "F405"]
 [tool.isort]

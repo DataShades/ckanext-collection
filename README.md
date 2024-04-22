@@ -735,6 +735,11 @@ records. It defines following settings:
   services
 * labels: human readable labels for columns. Used by serializer services
 
+This service contains information used by other service, so defining additional
+attributes here is completely normal. For example, some custom serializer, that
+serializes data into ORC, can expect `orc_format` attribute in the `columns`
+service to be available. So you can add as much additional column related
+details as required into this service.
 
 #### Filters service
 

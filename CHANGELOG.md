@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [v0.1.2](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.2) - 2024-03-03
+
+<small>[Compare with v0.1.2a1](https://github.com/DataShades/ckanext-collection/compare/v0.1.2a1...v0.1.2)</small>
+
+### Code Refactoring
+
+- move pagination switcher into pagination template ([30dc9a9](https://github.com/DataShades/ckanext-collection/commit/30dc9a9f6457438f3b5090d408edd5bf51d744fe) by Sergey Motornyuk).
+
 ## [v0.1.2a1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.2a1) - 2024-02-21
 
 <small>[Compare with v0.1.2a0](https://github.com/DataShades/ckanext-collection/compare/v0.1.2a0...v0.1.2a1)</small>
