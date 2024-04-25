@@ -3,7 +3,7 @@
 {% set form_id = collection.serializer.form_id %}
 
 {% block prev_page_link %}
-    <button class="pagination--switch-button" name="{{ collection.name }}:page" form="{{ form_id }}"
+    <button class="pagination--switch-button btn" name="{{ collection.name }}:page" form="{{ form_id }}"
             type="submit" value="{{ prev_page_number }}"
             {% if current_page_number == 1 %} disabled{% endif %}
     >
@@ -14,7 +14,7 @@
 {% endblock prev_page_link %}
 
 {% block next_page_link %}
-    <button class="pagination--switch-button" name="{{ collection.name }}:page" form="{{ form_id }}"
+    <button class="pagination--switch-button btn btn-primary" name="{{ collection.name }}:page" form="{{ form_id }}"
             type="submit" value="{{ next_page_number }}"
             {% if pos_last >= total %} disabled{% endif %}
     >
