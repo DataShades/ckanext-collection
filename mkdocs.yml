@@ -1,0 +1,54 @@
+site_name: ckanext-collection
+site_url: https://datashades.github.io/ckanext-collection/
+
+repo_url:  https://github.com/DataShades/ckanext-collection
+
+markdown_extensions:
+  - pymdownx.snippets
+  - pymdownx.blocks.admonition
+  - pymdownx.blocks.details
+  - pymdownx.blocks.tab
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_symbol_type_heading: true
+            show_source: false
+
+  - search:
+      separator: '[\s\-\.\_]+'
+
+watch:
+  - docs/
+  - ckanext/collection/utils
+
+theme:
+  name: material
+  logo: img/logo.png
+  favicon: img/favicon.ico
+  palette:
+    primary: blue
+  features:
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.footer
+    - navigation.indexes
+    - navigation.top
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+
+nav:
+  - Overview: index.md
+  - detailed.md

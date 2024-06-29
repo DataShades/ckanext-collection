@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import operator
 from dataclasses import is_dataclass
-from typing import Any
+from typing import Any, cast
 
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
 from ckan.common import CKANConfig
 
-from . import shared
+from . import shared, signals
 from .interfaces import CollectionFactory, ICollection
 
 try:
@@ -40,10 +40,7 @@ try:
                     break
             else:
                 config_list.append(
-                    SectionConfig(  # type: ignore
-                        name="Basic site settings",
-                        configs=[config_page],
-                    ),
+                    SectionConfig(name="Basic site settings", configs=[config_page]),
                 )
 
             return config_list
@@ -54,11 +51,6 @@ except ImportError:
         pass
 
 
-register_collection_signal = tk.signals.ckanext.signal(
-    "collection:register_collections",
-)
-
-
 @tk.blanket.blueprints
 @tk.blanket.auth_functions
 @tk.blanket.config_declarations
@@ -67,7 +59,6 @@ register_collection_signal = tk.signals.ckanext.signal(
 class CollectionPlugin(ApImplementation, p.SingletonPlugin):
     p.implements(p.IConfigurer)
     p.implements(p.IConfigurable)
-    # p.implements(p.ISignal)
     p.implements(ICollection, inherit=True)
 
     # IConfigurer
@@ -79,15 +70,7 @@ class CollectionPlugin(ApImplementation, p.SingletonPlugin):
 
     # IConfigurable
     def configure(self, config_: CKANConfig):
-        shared.collection_registry.reset()
-
-        for plugin in p.PluginImplementations(ICollection):
-            for name, factory in plugin.get_collection_factories().items():
-                shared.collection_registry.register(name, factory)
-
-        for _, factories in register_collection_signal.send():
-            for name, factory in factories.items():
-                shared.collection_registry.register(name, factory)
+        _register_collections()
 
     def get_collection_factories(self) -> dict[str, CollectionFactory]:
         if tk.config["debug"]:
@@ -113,3 +96,19 @@ class CollectionPlugin(ApImplementation, p.SingletonPlugin):
             }
 
         return {}
+
+
+def _register_collections():
+    shared.collection_registry.reset()
+
+    for plugin in p.PluginImplementations(ICollection):
+        for name, factory in plugin.get_collection_factories().items():
+            shared.collection_registry.register(name, factory)
+
+    results = cast(
+        "list[tuple[Any, dict[str, CollectionFactory]]]",
+        signals.register_collection_signal.send(),
+    )
+    for _, factories in results:
+        for name, factory in factories.items():
+            shared.collection_registry.register(name, factory)

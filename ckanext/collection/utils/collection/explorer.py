@@ -102,20 +102,27 @@ class DbExplorer(DbCollection):
             if isinstance(tables, str):
                 tables = [tables]
 
-            hidden = self.attached.params.get("hidden", "").split(",")
-            hidden = set(filter(None, map(str.strip, hidden)))
+            _hidden = self.attached.params.get("hidden", "").split(",")
+            hidden: set[str] = set(filter(None, map(str.strip, _hidden)))
 
-            visible = self.attached.params.get("visible", "").split(",")
-            visible = set(filter(None, map(str.strip, visible))) - hidden
+            _visible = self.attached.params.get("visible", "").split(",")
+            visible: set[str] = set(filter(None, map(str.strip, _visible))) - hidden
 
-            allowed_filters = self.attached.params.get("allowed_filters", "").split(",")
-            allowed_filters = set(filter(None, map(str.strip, allowed_filters)))
-
-            searchable_fields = self.attached.params.get("searchable_fields", "").split(
+            _allowed_filters = self.attached.params.get("allowed_filters", "").split(
                 ",",
             )
-            searchable_fields = (
-                set(filter(None, map(str.strip, searchable_fields))) - allowed_filters
+            allowed_filters: set[str] = set(
+                filter(None, map(str.strip, _allowed_filters)),
+            )
+
+            _searchable_fields = self.attached.params.get(
+                "searchable_fields",
+                "",
+            ).split(
+                ",",
+            )
+            searchable_fields: set[str] = (
+                set(filter(None, map(str.strip, _searchable_fields))) - allowed_filters
             )
 
             return [

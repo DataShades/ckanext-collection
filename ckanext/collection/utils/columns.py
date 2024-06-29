@@ -74,7 +74,11 @@ class Columns(
         return value
 
     def get_primary_order(self, name: str) -> str:
-        """Format column name for usage as a primary order value."""
+        """Format column name for usage as a primary order value.
+
+        Args:
+          name: the name of sorted column
+        """
         return name
 
     def get_secondary_order(self, name: str) -> str:

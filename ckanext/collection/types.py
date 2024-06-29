@@ -17,8 +17,7 @@ class CollectionFactory(Protocol):
         params: dict[str, Any],
         /,
         **kwargs: Any,
-    ) -> BaseCollection:
-        ...
+    ) -> BaseCollection: ...
 
 
 TCollection = TypeVar("TCollection", bound="BaseCollection")
@@ -32,7 +31,11 @@ TData = TypeVar("TData")
 class Service:
     """Marker for service classes used by collection."""
 
-    @abc.abstractproperty
+    def __init__(self, obj: Any, /, **kwargs: Any):
+        pass
+
+    @property
+    @abc.abstractmethod
     def service_name(self) -> str:
         """Name of the service instance used by collection."""
         ...
@@ -57,7 +60,8 @@ class BaseColumns(abc.ABC, Service):
 class BaseData(abc.ABC, Sized, Iterable[Any], Service):
     """Declaration of data properties."""
 
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def total(self) -> int:
         """Total number of data records."""
         ...
@@ -77,7 +81,8 @@ class BasePager(abc.ABC, Service):
 
     params: dict[str, Any]
 
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def size(self) -> Any:
         """Range of the pager.
 
@@ -87,7 +92,8 @@ class BasePager(abc.ABC, Service):
         """
         ...
 
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def start(self) -> Any:
         """Inclusive lower bound of the page.
 
@@ -97,7 +103,8 @@ class BasePager(abc.ABC, Service):
         """
         ...
 
-    @abc.abstractproperty
+    @property
+    @abc.abstractmethod
     def end(self) -> Any:
         """Exclusive upper bound of the page.
 
@@ -114,8 +121,7 @@ class BasePager(abc.ABC, Service):
 
 class BaseSerializer(abc.ABC, Service):
     @abc.abstractmethod
-    def serialize(self) -> Any:
-        ...
+    def serialize(self) -> Any: ...
 
     @property
     def service_name(self):

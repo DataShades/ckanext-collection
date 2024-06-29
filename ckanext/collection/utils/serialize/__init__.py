@@ -22,6 +22,7 @@ __all__ = [
     "StreamingSerializer",
     "RenderableSerializer",
     "CsvSerializer",
+    "DictListSerializer",
     "JsonlSerializer",
     "JsonSerializer",
     "ChartJsSerializer",
@@ -100,20 +101,43 @@ class Serializer(
         """Transform single data record into serializable dictionary."""
         result = self.row_dictizer(row)
 
-        return {k: self.serialize_value(v, k, row) for k, v in result.items()}
+        return {
+            field: self.serialize_value(result[field], field, row)
+            for field in self.attached.columns.visible
+            if field in result
+        }
 
 
-class StreamingSerializer(Serializer[types.TSerialized, types.TDataCollection]):
+class StreamingSerializer(
+    Serializer[types.TSerialized, types.TDataCollection],
+):
+
     @abc.abstractmethod
     def stream(self) -> Iterable[types.TSerialized]:
-        """Iterate over fragments of the content."""
+        """Iterate over fragments of the content.
+
+        Type of the stream fragment must be the same as type of serialized
+        content. For example, serializer that produces list of dictionaries,
+        must yield `[dict(...)]`, not just `dict(...)`
+        """
         raise NotImplementedError
 
-    def serialize(self):
+    def serialize(self) -> types.TSerialized:
         return reduce(operator.add, self.stream())
 
 
+class DictListSerializer(
+    StreamingSerializer["list[dict[str, Any]]", types.TDataCollection],
+):
+
+    def stream(self):
+        """Iterate over fragments of the content."""
+        for item in self.attached.data:
+            yield [self.dictize_row(item)]
+
+
 class RenderableSerializer(StreamingSerializer[str, types.TDataCollection]):
+
     def stream(self) -> Iterable[str]:
         """Iterate over fragments of the content."""
         yield ""

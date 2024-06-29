@@ -9,9 +9,11 @@ from .api import ApiData, ApiListData, ApiSearchData
 from .base import Data
 from .db import DbData, TableData
 from .model import BaseSaData, ModelData, StatementSaData, UnionSaData
+from .stream import CsvData
 
 __all__ = [
     "Data",
+    "CsvData",
     "TableData",
     "ApiData",
     "ApiListData",

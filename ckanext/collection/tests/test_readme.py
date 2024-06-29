@@ -1,163 +1,111 @@
 from __future__ import annotations
 
+import csv
+import json
+import os
+from io import StringIO
+from typing import Any, cast
+
 import pytest
 
 from ckan import model
+from ckan.tests.factories import CKANFactory
 
-from ckanext.collection import shared
-from ckanext.collection.utils import *
-
-
-class TestOverview:
-    def test_static(self):
-        col = StaticCollection("name", {})
-        assert list(col) == []
-
-        col = StaticCollection("name", {}, data_settings={"data": [1, 2, 3]})
-        assert list(col) == [1, 2, 3]
-
-    @pytest.mark.usefixtures("clean_db")
-    def test_model(self):
-        col = ModelCollection(
-            "",
-            {},
-            data_settings={"is_scalar": True, "model": model.User},
-        )
-
-        for user in col:
-            assert isinstance(user, model.User)
-
-    @pytest.mark.usefixtures("clean_db", "clean_index", "package")
-    def test_api_search(self):
-        col = ApiSearchCollection("", {}, data_settings={"action": "package_search"})
-
-        for pkg in col:
-            assert isinstance(pkg, dict)
-
-    @pytest.mark.usefixtures("clean_db", "clean_index", "package")
-    def test_api_list(self):
-        col = ApiListCollection("", {}, data_settings={"action": "package_list"})
-        for pkg in col:
-            assert isinstance(pkg, str)
-
-    @pytest.mark.usefixtures("clean_db", "user")
-    def test_api(self):
-        col = ApiCollection("", {}, data_settings={"action": "user_list"})
-
-        for user in col:
-            assert isinstance(user, dict)
+import ckanext.collection.utils as cu
 
 
-class TestInitialization:
-    def test_params(self):
-        col = Collection("hello", {"hello:a": 1, "b": 2, "world:c": 3})
-        assert col.params == {"a": 1}
-
-        col = Collection("world", {"hello:a": 1, "b": 2, "world:c": 3})
-        assert col.params == {"c": 3}
-
-    def test_multi(self):
-        params = {"users:page": 2, "packages:page": 5}
-
-        users = ModelCollection("users", params, data_settings={"model": model.User})
-        packages = ModelCollection(
-            "packages",
-            params,
-            data_settings={"model": model.Package},
-        )
-
-        assert isinstance(users.pager, ClassicPager)
-        assert isinstance(packages.pager, ClassicPager)
-
-        assert users.pager.page == 2
-        assert packages.pager.page == 5
+class TestModelCollection(cu.Collection):
+    DataFactory = cu.ModelData.with_attributes(model=model.Resource)
+    ColumnsFactory = cu.Columns.with_attributes(names=["name", "size"])
 
 
-class TestServices:
-    def test_default_initialization(self):
-        col = Collection("name", {})
-        assert isinstance(col.data, Data)
-        assert col.pager
-        assert col.serializer
-        assert col.columns
-        assert col.filters
-
-    def test_service_replacement(self):
-        col = Collection("name", {})
-        static_data = StaticData(col, data=[1, 2, 3])
-        col.replace_service(static_data)
-
-        assert list(col) == [1, 2, 3]
-
-    def test_factory(self):
-        col = Collection("name", {}, data_factory=StaticData)
-        assert list(col) == []
-
-        col.data.data = [1, 2, 3]
-        col.data.refresh_data()
-        assert list(col) == [1, 2, 3]
-
-    def test_custom_settings(self):
-        col = Collection(
-            "name",
-            {},
-            data_factory=StaticData,
-            data_settings={"data": [1, 2, 3]},
-        )
-        assert list(col) == [1, 2, 3]
-
-    def test_custom_service_factory(self):
-        class MyCollection(Collection):
-            DataFactory = StaticData
-
-        col = MyCollection("name", {}, data_settings={"data": [1, 2, 3]})
-        assert list(col) == [1, 2, 3]
-
-    def test_with_attributes(self):
-        class MyCollection(Collection):
-            DataFactory = StaticData.with_attributes(data=[1, 2, 3])
-
-        col = MyCollection("name", {})
-        assert list(col) == [1, 2, 3]
+## collection of all packages available via search API
+class TestApiCollection(cu.Collection):
+    DataFactory = cu.ApiSearchData.with_attributes(action="package_search")
+    ColumnsFactory = cu.Columns.with_attributes(names=["name", "title"])
 
 
-class TestCommonLogic:
-    def test_attached(self):
-        col = Collection("name", {})
-        assert col.data.attached is col
-        assert col.pager.attached is col
-        assert col.columns.attached is col
+## collection of all records from CSV file
+class TestCsvCollection(cu.Collection):
+    DataFactory = cu.CsvData.with_attributes(
+        source=os.path.join(os.path.dirname(__file__), "data/file.csv"),
+    )
+    ColumnsFactory = cu.Columns.with_attributes(names=["a", "b"])
 
-        another_col = Collection("another-name", {}, data_instance=col.data)
-        assert col.data.attached is not col
-        assert col.data.attached is another_col
-        assert col.data is another_col.data
 
-    def test_settings(self):
-        col = Collection("name", {})
-        data = StaticData(col, data=[], not_real=True)
-        assert hasattr(data, "data")
-        assert not hasattr(data, "not_real")
+@pytest.mark.usefixtures("with_plugins", "clean_db", "clean_index")
+class TestQuickstart:
+    def test_model(self, resource_factory: type[CKANFactory]):
+        col = TestModelCollection("", {})
+        assert col.data.total == 0
 
-    def test_configurable_attributes(self):
-        col = Collection("name", {})
+        resource_factory.create_batch(3)
 
-        class MyData(StaticData):
-            i_am_real = shared.configurable_attribute(False)
+        col = TestModelCollection("", {})
+        assert col.data.total == 3
 
-        data = MyData(col, data=[], i_am_real=True)
-        assert hasattr(data, "data")
-        assert hasattr(data, "i_am_real")
-        assert data.i_am_real is True
+        serializer = cu.JsonSerializer(col)
+        expected = [{"name": r.name, "size": r.size} for r in col.data]
+        assert json.loads(serializer.serialize()) == expected
 
-    def test_configurable_attribute_default_factory(self):
-        col = Collection("name", {})
+        serializer = cu.CsvSerializer(col)
+        output = StringIO()
+        writer = csv.writer(output)
+        writer.writerow(["name", "size"])
+        writer.writerows([[r.name, r.size] for r in col.data])
+        assert serializer.serialize() == output.getvalue()
 
-        class MyData(StaticData):
-            ref = 42
-            i_am_real = shared.configurable_attribute(
-                default_factory=lambda self: self.ref * 10,
-            )
+        serializer = cu.DictListSerializer(col)
+        expected = [{"name": r.name, "size": r.size} for r in col.data]
+        assert serializer.serialize() == expected
 
-        data = MyData(col, data=[])
-        assert data.i_am_real == 420
+    def test_api(self, package_factory: type[CKANFactory]):
+        col = TestApiCollection("", {})
+        assert col.data.total == 0
+
+        package_factory.create_batch(3)
+
+        col = TestApiCollection("", {})
+        assert col.data.total == 3
+
+        serializer = cu.JsonSerializer(col)
+        expected = [{"name": r["name"], "title": r["title"]} for r in col.data]
+        assert json.loads(serializer.serialize()) == expected
+
+        serializer = cu.CsvSerializer(col)
+        output = StringIO()
+        writer = csv.writer(output)
+        writer.writerow(["name", "title"])
+        writer.writerows([[r["name"], r["title"]] for r in col.data])
+        assert serializer.serialize() == output.getvalue()
+
+        serializer = cu.DictListSerializer(col)
+        expected = [{"name": r["name"], "title": r["title"]} for r in col.data]
+        assert serializer.serialize() == expected
+
+    def test_csv(self, package_factory: type[CKANFactory]):
+        filename = cast(Any, TestCsvCollection.DataFactory).source
+        col = TestCsvCollection("", {})
+        assert col.data.total == 16
+
+        assert len(list(col)) == 10
+        assert len(list(col.data)) == 16
+        assert len(list(col.data.range(2, 5))) == 3
+
+        serializer = cu.JsonSerializer(col)
+        with open(filename) as src:
+            expected = [{"a": r["a"], "b": r["b"]} for r in csv.DictReader(src)]
+        assert json.loads(serializer.serialize()) == expected
+
+        serializer = cu.CsvSerializer(col)
+        output = StringIO()
+        with open(filename) as src:
+            writer = csv.writer(output)
+            for row in csv.reader(src):
+                writer.writerow(row[:-1])
+        assert serializer.serialize() == output.getvalue()
+
+        serializer = cu.DictListSerializer(col)
+        with open(filename) as src:
+            expected = [{"a": r["a"], "b": r["b"]} for (r) in csv.DictReader(src)]
+        assert serializer.serialize() == expected

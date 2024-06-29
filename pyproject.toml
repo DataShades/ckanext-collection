@@ -38,7 +38,7 @@ lint.ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "ckanext/collection/tests*" = ["S", "PL"]
-"ckanext/collection/tests/test_readme.py" = ["F403", "F405"]
+"ckanext/collection/tests/test_dive.py" = ["F403", "F405"]
 [tool.isort]
 known_ckan = "ckan"
 known_ckanext = "ckanext"

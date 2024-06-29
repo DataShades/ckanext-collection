@@ -23,3 +23,6 @@ changelog:  ## compile changelog
 
 vendor:
 	cp node_modules/htmx.org/dist/htmx.js ckanext/collection/assets/vendor
+
+deploy-docs:  ## build and publish documentation
+	mkdocs gh-deploy
