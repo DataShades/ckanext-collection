@@ -1,0 +1,911 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://datashades.github.io/ckanext-collection/structure/collection/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../columns/">
+      
+      
+      <link rel="icon" href="../../img/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.27">
+    
+    
+      
+        <title>Collection - ckanext-collection</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#collection" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ckanext-collection" class="md-header__button md-logo" aria-label="ckanext-collection" data-md-component="logo">
+      
+  <img src="../../img/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ckanext-collection
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Collection
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/DataShades/ckanext-collection" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ckanext-collection" class="md-nav__button md-logo" aria-label="ckanext-collection" data-md-component="logo">
+      
+  <img src="../../img/logo.png" alt="logo">
+
+    </a>
+    ckanext-collection
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/DataShades/ckanext-collection" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../interfaces/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interfaces
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Structure
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Structure
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Collection
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../columns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Columns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../filters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Filters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serializer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Serializer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pager/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pager
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../api/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    API
+  </span>
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Integrations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../detailed/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deep dive
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="collection">Collection</h1>
+<p>Collection constructor has two mandatory arguments: name and parameters.</p>
+<p>Name is used as collection identifier and it's better to keep this value unique
+accross collections. For example, name is used for computing HTML table <code>id</code>
+attribute when serializing collection as an HTML table. If you render two
+collections with the same name, you'll get two identical IDs on the page.</p>
+<p>Params are usually used by data and pager service for searching, sorting,
+etc. Collection does not keep all the params. Instead, it stores only items
+with key prefixed by <code>&lt;name&gt;:</code>. I.e, if collection has name <code>hello</code>, and you
+pass <code>{"hello:a": 1, "b": 2, "world:c": 3}</code>, collection will remove <code>b</code>(because
+it has no collection name plus colon prefix) and <code>world:c</code> members(because it
+uses <code>world</code> instead of <code>hello</code> in prefix). As for <code>hello:a</code>, collection strips
+<code>&lt;name&gt;:</code> prefix from it. So, in the end, collection stores <code>{"a": 1}</code>.  You
+can check params of the collection using <code>params</code> attribute:</p>
+<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;hello:a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;world:c&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
+<span class="k">assert</span> <span class="n">col</span><span class="o">.</span><span class="n">params</span> <span class="o">==</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+
+<span class="n">col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;world&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;hello:a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;world:c&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
+<span class="k">assert</span> <span class="n">col</span><span class="o">.</span><span class="n">params</span> <span class="o">==</span> <span class="p">{</span><span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+</code></pre></div>
+<p>It allows you rendering and processing multiple collections simultaneously on
+the same page. Imagine that you have collection <code>users</code> and collection
+<code>packages</code>. You want to see second page of <code>users</code> and fifth of
+<code>packages</code>. Submit the query string <code>?users:page=2&amp;packages:page=5</code> and
+initialize collections using the following code:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">ckan.logic</span> <span class="kn">import</span> <span class="n">parse_params</span>
+<span class="kn">from</span> <span class="nn">ckan.plugins</span> <span class="kn">import</span> <span class="n">toolkit</span> <span class="k">as</span> <span class="n">tk</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">parse_params</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+
+<span class="n">users</span> <span class="o">=</span> <span class="n">ModelCollection</span><span class="p">(</span>
+    <span class="s2">&quot;users&quot;</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span>
+    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">packages</span> <span class="o">=</span> <span class="n">ModelCollection</span><span class="p">(</span>
+    <span class="s2">&quot;packages&quot;</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span>
+    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">Package</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">users</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">page</span> <span class="o">==</span> <span class="mi">2</span>
+<span class="k">assert</span> <span class="n">packages</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">page</span> <span class="o">==</span> <span class="mi">5</span>
+</code></pre></div>
+<hr />
+<p>When a collection is created, it creates an instance of each service using
+service factories and service settings. Base collection and all collections
+that extend it already have all details for initializing every service:</p>
+<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{})</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;Services:</span>
+<span class="s2">  </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="si">=}</span><span class="s2">,</span>
+<span class="s2">  </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">pager</span><span class="si">=}</span><span class="s2">,</span>
+<span class="s2">  </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">serializer</span><span class="si">=}</span><span class="s2">,</span>
+<span class="s2">  </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">columns</span><span class="si">=}</span><span class="s2">,</span>
+<span class="s2">  </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">filters</span><span class="si">=}</span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[]</span>
+</code></pre></div>
+<p>This collection has no data. We can initialize an instance of <code>StaticData</code> and
+replace the existing data service of the collection with new <code>StaticData</code>
+instance.</p>
+<p>Every service has one required argument: collection that owns the service. All
+other arguments are used as a service settings and must be passed by
+name. Remember, all the classes used in this manual are available inside
+<code>ckanext.collection.utils</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">static_data</span> <span class="o">=</span> <span class="n">StaticData</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">col</span><span class="o">.</span><span class="n">replace_service</span><span class="p">(</span><span class="n">static_data</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</code></pre></div>
+<p>Look at <code>Colletion.replace_service</code>. It accepts only service instance. There is
+no need to pass the name of the service that must be replaced - collection can
+understand it without help. And pay attention to the first argument of service
+constructor. It must be the collection that is going to use the service. Some
+services may work even if you pass a random value as the first argument, but
+it's an exceptional situation and one shouldn't rely on it.</p>
+<p>If existing collection is no longer used and you are going to create a new one,
+you sometimes want to reuse a service from an existing collection. Just to
+avoid creating the service and calling <code>Collection.replace_service</code>, which will
+save you two lines of code. In this case, use <code>&lt;service&gt;_instance</code> parameter of
+the collection constructor:</p>
+<div class="highlight"><pre><span></span><code><span class="n">another_col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;another-name&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">data_instance</span><span class="o">=</span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">another_col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</code></pre></div>
+<p>If you do such thing, make sure you are not using old collection anymore. You
+just transfered one of its services to another collection, so there is no
+guarantees that old collection with detached service will function properly.</p>
+<p>It's usually better to customize service factory, instead of passing existing
+customized instance of the service around. You can tell which class to use for
+making an instance of a service using <code>&lt;service&gt;_factory</code> parameter of the
+collection contstructor:</p>
+<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">data_factory</span><span class="o">=</span><span class="n">StaticData</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[]</span>
+</code></pre></div>
+<p>But in this way we cannot specify the <code>data</code> attribute of the <code>data</code> factory!
+No worries, there are multiple ways to overcome this problem. First of all, all
+the settings of the service are available as its attributes. It means that
+<code>data</code> setting is the same as <code>data</code> attribute of the service. If you can do
+<code>StaticData(..., data=...)</code>, you can as well do <code>service = StaticData(...);
+service.data = ...</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">data_factory</span><span class="o">=</span><span class="n">StaticData</span><span class="p">)</span>
+<span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</code></pre></div>
+<p><strong>Note</strong>: <code>data</code> service caches its data. If you already accessed data property
+from the <code>StaticData</code>, assigning an new value doesn't have any effect because
+of the cache. You have to call <code>col.data.refresh_data()</code> after assigning to
+rebuild the cache.</p>
+<p>But there is a better way. You can pass <code>&lt;service&gt;_settings</code> dictionary to the
+collection constructor and it will be passed down into corresponding service
+factory:</p>
+<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{},</span>
+    <span class="n">data_factory</span><span class="o">=</span><span class="n">StaticData</span><span class="p">,</span>
+    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>
+<span class="p">)</span>
+<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</code></pre></div>
+<p>It works well for individual scenarios, but when you are creating a lot of
+collections with the static data, you want to omit some standard parameters. In
+this case you should define a new class that extends Collection and declares
+<code>&lt;Service&gt;Factory</code> attribute:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyCollection</span><span class="p">(</span><span class="n">Collection</span><span class="p">):</span>
+    <span class="n">DataFactory</span> <span class="o">=</span> <span class="n">StaticData</span>
+
+<span class="n">col</span> <span class="o">=</span> <span class="n">MyCollection</span><span class="p">(</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{},</span>
+    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>
+<span class="p">)</span>
+<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</code></pre></div>
+<p>You still can pass <code>data_factory</code> into <code>MyCollection</code> constructor to override
+data service factory. But now, by default, <code>StaticData</code> is used when it's not
+specified explicitly.</p>
+<p>Finally, if you want to create a subclass of service, that has a specific value
+of certain attributes, i.e something like this:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">OneTwoThreeData</span><span class="p">(</span><span class="n">StaticData</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</code></pre></div>
+<p>you can use <code>Service.with_attributes(attr_name=attr_value)</code> factory method. It
+produce a new service class(factory) with specified attributes bound to a
+static value. For example, that's how we can define a collection, that always
+contains <code>[1, 2, 3]</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyCollection</span><span class="p">(</span><span class="n">Collection</span><span class="p">):</span>
+    <span class="n">DataFactory</span> <span class="o">=</span> <span class="n">StaticData</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+<span class="n">col</span> <span class="o">=</span> <span class="n">MyCollection</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{})</span>
+<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</code></pre></div>
+<p>Now you don't have to specify <code>data_factory</code> or <code>data_settings</code> when creating a
+collection. It will always use <code>StaticData</code> with <code>data</code> set to <code>[1, 2, 3]</code>
+. Make sure you mean it, because now you cannot override the data using
+<code>data_settings</code>.</p>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: Structure of the collection">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Structure of the collection
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../columns/" class="md-footer__link md-footer__link--next" aria-label="Next: Columns">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Columns
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.footer", "navigation.indexes", "navigation.top", "content.code.copy", "content.code.select", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.ad660dcc.min.js"></script>
+      
+    
+  </body>
+</html>
