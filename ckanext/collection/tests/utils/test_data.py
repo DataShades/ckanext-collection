@@ -44,6 +44,16 @@ class TestLaziness:
 
         stub.assert_called_once()
 
+    @mock.patch.object(data.Data, "compute_data", return_value=range(25))
+    def test_range(self, stub: mock.Mock):
+        obj = data.Data(None)
+        for i in range(25):
+            assert obj[i] == i
+
+        assert list(obj.range(1, 5)) == [1, 2, 3, 4]
+
+        assert list(obj[10:13]) == [10, 11, 12]
+
     @mock.patch.object(data.Data, "compute_total", return_value=0)
     def test_total(self, stub: mock.Mock):
         obj = data.Data(None)

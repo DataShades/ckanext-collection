@@ -7,10 +7,10 @@ from faker import Faker
 
 import ckan.plugins.toolkit as tk
 
-from ckanext.collection import shared, utils
+from ckanext.collection import internal, utils
 
 
-class AttachExample(shared.AttachTrait[Any]):
+class AttachExample(internal.AttachTrait[Any]):
     pass
 
 
@@ -21,7 +21,7 @@ class AttachExample(shared.AttachTrait[Any]):
 def test_attached_object(obj: Any):
     """Anything can be attached as a collection to AttachTrait implementation."""
     example = AttachExample()
-    example._attach(obj)
+    example._attach(obj)  # type: ignore
     assert example.attached is obj
 
 
@@ -29,11 +29,11 @@ def test_service_attach_updates_collection():
     """Anything can be attached as a collection to AttachTrait implementation."""
     collection = utils.Collection("", {})
     example = AttachExample()
-    example._attach(collection)
+    example._attach(collection)  # type: ignore
     assert collection.data is not example
 
-    data = utils.Data(None)
-    data._attach(collection)
+    data = utils.Data(None)  # type: ignore
+    data._attach(collection)  # pyright: ignore[reportPrivateUsage]
     assert collection.data is data
 
 
@@ -44,15 +44,17 @@ class TestAttrSettings:
         value = faker.pyint()
         another_value = faker.word()
 
-        class Test(shared.AttrSettingsTrait):
-            test = shared.configurable_attribute(default_factory=lambda self: value)
+        class Test(internal.AttrSettingsTrait):
+            test = internal.configurable_attribute(default_factory=lambda self: value)
 
         obj = Test()
 
-        obj._gather_settings({})
+        obj._gather_settings({})  # pyright: ignore[reportPrivateUsage]
         assert getattr(obj, name) == value
 
-        obj._gather_settings({name: another_value})
+        obj._gather_settings(  # pyright: ignore[reportPrivateUsage]
+            {name: another_value},
+        )
         assert getattr(obj, name) == another_value
 
     def test_without_factories(self, faker: Faker):
@@ -63,46 +65,48 @@ class TestAttrSettings:
         name = "test"
         value = faker.pyint()
 
-        class Test(shared.AttrSettingsTrait):
-            test = shared.configurable_attribute(None)
+        class Test(internal.AttrSettingsTrait):
+            test = internal.configurable_attribute(None)
 
         obj = Test()
 
-        obj._gather_settings({})
+        obj._gather_settings({})  # pyright: ignore[reportPrivateUsage]
         assert getattr(obj, name) is None
 
-        obj._gather_settings({name: value})
+        obj._gather_settings({name: value})  # pyright: ignore[reportPrivateUsage]
         assert getattr(obj, name) == value
 
     def test_declaration(self, faker: Faker):
         first = "first"
         second = "second"
 
-        class Test(shared.AttrSettingsTrait):
-            first = shared.configurable_attribute(default_factory=lambda self: "first")
+        class Test(internal.AttrSettingsTrait):
+            first = internal.configurable_attribute(
+                default_factory=lambda self: "first",
+            )
 
         obj = Test()
-        obj._gather_settings({})
+        obj._gather_settings({})  # pyright: ignore[reportPrivateUsage]
 
         assert getattr(obj, first) == "first"
 
         class ChildTest(Test):
-            first = shared.configurable_attribute(
+            first = internal.configurable_attribute(
                 default_factory=lambda self: "new first",
             )
 
         obj = ChildTest()
-        obj._gather_settings({})
+        obj._gather_settings({})  # pyright: ignore[reportPrivateUsage]
 
         assert getattr(obj, first) == "new first"
 
         class AnotherChildTest(Test):
-            second = shared.configurable_attribute(
+            second = internal.configurable_attribute(
                 default_factory=lambda self: "second",
             )
 
         obj = AnotherChildTest()
-        obj._gather_settings({})
+        obj._gather_settings({})  # pyright: ignore[reportPrivateUsage]
 
         assert getattr(obj, first) == "first"
         assert getattr(obj, second) == "second"
@@ -112,36 +116,35 @@ class TestAttrSettings:
 def test_user_trait(user_factory: Any, faker: Faker, app_with_session: Any):
     fake_username = faker.name()
 
-    class Test(shared.UserTrait):
+    class Test(internal.UserTrait):
         pass
 
     obj = Test()
-    obj._gather_settings({})
+    obj._gather_settings({})  # pyright: ignore[reportPrivateUsage]
     assert not obj.user
 
     with app_with_session.flask_app.test_request_context():
         user = user_factory.model()
         tk.login_user(user)
 
-        obj._gather_settings({})
+        obj._gather_settings({})  # pyright: ignore[reportPrivateUsage]
         assert obj.user == user.name
 
-    obj._gather_settings({"user": fake_username})
+    obj._gather_settings({"user": fake_username})  # pyright: ignore[reportPrivateUsage]
     assert obj.user == fake_username
 
 
 class TestDomain:
     def test_attachment(self):
-        class Child(shared.Domain[Any]):
-            ...
+        class Child(internal.Domain[Any]): ...
 
         attachment = object()
         obj = Child(attachment)
         assert obj.attached is attachment
 
     def test_settings(self):
-        class Child(shared.Domain[Any]):
-            prop = shared.configurable_attribute(
+        class Child(internal.Domain[Any]):
+            prop = internal.configurable_attribute(
                 default_factory=lambda self: self.attached,
             )
 
@@ -157,11 +160,11 @@ class TestDomain:
 
         """
 
-        class Child(shared.Domain[Any]):
-            prop = shared.configurable_attribute(None)
+        class Child(internal.Domain[Any]):
+            prop = internal.configurable_attribute(None)
 
         default = object()
-        derived = Child.with_attributes(prop=shared.configurable_attribute(default))
+        derived = Child.with_attributes(prop=internal.configurable_attribute(default))
         obj = derived(None)
         assert obj.prop is default
 

@@ -3,12 +3,12 @@ from __future__ import annotations
 import enum
 from typing import Any, cast
 
-from ckanext.collection import shared, types
+from ckanext.collection import internal, types
 
 
 class Columns(
     types.BaseColumns,
-    shared.Domain[types.TDataCollection],
+    internal.Domain[types.TDataCollection],
 ):
     """Collection of columns details for filtering/rendering.
 
@@ -19,23 +19,25 @@ class Columns(
       labels: UI labels for columns
     """
 
-    class Default(shared.Sentinel, enum.Enum):
+    class Default(internal.Sentinel, enum.Enum):
         ALL = enum.auto()
         NOT_HIDDEN = enum.auto()
         NONE = enum.auto()
 
-    names: list[str] = shared.configurable_attribute(default_factory=lambda self: [])
-    hidden: set[str] = shared.configurable_attribute(default_factory=lambda self: set())
-    visible: set[str] = shared.configurable_attribute(Default.NOT_HIDDEN)
-    sortable: set[str] = shared.configurable_attribute(Default.NONE)
-    filterable: set[str] = shared.configurable_attribute(Default.NONE)
-    searchable: set[str] = shared.configurable_attribute(Default.NONE)
-    labels: dict[str, str] = shared.configurable_attribute(Default.ALL)
+    names: list[str] = internal.configurable_attribute(default_factory=lambda self: [])
+    hidden: set[str] = internal.configurable_attribute(
+        default_factory=lambda self: set(),
+    )
+    visible: set[str] = internal.configurable_attribute(Default.NOT_HIDDEN)
+    sortable: set[str] = internal.configurable_attribute(Default.NONE)
+    filterable: set[str] = internal.configurable_attribute(Default.NONE)
+    searchable: set[str] = internal.configurable_attribute(Default.NONE)
+    labels: dict[str, str] = internal.configurable_attribute(Default.ALL)
 
     serializers: dict[
         str,
         list[tuple[str, dict[str, Any]]],
-    ] = shared.configurable_attribute(
+    ] = internal.configurable_attribute(
         default_factory=lambda self: {},
     )
 
@@ -115,8 +117,8 @@ class DbColumns(Columns[types.TDbCollection]):
 
 
 class TableColumns(DbColumns[types.TDbCollection]):
-    table: str = shared.configurable_attribute()
-    filterable: set[str] = shared.configurable_attribute(
+    table: str = internal.configurable_attribute()
+    filterable: set[str] = internal.configurable_attribute(
         default_factory=lambda self: self.Default.NONE,
     )
 

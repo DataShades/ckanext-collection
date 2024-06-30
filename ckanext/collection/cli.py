@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import click
 
-from ckanext.collection import shared
+from ckanext.collection.internal import collection_registry
 
 __all__ = ["collection"]
 
@@ -16,6 +16,6 @@ def collection():
 @click.option("--name-only", is_flag=True, help="Show only collection names")
 def list_collections(name_only: bool):
     """List all registered collections."""
-    for name, collection in shared.collection_registry.members.items():
+    for name, collection in collection_registry.members.items():
         line = name if name_only else f"{name}: {collection}"
         click.secho(line)

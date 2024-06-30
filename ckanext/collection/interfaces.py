@@ -6,7 +6,20 @@ from ckanext.collection.types import CollectionFactory
 
 
 class ICollection(Interface):
-    """Extend functionality of ckanext-collections"""
+    """Extend functionality of ckanext-collections
+
+    Example:
+        ```python
+        import ckan.plugins as p
+        from ckanext.collection import shared
+
+        class MyPlugin(p.SingletonPlugin):
+            p.implements(shared.ICollection, inherit=True)
+
+            def get_collection_factories(self) -> dict[str, CollectionFactory]:
+                return {...}
+        ```
+    """
 
     def get_collection_factories(self) -> dict[str, CollectionFactory]:
         """Register named collection factories.

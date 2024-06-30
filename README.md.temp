@@ -30,25 +30,25 @@ Define the collection
 ```python
 
 from ckan import model
-from ckanext.collection.utils import *
+from ckanext.collection.shared import collection, data, columns, serialize
 
 
 ## collection of all resources
-class MyCollection(Collection):
-    DataFactory = ModelData.with_attributes(model=model.Resource)
+class MyCollection(collection.Collection):
+    DataFactory = data.ModelData.with_attributes(model=model.Resource)
     # `names` controls names of fields exported by serializer
     # further in this guide
-    ColumnsFactory = Columns.with_attributes(names=["name", "size"])
+    ColumnsFactory = columns.Columns.with_attributes(names=["name", "size"])
 
 ## collection of all packages available via search API
-class MyCollection(Collection):
-    DataFactory = ApiSearchData.with_attributes(action="package_search")
-    ColumnsFactory = Columns.with_attributes(names=["name", "title"])
+class MyCollection(collection.Collection):
+    DataFactory = data.ApiSearchData.with_attributes(action="package_search")
+    ColumnsFactory = columns.Columns.with_attributes(names=["name", "title"])
 
 ## collection of all records from CSV file
-class MyCollection(Collection):
-    DataFactory = CsvFileData.with_attributes(source="/path/to/file.csv")
-    ColumnsFactory = Columns.with_attributes(names=["a", "b"])
+class MyCollection(collection.Collection):
+    DataFactory = data.CsvFileData.with_attributes(source="/path/to/file.csv")
+    ColumnsFactory = columns.Columns.with_attributes(names=["a", "b"])
 
 ```
 
@@ -84,13 +84,13 @@ Serialize data using `Serializer` service:
 ```python
 
 # JSON string
-serializer = JsonSerializer(col)
+serializer = serialize.JsonSerializer(col)
 
 # or CSV string
-serializer = CsvSerializer(col)
+serializer = serialize.CsvSerializer(col)
 
 # or python list of dictionaries
-serializer = DictListSerializer(col)
+serializer = serialize.DictListSerializer(col)
 
 
 print(serializer.serialize())

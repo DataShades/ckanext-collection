@@ -2,12 +2,10 @@ from __future__ import annotations
 
 from typing import Any
 
-import ckan.plugins.toolkit as tk
-
-from ckanext.collection import shared, types
+from ckanext.collection import internal, types
 
 
-class Pager(types.BasePager, shared.Domain[types.TDataCollection]):
+class Pager(types.BasePager, internal.Domain[types.TDataCollection]):
     """Pagination logic for collections.
 
     This class must be abstract enough to fit into majority of pager
@@ -24,18 +22,26 @@ class ClassicPager(Pager[types.TDataCollection]):
       rows_per_page: max number of items per page
     """
 
-    page: int = shared.configurable_attribute(1)
-    rows_per_page: int = shared.configurable_attribute(10)
+    prioritize_params: int = internal.configurable_attribute(True)
+    page: int = internal.configurable_attribute(1)
+    rows_per_page: int = internal.configurable_attribute(10)
 
     def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         """Use `page` and `rows_per_page` parameters."""
         super().__init__(obj, **kwargs)
-        self.page = tk.h.get_page_number(self.attached.params, "page", self.page)
-        self.rows_per_page = tk.h.get_page_number(
-            self.attached.params,
-            "rows_per_page",
-            self.rows_per_page,
-        )
+
+        if self.prioritize_params:
+            self.page = max(int(self.attached.params.get("page", self.page)), 1)
+
+            self.rows_per_page = max(
+                int(
+                    self.attached.params.get(
+                        "rows_per_page",
+                        self.rows_per_page,
+                    ),
+                ),
+                0,
+            )
 
     @property
     def start(self) -> int:

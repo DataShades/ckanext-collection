@@ -3,6 +3,7 @@ from __future__ import annotations
 import abc
 import csv
 import io
+import itertools
 import json
 import operator
 from functools import reduce
@@ -15,7 +16,7 @@ from sqlalchemy.orm import InstanceState
 
 import ckan.plugins.toolkit as tk
 
-from ckanext.collection import shared, types
+from ckanext.collection import internal, types
 
 __all__ = [
     "Serializer",
@@ -54,7 +55,7 @@ def basic_row_dictizer(row: Any) -> dict[str, Any]:
 
 class Serializer(
     types.BaseSerializer,
-    shared.Domain[types.TDataCollection],
+    internal.Domain[types.TDataCollection],
     Generic[types.TSerialized, types.TDataCollection],
 ):
     """Base collection serializer.
@@ -71,10 +72,12 @@ class Serializer(
 
     """
 
-    value_serializers: dict[str, types.ValueSerializer] = shared.configurable_attribute(
-        default_factory=lambda self: {},
+    value_serializers: dict[str, types.ValueSerializer] = (
+        internal.configurable_attribute(
+            default_factory=lambda self: {},
+        )
     )
-    row_dictizer: Callable[[Any], dict[str, Any]] = shared.configurable_attribute(
+    row_dictizer: Callable[[Any], dict[str, Any]] = internal.configurable_attribute(
         basic_row_dictizer,
     )
 
@@ -100,11 +103,16 @@ class Serializer(
     def dictize_row(self, row: Any) -> dict[str, Any]:
         """Transform single data record into serializable dictionary."""
         result = self.row_dictizer(row)
+        if fields := self.attached.columns.names:
+            visible = self.attached.columns.visible
+        else:
+            fields = list(result)
+            visible = set(fields)
 
         return {
             field: self.serialize_value(result[field], field, row)
-            for field in self.attached.columns.visible
-            if field in result
+            for field in fields
+            if field in result and field in visible
         }
 
 
@@ -150,31 +158,29 @@ class RenderableSerializer(StreamingSerializer[str, types.TDataCollection]):
 class CsvSerializer(StreamingSerializer[str, types.TDataCollection]):
     """Serialize collection into CSV document."""
 
-    def get_writer(self, buff: io.StringIO):
-        return csv.DictWriter(
-            buff,
-            fieldnames=self.get_fieldnames(),
-            extrasaction="ignore",
-        )
-
-    def get_fieldnames(self) -> list[str]:
-        return [
-            name
-            for name in self.attached.columns.names
-            if name in self.attached.columns.visible
-        ]
+    def get_writer(self, buff: io.StringIO, fieldnames: list[str]):
+        return csv.DictWriter(buff, fieldnames, extrasaction="ignore")
 
     def get_header_row(self, writer: csv.DictWriter[str]) -> dict[str, str]:
         return {
             col: self.attached.columns.labels.get(col, col) for col in writer.fieldnames
         }
 
-    def prepare_row(self, row: Any, writer: csv.DictWriter[str]) -> dict[str, Any]:
+    def prepare_row(self, row: Any) -> dict[str, Any]:
         return self.dictize_row(row)
 
     def stream(self) -> Iterable[str]:
         buff = io.StringIO()
-        writer = self.get_writer(buff)
+        data = iter(self.attached.data)
+        fieldnames = self.attached.columns.names
+        if not fieldnames:
+            empty = object()
+            row = next(data, empty)
+            if row is not empty:
+                data = itertools.chain([row], data)
+                fieldnames = list(self.prepare_row(row))
+
+        writer = self.get_writer(buff, fieldnames)
 
         writer.writerow(self.get_header_row(writer))
 
@@ -182,8 +188,8 @@ class CsvSerializer(StreamingSerializer[str, types.TDataCollection]):
         buff.seek(0)
         buff.truncate()
 
-        for row in self.attached.data:
-            writer.writerow(self.prepare_row(row, writer))
+        for row in data:
+            writer.writerow(self.prepare_row(row))
             yield buff.getvalue()
             buff.seek(0)
             buff.truncate()
@@ -192,10 +198,12 @@ class CsvSerializer(StreamingSerializer[str, types.TDataCollection]):
 class JsonlSerializer(StreamingSerializer[str, types.TDataCollection]):
     """Serialize collection into JSONL lines."""
 
+    encoder = internal.configurable_attribute(json.JSONEncoder(default=str))
+
     def stream(self) -> Iterable[str]:
         buff = io.StringIO()
         for row in map(self.dictize_row, self.attached.data):
-            json.dump(row, buff)
+            buff.write(self.encoder.encode(row))
             yield buff.getvalue()
             yield "\n"
             buff.seek(0)
@@ -205,8 +213,10 @@ class JsonlSerializer(StreamingSerializer[str, types.TDataCollection]):
 class JsonSerializer(StreamingSerializer[str, types.TDataCollection]):
     """Serialize collection into single JSON document."""
 
+    encoder = internal.configurable_attribute(json.JSONEncoder(default=str))
+
     def stream(self):
-        yield json.dumps(
+        yield self.encoder.encode(
             [self.dictize_row(row) for row in self.attached.data],
         )
 
@@ -217,14 +227,14 @@ class ChartJsSerializer(StreamingSerializer[str, types.TDataCollection]):
 
     """
 
-    label_column: str = shared.configurable_attribute("")
-    dataset_columns: list[str] = shared.configurable_attribute(
+    label_column: str = internal.configurable_attribute("")
+    dataset_columns: list[str] = internal.configurable_attribute(
         default_factory=lambda self: [],
     )
-    dataset_labels: dict[str, str] = shared.configurable_attribute(
+    dataset_labels: dict[str, str] = internal.configurable_attribute(
         default_factory=lambda self: {},
     )
-    colors: dict[str, str] = shared.configurable_attribute(
+    colors: dict[str, str] = internal.configurable_attribute(
         default_factory=lambda self: {},
     )
 
@@ -257,12 +267,12 @@ class ChartJsSerializer(StreamingSerializer[str, types.TDataCollection]):
 class HtmlSerializer(RenderableSerializer[types.TDataCollection]):
     """Serialize collection into HTML document."""
 
-    ensure_dictized: bool = shared.configurable_attribute(False)
+    ensure_dictized: bool = internal.configurable_attribute(False)
 
-    main_template: str = shared.configurable_attribute(
+    main_template: str = internal.configurable_attribute(
         "collection/serialize/html/main.html",
     )
-    record_template: str = shared.configurable_attribute(
+    record_template: str = internal.configurable_attribute(
         "collection/serialize/html/record.html",
     )
 
@@ -281,30 +291,30 @@ class HtmlSerializer(RenderableSerializer[types.TDataCollection]):
 class TableSerializer(HtmlSerializer[types.TDataCollection]):
     """Serialize collection into HTML table."""
 
-    main_template: str = shared.configurable_attribute(
+    main_template: str = internal.configurable_attribute(
         "collection/serialize/table/main.html",
     )
-    table_template: str = shared.configurable_attribute(
+    table_template: str = internal.configurable_attribute(
         "collection/serialize/table/table.html",
     )
-    record_template: str = shared.configurable_attribute(
+    record_template: str = internal.configurable_attribute(
         "collection/serialize/table/record.html",
     )
-    counter_template: str = shared.configurable_attribute(
+    counter_template: str = internal.configurable_attribute(
         "collection/serialize/table/counter.html",
     )
-    pager_template: str = shared.configurable_attribute(
+    pager_template: str = internal.configurable_attribute(
         "collection/serialize/table/pager.html",
     )
-    form_template: str = shared.configurable_attribute(
+    form_template: str = internal.configurable_attribute(
         "collection/serialize/table/form.html",
     )
-    filter_template: str = shared.configurable_attribute(
+    filter_template: str = internal.configurable_attribute(
         "collection/serialize/table/filter.html",
     )
 
-    prefix: str = shared.configurable_attribute("collection-table")
-    base_class: str = shared.configurable_attribute("collection")
+    prefix: str = internal.configurable_attribute("collection-table")
+    base_class: str = internal.configurable_attribute("collection")
 
     @property
     def form_id(self):
@@ -318,33 +328,33 @@ class TableSerializer(HtmlSerializer[types.TDataCollection]):
 class HtmxTableSerializer(TableSerializer[types.TDataCollection]):
     """Serialize collection into HTML table."""
 
-    main_template: str = shared.configurable_attribute(
+    main_template: str = internal.configurable_attribute(
         "collection/serialize/htmx_table/main.html",
     )
-    table_template: str = shared.configurable_attribute(
+    table_template: str = internal.configurable_attribute(
         "collection/serialize/htmx_table/table.html",
     )
-    record_template: str = shared.configurable_attribute(
+    record_template: str = internal.configurable_attribute(
         "collection/serialize/htmx_table/record.html",
     )
-    counter_template: str = shared.configurable_attribute(
+    counter_template: str = internal.configurable_attribute(
         "collection/serialize/htmx_table/counter.html",
     )
-    pager_template: str = shared.configurable_attribute(
+    pager_template: str = internal.configurable_attribute(
         "collection/serialize/htmx_table/pager.html",
     )
-    form_template: str = shared.configurable_attribute(
+    form_template: str = internal.configurable_attribute(
         "collection/serialize/htmx_table/form.html",
     )
-    filter_template: str = shared.configurable_attribute(
+    filter_template: str = internal.configurable_attribute(
         "collection/serialize/htmx_table/filter.html",
     )
 
-    debug: bool = shared.configurable_attribute(False)
-    push_url: bool = shared.configurable_attribute(False)
-    base_class: str = shared.configurable_attribute("htmx-collection")
+    debug: bool = internal.configurable_attribute(False)
+    push_url: bool = internal.configurable_attribute(False)
+    base_class: str = internal.configurable_attribute("htmx-collection")
 
-    render_url: str = shared.configurable_attribute(
+    render_url: str = internal.configurable_attribute(
         default_factory=lambda self: tk.h.url_for(
             "ckanext-collection.render",
             name=self.attached.name,

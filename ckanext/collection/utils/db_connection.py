@@ -9,11 +9,11 @@ from ckan import model
 
 from ckanext.datastore.backend.postgres import get_read_engine
 
-from ckanext.collection import shared, types
+from ckanext.collection import internal, types
 
 
-class DbConnection(types.BaseDbConnection, shared.Domain[types.TDbCollection]):
-    engine: Engine = shared.configurable_attribute()
+class DbConnection(types.BaseDbConnection, internal.Domain[types.TDbCollection]):
+    engine: Engine = internal.configurable_attribute()
 
     @property
     def inspector(self):
@@ -21,8 +21,8 @@ class DbConnection(types.BaseDbConnection, shared.Domain[types.TDbCollection]):
 
 
 class UrlDbConnection(DbConnection[types.TDbCollection]):
-    url: str = shared.configurable_attribute()
-    engine_options: dict[str, Any] = shared.configurable_attribute(
+    url: str = internal.configurable_attribute()
+    engine_options: dict[str, Any] = internal.configurable_attribute(
         default_factory=lambda self: {},
     )
 
@@ -32,12 +32,12 @@ class UrlDbConnection(DbConnection[types.TDbCollection]):
 
 
 class CkanDbConnection(DbConnection[types.TDbCollection]):
-    engine: Engine = shared.configurable_attribute(
+    engine: Engine = internal.configurable_attribute(
         default_factory=lambda self: cast(Engine, model.meta.engine),
     )
 
 
 class DatastoreDbConnection(DbConnection[types.TDbCollection]):
-    engine: Engine = shared.configurable_attribute(
+    engine: Engine = internal.configurable_attribute(
         default_factory=lambda self: get_read_engine(),
     )

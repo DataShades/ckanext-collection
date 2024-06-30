@@ -6,7 +6,7 @@ from typing import Any, Iterable
 import sqlalchemy as sa
 from sqlalchemy.sql.selectable import GenerativeSelect, Select
 
-from ckanext.collection import shared, types
+from ckanext.collection import internal, types
 
 from .model import BaseSaData
 
@@ -20,8 +20,8 @@ class DbData(BaseSaData[Select, types.TData, types.TDbCollection], abc.ABC):
 
 
 class TableData(DbData[types.TData, types.TDbCollection]):
-    table: str = shared.configurable_attribute()
-    static_columns: Iterable[Any] = shared.configurable_attribute(
+    table: str = internal.configurable_attribute()
+    static_columns: Iterable[Any] = internal.configurable_attribute(
         default_factory=lambda self: [],
     )
 

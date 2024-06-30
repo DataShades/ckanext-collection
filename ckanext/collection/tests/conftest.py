@@ -1,11 +1,11 @@
 import pytest
 
-from ckanext.collection import shared
+from ckanext.collection import internal
 
 
 @pytest.fixture()
 def collection_registry():
     """Collection registry cleaned after each test."""
 
-    yield shared.collection_registry
-    shared.collection_registry.reset()
+    yield internal.collection_registry
+    internal.collection_registry.reset()

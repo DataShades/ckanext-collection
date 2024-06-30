@@ -4,12 +4,12 @@ from typing import Any, Iterable
 
 import sqlalchemy as sa
 
-from ckanext.collection import shared, types
+from ckanext.collection import internal, types
 
 
 class Filters(
     types.BaseFilters,
-    shared.Domain[types.TDataCollection],
+    internal.Domain[types.TDataCollection],
 ):
     """Information about UI filters.
 
@@ -24,10 +24,10 @@ class Filters(
     def make_actions(self) -> Iterable[types.Filter[Any]]:
         return []
 
-    static_filters: Iterable[types.Filter[Any]] = shared.configurable_attribute(
+    static_filters: Iterable[types.Filter[Any]] = internal.configurable_attribute(
         default_factory=lambda self: [],
     )
-    static_actions: Iterable[types.Filter[Any]] = shared.configurable_attribute(
+    static_actions: Iterable[types.Filter[Any]] = internal.configurable_attribute(
         default_factory=lambda self: [],
     )
 
@@ -42,7 +42,7 @@ class DbFilters(Filters[types.TDbCollection]):
 
 
 class TableFilters(DbFilters[types.TDbCollection]):
-    table: str = shared.configurable_attribute()
+    table: str = internal.configurable_attribute()
 
     def make_filters(self) -> Iterable[types.Filter[Any]]:
         return [

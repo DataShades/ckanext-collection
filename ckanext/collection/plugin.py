@@ -8,8 +8,9 @@ import ckan.plugins as p
 import ckan.plugins.toolkit as tk
 from ckan.common import CKANConfig
 
-from . import shared, signals
+from . import signals
 from .interfaces import CollectionFactory, ICollection
+from .internal import collection_registry
 
 try:
     from ckanext.ap_main.interfaces import IAdminPanel
@@ -99,11 +100,11 @@ class CollectionPlugin(ApImplementation, p.SingletonPlugin):
 
 
 def _register_collections():
-    shared.collection_registry.reset()
+    collection_registry.reset()
 
     for plugin in p.PluginImplementations(ICollection):
         for name, factory in plugin.get_collection_factories().items():
-            shared.collection_registry.register(name, factory)
+            collection_registry.register(name, factory)
 
     results = cast(
         "list[tuple[Any, dict[str, CollectionFactory]]]",
@@ -111,4 +112,4 @@ def _register_collections():
     )
     for _, factories in results:
         for name, factory in factories.items():
-            shared.collection_registry.register(name, factory)
+            collection_registry.register(name, factory)

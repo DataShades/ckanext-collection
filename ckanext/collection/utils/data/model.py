@@ -14,7 +14,7 @@ from sqlalchemy.sql.selectable import GenerativeSelect, Select
 from ckan import model
 from ckan.types import AlchemySession
 
-from ckanext.collection import shared, types
+from ckanext.collection import internal, types
 
 from .base import Data
 
@@ -29,9 +29,9 @@ class BaseSaData(
     """Data source for custom SQL statement."""
 
     _data: cached_property[TStatement]
-    use_naive_filters: bool = shared.configurable_attribute(False)
-    use_naive_search: bool = shared.configurable_attribute(False)
-    session: AlchemySession = shared.configurable_attribute(
+    use_naive_filters: bool = internal.configurable_attribute(False)
+    use_naive_search: bool = internal.configurable_attribute(False)
+    session: AlchemySession = internal.configurable_attribute(
         default_factory=lambda self: model.Session,
     )
 
@@ -125,7 +125,7 @@ class BaseSaData(
         if not sort:
             return stmt
 
-        column, desc = shared.parse_sort(sort)
+        column, desc = internal.parse_sort(sort)
 
         if column not in self.attached.columns.sortable:
             log.warning("Unexpected sort value: %s", column)
@@ -145,7 +145,7 @@ class BaseSaData(
 class StatementSaData(BaseSaData[Select, types.TData, types.TDataCollection]):
     """Data source for custom SQL statement."""
 
-    statement: Any = shared.configurable_attribute(None)
+    statement: Any = internal.configurable_attribute(None)
 
     def get_base_statement(self):
         """Return statement with minimal amount of columns and filters."""
@@ -155,7 +155,7 @@ class StatementSaData(BaseSaData[Select, types.TData, types.TDataCollection]):
 class UnionSaData(BaseSaData[Select, types.TData, types.TDataCollection]):
     """Data source for custom SQL statement."""
 
-    statements: Iterable[GenerativeSelect] = shared.configurable_attribute(
+    statements: Iterable[GenerativeSelect] = internal.configurable_attribute(
         default_factory=lambda self: [],
     )
 
@@ -174,19 +174,19 @@ class ModelData(BaseSaData[Select, types.TData, types.TDataCollection]):
       is_scalar: return model instance instead of columns set.
     """
 
-    model: Any = shared.configurable_attribute(None)
-    is_scalar: bool = shared.configurable_attribute(False)
+    model: Any = internal.configurable_attribute(None)
+    is_scalar: bool = internal.configurable_attribute(False)
 
-    static_columns: list[sa.Column[Any] | Label[Any]] = shared.configurable_attribute(
+    static_columns: list[sa.Column[Any] | Label[Any]] = internal.configurable_attribute(
         default_factory=lambda self: [],
     )
-    static_filters: list[Any] = shared.configurable_attribute(
+    static_filters: list[Any] = internal.configurable_attribute(
         default_factory=lambda self: [],
     )
-    static_sources: dict[str, Any] = shared.configurable_attribute(
+    static_sources: dict[str, Any] = internal.configurable_attribute(
         default_factory=lambda self: {},
     )
-    static_joins: list[tuple[str, Any, bool]] = shared.configurable_attribute(
+    static_joins: list[tuple[str, Any, bool]] = internal.configurable_attribute(
         default_factory=lambda self: [],
     )
 

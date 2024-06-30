@@ -6,7 +6,7 @@ import ckan.plugins.toolkit as tk
 from ckan.authz import is_authorized_boolean
 from ckan.logic import parse_params
 
-from ckanext.collection import shared, types
+from ckanext.collection import internal, types
 from ckanext.collection.utils.columns import TableColumns
 from ckanext.collection.utils.data import Data
 from ckanext.collection.utils.data.db import TableData
@@ -18,11 +18,11 @@ from .db import DbCollection
 
 
 class ExplorerSerializer(HtmlSerializer[types.TDataCollection]):
-    extend_page_template: bool = shared.configurable_attribute(
+    extend_page_template: bool = internal.configurable_attribute(
         default_factory=lambda self: tk.request
         and not tk.request.headers.get("hx-request"),
     )
-    main_template: str = shared.configurable_attribute(
+    main_template: str = internal.configurable_attribute(
         "collection/serialize/explorer/main.html",
     )
 
@@ -49,7 +49,7 @@ class CollectionExplorer(Collection):
                 names = [names]
 
             return [
-                shared.get_collection(
+                internal.get_collection(
                     name,
                     params,
                     serializer_settings={"extend_page_template": False},
@@ -57,10 +57,10 @@ class CollectionExplorer(Collection):
                 for name in names
             ]
 
-    class FiltersFactory(Filters["CollectionExplorer"], shared.UserTrait):
-        static_collections: Iterable[str] = shared.configurable_attribute(
+    class FiltersFactory(Filters["CollectionExplorer"], internal.UserTrait):
+        static_collections: Iterable[str] = internal.configurable_attribute(
             default_factory=lambda self: list(
-                map(str, shared.collection_registry.members),
+                map(str, internal.collection_registry.members),
             ),
         )
 
@@ -160,7 +160,7 @@ class DbExplorer(DbCollection):
             ]
 
     class FiltersFactory(DbFilters["DbExplorer"]):
-        static_tables: Iterable[str] = shared.configurable_attribute(
+        static_tables: Iterable[str] = internal.configurable_attribute(
             default_factory=lambda self: [],
         )
 

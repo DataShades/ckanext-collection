@@ -4,7 +4,7 @@ from typing import Any, Iterator, overload
 
 from typing_extensions import Self
 
-from ckanext.collection import shared, types
+from ckanext.collection import internal, types
 from ckanext.collection.utils.columns import Columns
 from ckanext.collection.utils.data import Data
 from ckanext.collection.utils.filters import Filters
@@ -85,7 +85,13 @@ class Collection(types.BaseCollection):
         "serializer",
     )
 
-    def __init__(self, name: str, params: dict[str, Any], /, **kwargs: Any):
+    def __init__(
+        self,
+        name: str = "",
+        params: dict[str, Any] | None = None,
+        /,
+        **kwargs: Any,
+    ):
         """Use name to pick only relevant parameters.
 
         When multiple collections rendered on the same page, the use format
@@ -93,6 +99,9 @@ class Collection(types.BaseCollection):
         collections.
 
         """
+        if params is None:
+            params = {}
+
         self.name = name
 
         if self.name:
@@ -104,14 +113,14 @@ class Collection(types.BaseCollection):
         self.params = params
 
         for service in self._service_names:
-            self.replace_service(self._instantiate(service, kwargs))
+            self._instantiate(service, kwargs)
 
     def _instantiate(self, name: str, kwargs: dict[str, Any]) -> Any:
         if factory := kwargs.get(f"{name}_factory"):
             fn = "".join(p.capitalize() for p in name.split("_"))
             setattr(self, fn + "Factory", factory)
 
-        value: shared.Domain[Any] | None = kwargs.get(f"{name}_instance")
+        value: internal.Domain[Any] | None = kwargs.get(f"{name}_instance")
         if value is None:
             maker = getattr(self, f"make_{name}")
             value = maker(**kwargs.get(f"{name}_settings", {}))
@@ -122,34 +131,34 @@ class Collection(types.BaseCollection):
         return value
 
     @overload
-    def replace_service(self, service: types.BaseColumns) -> types.BaseColumns | None:
-        ...
+    def replace_service(
+        self,
+        service: types.BaseColumns,
+    ) -> types.BaseColumns | None: ...
 
     @overload
-    def replace_service(self, service: types.BaseData) -> types.BaseData | None:
-        ...
+    def replace_service(self, service: types.BaseData) -> types.BaseData | None: ...
 
     @overload
-    def replace_service(self, service: types.BasePager) -> types.BasePager | None:
-        ...
+    def replace_service(self, service: types.BasePager) -> types.BasePager | None: ...
 
     @overload
-    def replace_service(self, service: types.BaseFilters) -> types.BaseFilters | None:
-        ...
+    def replace_service(
+        self,
+        service: types.BaseFilters,
+    ) -> types.BaseFilters | None: ...
 
     @overload
     def replace_service(
         self,
         service: types.BaseSerializer,
-    ) -> types.BaseSerializer | None:
-        ...
+    ) -> types.BaseSerializer | None: ...
 
     @overload
     def replace_service(
         self,
         service: types.BaseDbConnection,
-    ) -> types.BaseDbConnection | None:
-        ...
+    ) -> types.BaseDbConnection | None: ...
 
     def replace_service(self, service: types.Service) -> types.Service | None:
         """Attach service to collection"""

@@ -4,7 +4,7 @@ import pytest
 
 from ckan import model
 
-from ckanext.collection import shared
+from ckanext.collection import internal
 from ckanext.collection.utils import *
 
 
@@ -143,7 +143,7 @@ class TestCommonLogic:
         col = Collection("name", {})
 
         class MyData(StaticData):
-            i_am_real = shared.configurable_attribute(False)
+            i_am_real = internal.configurable_attribute(False)
 
         data = MyData(col, data=[], i_am_real=True)
         assert hasattr(data, "data")
@@ -155,7 +155,7 @@ class TestCommonLogic:
 
         class MyData(StaticData):
             ref = 42
-            i_am_real = shared.configurable_attribute(
+            i_am_real = internal.configurable_attribute(
                 default_factory=lambda self: self.ref * 10,
             )
 

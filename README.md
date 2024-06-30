@@ -2,7 +2,7 @@
 
 # ckanext-collection
 
-Tools for building interfaces for data collections.
+Tools for building interfaces for data collections using declarative style.
 
 This extension simplifies describing series of items, such as datasets from
 search page, users registered on portal, rows of CSV file, tables in DB,
@@ -28,27 +28,26 @@ Add `collection` to the `ckan.plugins` setting in your CKAN config file
 Define the collection
 
 ```python
-
 from ckan import model
-from ckanext.collection.utils import *
+from ckanext.collection.shared import collection, data, columns, serialize
 
 
-## collection of all resources
-class MyCollection(Collection):
-    DataFactory = ModelData.with_attributes(model=model.Resource)
+## collection of all resources from DB
+class MyCollection(collection.Collection):
+    DataFactory = data.ModelData.with_attributes(model=model.Resource)
     # `names` controls names of fields exported by serializer
     # further in this guide
-    ColumnsFactory = Columns.with_attributes(names=["name", "size"])
+    ColumnsFactory = columns.Columns.with_attributes(names=["name", "size"])
 
 ## collection of all packages available via search API
-class MyCollection(Collection):
-    DataFactory = ApiSearchData.with_attributes(action="package_search")
-    ColumnsFactory = Columns.with_attributes(names=["name", "title"])
+class MyCollection(collection.Collection):
+    DataFactory = data.ApiSearchData.with_attributes(action="package_search")
+    ColumnsFactory = columns.Columns.with_attributes(names=["name", "title"])
 
 ## collection of all records from CSV file
-class MyCollection(Collection):
-    DataFactory = CsvFileData.with_attributes(source="/path/to/file.csv")
-    ColumnsFactory = Columns.with_attributes(names=["a", "b"])
+class MyCollection(collection.Collection):
+    DataFactory = data.CsvFileData.with_attributes(source="/path/to/file.csv")
+    ColumnsFactory = columns.Columns.with_attributes(names=["a", "b"])
 
 ```
 
@@ -57,7 +56,7 @@ Initialize collection object and work with data:
 ```python
 
 # collection with first page of results(1st-10th items)
-col = MyCollection("", {})
+col = MyCollection()
 items = list(col)
 
 # collection with third page of results(21st-30th items)
@@ -67,12 +66,11 @@ items = list(col)
 
 # alternatively, read all the items into memory at once, without pagination.
 # It may be quite expensive operation depending on number of items
-col = MyCollection("", {})
+col = MyCollection()
 items = list(col.data)
 
-# or get the slice of data from 2nd till 5th(not includeing 5th,
-# just like in python slices)
-items = col.data.range(2, 5)
+# or get the slice of data from 8th till 12th
+items = list(col.data[8:12])
 
 # check total number of items in collection
 print(col.data.total)
@@ -84,13 +82,13 @@ Serialize data using `Serializer` service:
 ```python
 
 # JSON string
-serializer = JsonSerializer(col)
+serializer = serialize.JsonSerializer(col)
 
 # or CSV string
-serializer = CsvSerializer(col)
+serializer = serialize.CsvSerializer(col)
 
 # or python list of dictionaries
-serializer = DictListSerializer(col)
+serializer = serialize.DictListSerializer(col)
 
 
 print(serializer.serialize())

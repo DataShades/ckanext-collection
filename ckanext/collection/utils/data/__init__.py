@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Iterable
 
-from ckanext.collection import shared, types
+from ckanext.collection import internal, types
 
 from .api import ApiData, ApiListData, ApiSearchData
 from .base import Data
@@ -41,7 +41,7 @@ class StaticData(Data[types.TData, types.TDataCollection]):
     This class turns existing iterable into a data source.
     """
 
-    data: Iterable[types.TData] = shared.configurable_attribute(
+    data: Iterable[types.TData] = internal.configurable_attribute(
         default_factory=lambda self: [],
     )
 

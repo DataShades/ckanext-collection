@@ -7,14 +7,14 @@ from typing import Any, Callable, Iterable, Iterator
 import ckan.plugins.toolkit as tk
 from ckan.types import Context
 
-from ckanext.collection import shared, types
+from ckanext.collection import internal, types
 
 from .base import Data
 
 log = logging.getLogger(__name__)
 
 
-class ApiData(Data[types.TData, types.TDataCollection], shared.UserTrait):
+class ApiData(Data[types.TData, types.TDataCollection], internal.UserTrait):
     """API data source.
 
     This base class is suitable for building API calls.
@@ -23,11 +23,11 @@ class ApiData(Data[types.TData, types.TDataCollection], shared.UserTrait):
       action: API action that returns the data
     """
 
-    action: str = shared.configurable_attribute()
-    payload: dict[str, Any] = shared.configurable_attribute(
+    action: str = internal.configurable_attribute()
+    payload: dict[str, Any] = internal.configurable_attribute(
         default_factory=lambda self: {},
     )
-    ignore_auth: bool = shared.configurable_attribute(False)
+    ignore_auth: bool = internal.configurable_attribute(False)
 
     def make_context(self):
         return Context(user=self.user, ignore_auth=self.ignore_auth)
@@ -59,7 +59,7 @@ class ApiSearchData(ApiData[types.TData, types.TDataCollection]):
         if not sort:
             return {}
 
-        column, desc = shared.parse_sort(sort)
+        column, desc = internal.parse_sort(sort)
 
         if column not in self.attached.columns.sortable:
             log.warning("Unexpected sort value: %s", sort)

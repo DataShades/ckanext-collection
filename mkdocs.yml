@@ -5,6 +5,7 @@ repo_url:  https://github.com/DataShades/ckanext-collection
 
 markdown_extensions:
   - pymdownx.snippets
+  - pymdownx.inlinehilite
   - pymdownx.blocks.admonition
   - pymdownx.blocks.details
   - pymdownx.blocks.tab:
@@ -56,6 +57,7 @@ nav:
   - index.md
   - installation.md
   - usage.md
+  - interfaces.md
   - Structure:
     - structure/index.md
     - structure/collection.md
@@ -64,7 +66,8 @@ nav:
     - structure/filters.md
     - structure/serializer.md
     - structure/pager.md
-  - interfaces.md
   - API:
     - api/index.md
+  - configuration.md
+  - integrations.md
   - detailed.md

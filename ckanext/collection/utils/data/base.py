@@ -3,12 +3,12 @@ from __future__ import annotations
 from functools import cached_property
 from typing import Any, Generic, Iterable, Iterator
 
-from ckanext.collection import shared, types
+from ckanext.collection import internal, types
 
 
 class Data(
     types.BaseData,
-    shared.Domain[types.TDataCollection],
+    internal.Domain[types.TDataCollection],
     Generic[types.TData, types.TDataCollection],
 ):
     """Data source for collection.
@@ -37,6 +37,11 @@ class Data(
         self._data = self.compute_data()
         self._total = self.compute_total(self._data)
 
+    def __getitem__(self, key: Any):
+        if isinstance(key, slice):
+            return self.range(key.start, key.stop)
+        return self.at(key)
+
     def compute_data(self) -> Any:
         """Produce data."""
         return []
@@ -48,6 +53,10 @@ class Data(
     def range(self, start: Any, end: Any) -> Iterable[types.TData]:
         """Slice data."""
         return self._data[start:end]
+
+    def at(self, index: Any) -> types.TData:
+        """Slice data."""
+        return self._data[index]
 
     @property
     def total(self):
