@@ -16,7 +16,7 @@ from .data import (
     ApiSearchData,
     BaseModelData,
     BaseSaData,
-    CsvData,
+    CsvFileData,
     Data,
     DbData,
     ModelData,
@@ -91,5 +91,5 @@ __all__ = [
     "TableSerializer",
     "UnionModelData",
     "UnionSaData",
-    "CsvData",
+    "CsvFileData",
 ]

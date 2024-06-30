@@ -10,7 +10,7 @@ from .base import Data
 log = logging.getLogger(__name__)
 
 
-class CsvData(Data[types.TData, types.TDataCollection]):
+class CsvFileData(Data[types.TData, types.TDataCollection]):
     source = shared.configurable_attribute()
 
     def compute_data(self):

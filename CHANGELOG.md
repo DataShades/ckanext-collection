@@ -6,33 +6,27 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## [v0.1.2](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.2) - 2024-03-03
+## Unreleased
 
-<small>[Compare with v0.1.2a1](https://github.com/DataShades/ckanext-collection/compare/v0.1.2a1...v0.1.2)</small>
+<small>[Compare with latest](https://github.com/DataShades/ckanext-collection/compare/v0.1.2...HEAD)</small>
+
+### Features
+
+- Serializer.dictize_row returns only Columns.visible ([0ad5295](https://github.com/DataShades/ckanext-collection/commit/0ad5295fd6a5c463befe3630b4b46dd801c3ac9b) by Sergey Motornyuk).
 
 ### Code Refactoring
 
-- move pagination switcher into pagination template ([30dc9a9](https://github.com/DataShades/ckanext-collection/commit/30dc9a9f6457438f3b5090d408edd5bf51d744fe) by Sergey Motornyuk).
+- Columns filterable and sortable are empty by default ([aeb3950](https://github.com/DataShades/ckanext-collection/commit/aeb3950bda6013a680d9f48bba9d481d52d0bd47) by Sergey Motornyuk).
 
-## [v0.1.2a1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.2a1) - 2024-02-21
+<!-- insertion marker -->
+## [v0.1.2](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.2) - 2024-03-03
 
-<small>[Compare with v0.1.2a0](https://github.com/DataShades/ckanext-collection/compare/v0.1.2a0...v0.1.2a1)</small>
+<small>[Compare with v0.1.1](https://github.com/DataShades/ckanext-collection/compare/v0.1.1...v0.1.2)</small>
 
 ### Features
 
 - register collections via `collection:register_collections` signal ([6db3be0](https://github.com/DataShades/ckanext-collection/commit/6db3be0121ee9f8a05c40b6ac71fb13a5e6334cf) by Sergey Motornyuk).
 - Serializer has serialize method, stream and render moved to Streaming and Renderable serializers ([d749f36](https://github.com/DataShades/ckanext-collection/commit/d749f361cc40c0f431d94a383aeb24af8833fb52) by Sergey Motornyuk).
-
-### Code Refactoring
-
-- remove generic type from collection ([8497e1e](https://github.com/DataShades/ckanext-collection/commit/8497e1e3ee8a6810806f1ed83f3b6baf64604235) by Sergey Motornyuk).
-
-## [v0.1.2a0](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.2a0) - 2024-01-30
-
-<small>[Compare with v0.1.1](https://github.com/DataShades/ckanext-collection/compare/v0.1.1...v0.1.2a0)</small>
-
-### Features
-
 - add static_columns to table data ([9d5cd80](https://github.com/DataShades/ckanext-collection/commit/9d5cd80411c3b975561ba1186f2f8250ec5b7d65) by Sergey Motornyuk).
 - add attrs to link and button filter options ([8a184fe](https://github.com/DataShades/ckanext-collection/commit/8a184fe8a3f6313f2924182794445bd77aa2c7ef) by Sergey Motornyuk).
 - serializers has row_dictizer attribute ([883f3d7](https://github.com/DataShades/ckanext-collection/commit/883f3d73946008a6736a183686ac3f918800f1c4) by Sergey Motornyuk).
@@ -52,15 +46,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Code Refactoring
 
+- move pagination switcher into pagination template ([30dc9a9](https://github.com/DataShades/ckanext-collection/commit/30dc9a9f6457438f3b5090d408edd5bf51d744fe) by Sergey Motornyuk).
+- remove generic type from collection ([8497e1e](https://github.com/DataShades/ckanext-collection/commit/8497e1e3ee8a6810806f1ed83f3b6baf64604235) by Sergey Motornyuk).
 - use Iterable instead of Sequence for filters ([f047ed0](https://github.com/DataShades/ckanext-collection/commit/f047ed0ffcbe39d51a5300a32dc6017dd1fa09d5) by Sergey Motornyuk).
 
 ## [v0.1.1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.1) - 2024-01-26
 
-<small>[Compare with v0.1.1a0](https://github.com/DataShades/ckanext-collection/compare/v0.1.1a0...v0.1.1)</small>
-
-## [v0.1.1a0](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.1a0) - 2024-01-25
-
-<small>[Compare with v0.1.0](https://github.com/DataShades/ckanext-collection/compare/v0.1.0...v0.1.1a0)</small>
+<small>[Compare with v0.1.0](https://github.com/DataShades/ckanext-collection/compare/v0.1.0...v0.1.1)</small>
 
 ### Bug Fixes
 
@@ -68,7 +60,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [v0.1.0](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0) - 2024-01-25
 
-<small>[Compare with v0.1.0a10](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a10...v0.1.0)</small>
+<small>[Compare with v0.0.1](https://github.com/DataShades/ckanext-collection/compare/v0.0.1...v0.1.0)</small>
 
 ### Features
 
@@ -78,79 +70,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - move serializer templates into dedicated forlders ([dadecde](https://github.com/DataShades/ckanext-collection/commit/dadecde5265080e2395a337f445b29c4fe5edda3) by Sergey Motornyuk).
 - auto-serialize values insize dictize_row ([7ba26fe](https://github.com/DataShades/ckanext-collection/commit/7ba26feddaf64c1c07be8e6167c0ddda946b5957) by Sergey Motornyuk).
 - add value_serializers to all serializers and ensure_dictized to html serializers ([e2cc754](https://github.com/DataShades/ckanext-collection/commit/e2cc754eecd29eb7ed861b65e45479f44fe21f40) by Sergey Motornyuk).
-
-### Bug Fixes
-
-- fix sorting for table serializer ([b4cd2cb](https://github.com/DataShades/ckanext-collection/commit/b4cd2cbf50dde4ac364b86c4ee62c1fef86699ec) by Sergey Motornyuk).
-
-## [v0.1.0a10](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0a10) - 2024-01-16
-
-<small>[Compare with v0.1.0a9](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a9...v0.1.0a10)</small>
-
-### Features
-
 - raw collection export(without format) ([4db8397](https://github.com/DataShades/ckanext-collection/commit/4db839702a61383af8c7324159d43af215043f0b) by Sergey Motornyuk).
 - export endpoint accepts filename argument ([7c237e4](https://github.com/DataShades/ckanext-collection/commit/7c237e47903ee353c76dc4010b5de15312ea3e00) by Sergey Motornyuk).
-
-## [v0.1.0a9](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0a9) - 2024-01-15
-
-<small>[Compare with v0.1.0a8](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a8...v0.1.0a9)</small>
-
-## [v0.1.0a8](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0a8) - 2024-01-08
-
-<small>[Compare with v0.1.0a7](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a7...v0.1.0a8)</small>
-
-## [v0.1.0a7](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0a7) - 2024-01-08
-
-<small>[Compare with v0.1.0a6](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a6...v0.1.0a7)</small>
-
-## [v0.1.0a6](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0a6) - 2024-01-08
-
-<small>[Compare with v0.1.0a5](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a5...v0.1.0a6)</small>
-
-### Features
-
 - Union and Statement ModelData ([16d2aa3](https://github.com/DataShades/ckanext-collection/commit/16d2aa3a245d879b7e8c34535d6e649a6c7cb4e8) by Sergey Motornyuk).
 - Collection.replace_service ([a34518b](https://github.com/DataShades/ckanext-collection/commit/a34518b520743855f09f5eb32a4a0d4718356b11) by Sergey Motornyuk).
-
-## [v0.1.0a5](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0a5) - 2024-01-04
-
-<small>[Compare with v0.1.0a4](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a4...v0.1.0a5)</small>
-
-## [v0.1.0a4](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0a4) - 2024-01-04
-
-<small>[Compare with v0.1.0a3](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a3...v0.1.0a4)</small>
-
-### Features
-
 - add CLI ([9ea7e56](https://github.com/DataShades/ckanext-collection/commit/9ea7e5601062989a8752c16eb9eb0cff597191ed) by Sergey Motornyuk).
-
-## [v0.1.0a3](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0a3) - 2024-01-04
-
-<small>[Compare with v0.1.0a2](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a2...v0.1.0a3)</small>
-
-### Features
-
 - export view ([3dd019d](https://github.com/DataShades/ckanext-collection/commit/3dd019d3469564ea119c900b1858ff7836586929) by Sergey Motornyuk).
-
-## [v0.1.0a2](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0a2) - 2024-01-04
-
-<small>[Compare with v0.1.0a1](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a1...v0.1.0a2)</small>
-
-### Features
-
 - Domain.with_attributes ([31adfa1](https://github.com/DataShades/ckanext-collection/commit/31adfa1fbbd8ebb13354e24ed494627578e0d89d) by Sergey Motornyuk).
-
-## [v0.1.0a1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0a1) - 2024-01-04
-
-<small>[Compare with v0.1.0a0](https://github.com/DataShades/ckanext-collection/compare/v0.1.0a0...v0.1.0a1)</small>
-
-## [v0.1.0a0](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.0a0) - 2024-01-01
-
-<small>[Compare with v0.0.2a2](https://github.com/DataShades/ckanext-collection/compare/v0.0.2a2...v0.1.0a0)</small>
-
-### Features
-
 - add htmx table serializer ([fd99cd3](https://github.com/DataShades/ckanext-collection/commit/fd99cd3d61954372cc73a1198d4eec389ba68b49) by Sergey Motornyuk).
 - table serializer use record/collection variables instead of row/table ([8189eb0](https://github.com/DataShades/ckanext-collection/commit/8189eb09707470735831cd62e45c5fada32575e6) by Sergey Motornyuk).
 - Data has no limits ([0be661c](https://github.com/DataShades/ckanext-collection/commit/0be661c9c75216de7559441eea625c0af510fde5) by Sergey Motornyuk).
@@ -160,29 +86,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - table_id and form_id properties removed from chartjs and table serializers ([f919c8f](https://github.com/DataShades/ckanext-collection/commit/f919c8f6e65e631a2879dc3c5c5886f81fdade9a) by Sergey Motornyuk).
 - `_collection` attribute replaced by `attached` property ([ad1a10f](https://github.com/DataShades/ckanext-collection/commit/ad1a10fc2c122645a87f7a58f1ac9052596e6f11) by Sergey Motornyuk).
 - Filters now have only actions and filters attributes ([3f2ec4c](https://github.com/DataShades/ckanext-collection/commit/3f2ec4c61673081a36b6e2dd2a64ae09b34dfaa1) by Sergey Motornyuk).
-
-## [v0.0.2a2](https://github.com/DataShades/ckanext-collection/releases/tag/v0.0.2a2) - 2023-12-05
-
-<small>[Compare with v0.0.2a1](https://github.com/DataShades/ckanext-collection/compare/v0.0.2a1...v0.0.2a2)</small>
-
-### Features
-
 - add model data support to all serializers ([daaf4bc](https://github.com/DataShades/ckanext-collection/commit/daaf4bcdc0b7db04641603c8587237dad13adbdf) by Sergey Motornyuk).
-
-## [v0.0.2a1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.0.2a1) - 2023-12-05
-
-<small>[Compare with v0.0.2a0](https://github.com/DataShades/ckanext-collection/compare/v0.0.2a0...v0.0.2a1)</small>
-
-### Features
-
 - add model data support to CsvSerializer ([b774684](https://github.com/DataShades/ckanext-collection/commit/b774684b012862f1c2fadb3dde139f5e2fe521b9) by Sergey Motornyuk).
-
-## [v0.0.2a0](https://github.com/DataShades/ckanext-collection/releases/tag/v0.0.2a0) - 2023-11-17
-
-<small>[Compare with v0.0.1](https://github.com/DataShades/ckanext-collection/compare/v0.0.1...v0.0.2a0)</small>
 
 ### Bug Fixes
 
+- fix sorting for table serializer ([b4cd2cb](https://github.com/DataShades/ckanext-collection/commit/b4cd2cbf50dde4ac364b86c4ee62c1fef86699ec) by Sergey Motornyuk).
 - invariant base collection causes typing error ([6ebb0a1](https://github.com/DataShades/ckanext-collection/commit/6ebb0a1e3b445c83dbdc86f6a7a594074e1333e3) by Sergey Motornyuk).
 
 ## [v0.0.1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.0.1) - 2023-10-23

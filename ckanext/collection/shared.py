@@ -1,6 +1,7 @@
 """Logic used across collection utilities.
 
 """
+
 from __future__ import annotations
 
 import abc
@@ -12,19 +13,13 @@ from typing import Any, Callable, Generic, TypeVar, cast
 
 import ckan.plugins.toolkit as tk
 
-from ckanext.collection.types import (
-    BaseCollection,
-    CollectionFactory,
-    Service,
-    TDataCollection,
-)
+from . import types
 
 log = logging.getLogger(__name__)
 T = TypeVar("T")
 
 
-class Sentinel:
-    ...
+class Sentinel: ...
 
 
 SENTINEL: Any = Sentinel()
@@ -44,10 +39,10 @@ class Registry(Generic[T]):
         return self.members.get(name)
 
 
-collection_registry: Registry[CollectionFactory] = Registry({})
+collection_registry: Registry[types.CollectionFactory] = Registry({})
 
 
-class AttachTrait(abc.ABC, Generic[TDataCollection]):
+class AttachTrait(abc.ABC, Generic[types.TDataCollection]):
     """Attach collection to the current object.
 
     `_attach` method must be called as early as possible in the constructor of
@@ -68,11 +63,11 @@ class AttachTrait(abc.ABC, Generic[TDataCollection]):
 
     """
 
-    __collection: TDataCollection
+    __collection: types.TDataCollection
 
-    def _attach(self, obj: TDataCollection):
+    def _attach(self, obj: types.TDataCollection):
         self.__collection = obj
-        if isinstance(self, Service):
+        if isinstance(self, types.Service):
             # this block allows attaching services to non-collections. Mainly
             # it's used in tests
             replace_service = getattr(obj, "replace_service", None)
@@ -80,7 +75,7 @@ class AttachTrait(abc.ABC, Generic[TDataCollection]):
                 replace_service(self)
 
     @property
-    def attached(self) -> TDataCollection:
+    def attached(self) -> types.TDataCollection:
         return self.__collection
 
 
@@ -213,7 +208,7 @@ class UserTrait(AttrSettingsTrait):
     )
 
 
-class Domain(AttachTrait[TDataCollection], AttrSettingsTrait):
+class Domain(AttachTrait[types.TDataCollection], AttrSettingsTrait):
     """Standard initializer for collection utilities.
 
     Used as base class for utility instances created during collection
@@ -224,7 +219,7 @@ class Domain(AttachTrait[TDataCollection], AttrSettingsTrait):
 
     """
 
-    def __init__(self, obj: TDataCollection, /, **kwargs: Any):
+    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
         self._attach(obj)
         self._gather_settings(kwargs)
 
@@ -277,7 +272,7 @@ def get_collection(
     name: str,
     params: dict[str, Any],
     **kwargs: Any,
-) -> BaseCollection | None:
+) -> types.BaseCollection | None:
     if factory := collection_registry.get(name):
         return factory(name, params, **kwargs)
 

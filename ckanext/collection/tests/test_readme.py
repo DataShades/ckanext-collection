@@ -27,7 +27,7 @@ class TestApiCollection(cu.Collection):
 
 ## collection of all records from CSV file
 class TestCsvCollection(cu.Collection):
-    DataFactory = cu.CsvData.with_attributes(
+    DataFactory = cu.CsvFileData.with_attributes(
         source=os.path.join(os.path.dirname(__file__), "data/file.csv"),
     )
     ColumnsFactory = cu.Columns.with_attributes(names=["a", "b"])

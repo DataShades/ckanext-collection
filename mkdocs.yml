@@ -7,7 +7,8 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.blocks.admonition
   - pymdownx.blocks.details
-  - pymdownx.blocks.tab
+  - pymdownx.blocks.tab:
+      alternate_style: true
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
@@ -31,7 +32,7 @@ plugins:
       separator: '[\s\-\.\_]+'
 
 watch:
-  - docs/
+  - README.md
   - ckanext/collection/utils
 
 theme:
@@ -52,5 +53,18 @@ theme:
     - content.code.annotate
 
 nav:
-  - Overview: index.md
+  - index.md
+  - installation.md
+  - usage.md
+  - Structure:
+    - structure/index.md
+    - structure/collection.md
+    - structure/columns.md
+    - structure/data.md
+    - structure/filters.md
+    - structure/serializer.md
+    - structure/pager.md
+  - interfaces.md
+  - API:
+    - api/index.md
   - detailed.md
