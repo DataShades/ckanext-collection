@@ -27,8 +27,8 @@ class Columns(
     names: list[str] = shared.configurable_attribute(default_factory=lambda self: [])
     hidden: set[str] = shared.configurable_attribute(default_factory=lambda self: set())
     visible: set[str] = shared.configurable_attribute(Default.NOT_HIDDEN)
-    sortable: set[str] = shared.configurable_attribute(Default.ALL)
-    filterable: set[str] = shared.configurable_attribute(Default.ALL)
+    sortable: set[str] = shared.configurable_attribute(Default.NONE)
+    filterable: set[str] = shared.configurable_attribute(Default.NONE)
     searchable: set[str] = shared.configurable_attribute(Default.NONE)
     labels: dict[str, str] = shared.configurable_attribute(Default.ALL)
 
@@ -74,15 +74,39 @@ class Columns(
         return value
 
     def get_primary_order(self, name: str) -> str:
-        """Format column name for usage as a primary order value.
+        """Format column name as a primary(asc) order value.
+
+        Examples:
+            Hehe haha
+
+            >>> col = Collection()
+            >>> col.columns.get_primary_order("name")
+            "name"
 
         Args:
-          name: the name of sorted column
+            name: the name of the sorted column
+
+        Returns:
+            column name adapted for primary(ascending) sorting.
         """
         return name
 
     def get_secondary_order(self, name: str) -> str:
-        """Format column name for usage as a secondary order value."""
+        """Format column name as a secondary(desc) order value.
+
+        Examples:
+            >>> col = Collection()
+            >>> col.columns.get_secondary_order("name")
+            "-name"
+
+
+        Args:
+            name: the name of the sorted column
+
+        Returns:
+            column name adapted for secondary(descending) sorting.
+
+        """
         return f"-{name}"
 
 

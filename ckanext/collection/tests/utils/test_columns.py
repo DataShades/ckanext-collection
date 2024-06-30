@@ -26,8 +26,8 @@ class TestColumns:
         assert obj.names == names
         assert obj.hidden == set()
         assert obj.visible == set(names)
-        assert obj.sortable == set(names)
-        assert obj.filterable == set(names)
+        assert obj.sortable == set()
+        assert obj.filterable == set()
         assert obj.labels == {n: n for n in names}
 
     def test_hidden(self, collection: Collection):
