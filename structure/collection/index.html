@@ -14,7 +14,7 @@
         <link rel="prev" href="../">
       
       
-        <link rel="next" href="../columns/">
+        <link rel="next" href="../domain/">
       
       
       <link rel="icon" href="../../img/favicon.ico">
@@ -62,10 +62,12 @@
   
     
     
+      
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -117,7 +119,43 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -325,6 +363,8 @@
       
         
       
+        
+      
     
     
     
@@ -379,6 +419,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Collection
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -389,6 +440,82 @@
 
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Initialization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replacing-the-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Replacing the service
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../domain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Abstract service
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -639,6 +766,50 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Initialization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replacing-the-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Replacing the service
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -656,157 +827,287 @@
 
 
 <h1 id="collection">Collection</h1>
-<p>Collection constructor has two mandatory arguments: name and parameters.</p>
-<p>Name is used as collection identifier and it's better to keep this value unique
-accross collections. For example, name is used for computing HTML table <code>id</code>
-attribute when serializing collection as an HTML table. If you render two
-collections with the same name, you'll get two identical IDs on the page.</p>
-<p>Params are usually used by data and pager service for searching, sorting,
-etc. Collection does not keep all the params. Instead, it stores only items
-with key prefixed by <code>&lt;name&gt;:</code>. I.e, if collection has name <code>hello</code>, and you
-pass <code>{"hello:a": 1, "b": 2, "world:c": 3}</code>, collection will remove <code>b</code>(because
-it has no collection name plus colon prefix) and <code>world:c</code> members(because it
-uses <code>world</code> instead of <code>hello</code> in prefix). As for <code>hello:a</code>, collection strips
-<code>&lt;name&gt;:</code> prefix from it. So, in the end, collection stores <code>{"a": 1}</code>.  You
-can check params of the collection using <code>params</code> attribute:</p>
-<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;hello:a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;world:c&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
-<span class="k">assert</span> <span class="n">col</span><span class="o">.</span><span class="n">params</span> <span class="o">==</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-
-<span class="n">col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;world&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;hello:a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;world:c&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
-<span class="k">assert</span> <span class="n">col</span><span class="o">.</span><span class="n">params</span> <span class="o">==</span> <span class="p">{</span><span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+<h2 id="overview">Overview</h2>
+<p>Collection works as a proxy between user and collection's services. It hides
+internal complexity and simplifies access to data.</p>
+<p>The very base collection contains no data. It can be initialized using
+<code>Collection</code> constructor.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[]</span>
 </code></pre></div>
-<p>It allows you rendering and processing multiple collections simultaneously on
-the same page. Imagine that you have collection <code>users</code> and collection
-<code>packages</code>. You want to see second page of <code>users</code> and fifth of
-<code>packages</code>. Submit the query string <code>?users:page=2&amp;packages:page=5</code> and
-initialize collections using the following code:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">ckan.logic</span> <span class="kn">import</span> <span class="n">parse_params</span>
-<span class="kn">from</span> <span class="nn">ckan.plugins</span> <span class="kn">import</span> <span class="n">toolkit</span> <span class="k">as</span> <span class="n">tk</span>
-
-<span class="n">params</span> <span class="o">=</span> <span class="n">parse_params</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
-
-<span class="n">users</span> <span class="o">=</span> <span class="n">ModelCollection</span><span class="p">(</span>
-    <span class="s2">&quot;users&quot;</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span>
-    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="p">}</span>
-<span class="p">)</span>
-<span class="n">packages</span> <span class="o">=</span> <span class="n">ModelCollection</span><span class="p">(</span>
-    <span class="s2">&quot;packages&quot;</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span>
-    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">Package</span><span class="p">}</span>
-<span class="p">)</span>
-
-<span class="k">assert</span> <span class="n">users</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">page</span> <span class="o">==</span> <span class="mi">2</span>
-<span class="k">assert</span> <span class="n">packages</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">page</span> <span class="o">==</span> <span class="mi">5</span>
+<p>Constructor of collection accepts two positional arguments:</p>
+<ul>
+<li><code>name</code>: string containing letters, numbers, underscores and hyphens</li>
+<li><code>params</code>: dictionary that can be used by services. There are no rules that
+  define, how exactly params are used and whether or not they are used at
+  all. Everything depends on services. For example, pager <em>usually</em> checks
+  <code>page</code> and <code>rows_per_page</code> inside <code>params</code>. Data service often uses fields
+  from <code>params</code> to filter data.</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>params</code> depend on collection name. If the name is empty, params are used
+without changes. If name is not empty, params are filtered and
+transformed. First, any member of params that is not prefixed with collection
+name and colon is removed. Then, the prefix is removed.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;xxx:b&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;yyy:c&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span> <span class="c1"># (1)!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">params</span>
+<span class="go">{&quot;a&quot;: 1, &quot;xxx:b&quot;: 2, &quot;yyy:c&quot;: 3}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;xxx&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;xxx:b&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;yyy:c&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span> <span class="c1"># (2)!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">params</span>
+<span class="go">{&quot;b&quot;: 2}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;yyy&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;xxx:b&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;yyy:c&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span> <span class="c1"># (3)!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">params</span>
+<span class="go">{&quot;c&quot;: 3}</span>
 </code></pre></div>
-<hr />
-<p>When a collection is created, it creates an instance of each service using
-service factories and service settings. Base collection and all collections
-that extend it already have all details for initializing every service:</p>
-<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{})</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;Services:</span>
-<span class="s2">  </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="si">=}</span><span class="s2">,</span>
-<span class="s2">  </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">pager</span><span class="si">=}</span><span class="s2">,</span>
-<span class="s2">  </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">serializer</span><span class="si">=}</span><span class="s2">,</span>
-<span class="s2">  </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">columns</span><span class="si">=}</span><span class="s2">,</span>
-<span class="s2">  </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">filters</span><span class="si">=}</span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-
-<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[]</span>
+<ol>
+<li>All parameter are kept because collection has no name.</li>
+<li>Only <code>xxx:b</code> is kept and its name transformed to just <code>b</code>, because
+   collection has name <code>xxx</code>.</li>
+<li>Only <code>yyy:c</code> is kept and its name transformed to just <code>c</code>, because
+   collection has name <code>yyy</code>.</li>
+</ol>
+</div>
+<h2 id="initialization">Initialization</h2>
+<p>When a collection is created, it initializes services using service factories
+and service settings. <code>data</code> service is initialized using
+<code>Collection.DataFactory</code> class, <code>serializer</code> is initialized using
+<code>Collection.SerializerService</code>, etc.</p>
+<p>This logic creates a workflow for defining new collections. Create a subclass
+of base Collection and override <code>*Factory</code> of this new class.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyCollection</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">):</span>
+    <span class="n">DataFactory</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">StaticData</span>
 </code></pre></div>
-<p>This collection has no data. We can initialize an instance of <code>StaticData</code> and
-replace the existing data service of the collection with new <code>StaticData</code>
-instance.</p>
-<p>Every service has one required argument: collection that owns the service. All
-other arguments are used as a service settings and must be passed by
-name. Remember, all the classes used in this manual are available inside
-<code>ckanext.collection.utils</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="n">static_data</span> <span class="o">=</span> <span class="n">StaticData</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
-<span class="n">col</span><span class="o">.</span><span class="n">replace_service</span><span class="p">(</span><span class="n">static_data</span><span class="p">)</span>
-
-<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">MyCollection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">)</span>
+<span class="go">True</span>
 </code></pre></div>
-<p>Look at <code>Colletion.replace_service</code>. It accepts only service instance. There is
-no need to pass the name of the service that must be replaced - collection can
-understand it without help. And pay attention to the first argument of service
-constructor. It must be the collection that is going to use the service. Some
-services may work even if you pass a random value as the first argument, but
-it's an exceptional situation and one shouldn't rely on it.</p>
-<p>If existing collection is no longer used and you are going to create a new one,
-you sometimes want to reuse a service from an existing collection. Just to
-avoid creating the service and calling <code>Collection.replace_service</code>, which will
-save you two lines of code. In this case, use <code>&lt;service&gt;_instance</code> parameter of
-the collection constructor:</p>
-<div class="highlight"><pre><span></span><code><span class="n">another_col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;another-name&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">data_instance</span><span class="o">=</span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">another_col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</div>
+<p>Now you only need to find a suitable class for the service and job is done.</p>
+<p>But as soon as you choose the class, you'll notice, that majority of service
+factories must be configured before using. For example, the <code>StaticData</code> used
+in the example above produces records using iterable source. And this iterable
+must be configured, or you'll get just empty list from <code>StaticData</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">MyCollection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[]</span>
 </code></pre></div>
-<p>If you do such thing, make sure you are not using old collection anymore. You
-just transfered one of its services to another collection, so there is no
-guarantees that old collection with detached service will function properly.</p>
-<p>It's usually better to customize service factory, instead of passing existing
-customized instance of the service around. You can tell which class to use for
-making an instance of a service using <code>&lt;service&gt;_factory</code> parameter of the
-collection contstructor:</p>
-<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">data_factory</span><span class="o">=</span><span class="n">StaticData</span><span class="p">)</span>
-<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[]</span>
+<p>Configuration for services can be specified using keyword-only arguments of the
+collection's constructor. Pass <code>&lt;SERVICE&gt;_settings</code> dictionary to collection
+and this dictionary will be used as service settings. <code>data_settings={...}</code> is
+passed to data service, <code>pager_settings={...}</code> is passed to pager service,
+etc.</p>
+<p>Iterable with items is controlled by <code>data</code> parameter of <code>StatiData</code>. And it
+means you need to pass <code>data_settings={"data": [1, 2, 3]}</code> to collection
+constructor, if you want to use <code>[1, 2, 3]</code> as a data collection.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">MyCollection</span><span class="p">(</span><span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[1, 2, 3]</span>
 </code></pre></div>
-<p>But in this way we cannot specify the <code>data</code> attribute of the <code>data</code> factory!
-No worries, there are multiple ways to overcome this problem. First of all, all
-the settings of the service are available as its attributes. It means that
-<code>data</code> setting is the same as <code>data</code> attribute of the service. If you can do
-<code>StaticData(..., data=...)</code>, you can as well do <code>service = StaticData(...);
-service.data = ...</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">data_factory</span><span class="o">=</span><span class="n">StaticData</span><span class="p">)</span>
-<span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-</code></pre></div>
-<p><strong>Note</strong>: <code>data</code> service caches its data. If you already accessed data property
-from the <code>StaticData</code>, assigning an new value doesn't have any effect because
-of the cache. You have to call <code>col.data.refresh_data()</code> after assigning to
-rebuild the cache.</p>
-<p>But there is a better way. You can pass <code>&lt;service&gt;_settings</code> dictionary to the
-collection constructor and it will be passed down into corresponding service
-factory:</p>
-<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span>
-    <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{},</span>
-    <span class="n">data_factory</span><span class="o">=</span><span class="n">StaticData</span><span class="p">,</span>
-    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>
-<span class="p">)</span>
-<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-</code></pre></div>
-<p>It works well for individual scenarios, but when you are creating a lot of
-collections with the static data, you want to omit some standard parameters. In
-this case you should define a new class that extends Collection and declares
-<code>&lt;Service&gt;Factory</code> attribute:</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyCollection</span><span class="p">(</span><span class="n">Collection</span><span class="p">):</span>
-    <span class="n">DataFactory</span> <span class="o">=</span> <span class="n">StaticData</span>
-
-<span class="n">col</span> <span class="o">=</span> <span class="n">MyCollection</span><span class="p">(</span>
-    <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{},</span>
-    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>
-<span class="p">)</span>
-<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-</code></pre></div>
-<p>You still can pass <code>data_factory</code> into <code>MyCollection</code> constructor to override
-data service factory. But now, by default, <code>StaticData</code> is used when it's not
-specified explicitly.</p>
-<p>Finally, if you want to create a subclass of service, that has a specific value
-of certain attributes, i.e something like this:</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">OneTwoThreeData</span><span class="p">(</span><span class="n">StaticData</span><span class="p">):</span>
+</div>
+<p>Instead of specifying <code>data</code> every time, you can create a derived class from
+<code>StaticData</code> and replace the default value of <code>data</code>.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyData</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">):</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-</code></pre></div>
-<p>you can use <code>Service.with_attributes(attr_name=attr_value)</code> factory method. It
-produce a new service class(factory) with specified attributes bound to a
-static value. For example, that's how we can define a collection, that always
-contains <code>[1, 2, 3]</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyCollection</span><span class="p">(</span><span class="n">Collection</span><span class="p">):</span>
-    <span class="n">DataFactory</span> <span class="o">=</span> <span class="n">StaticData</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
 
-<span class="n">col</span> <span class="o">=</span> <span class="n">MyCollection</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{})</span>
-<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="k">class</span> <span class="nc">MyCollection</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">):</span>
+    <span class="n">DataFactory</span> <span class="o">=</span> <span class="n">MyData</span>
 </code></pre></div>
-<p>Now you don't have to specify <code>data_factory</code> or <code>data_settings</code> when creating a
-collection. It will always use <code>StaticData</code> with <code>data</code> set to <code>[1, 2, 3]</code>
-. Make sure you mean it, because now you cannot override the data using
-<code>data_settings</code>.</p>
-<hr />
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">MyCollection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[1, 2, 3]</span>
+</code></pre></div>
+</div>
+<p>New classes are created quite often with ckanext-collection. And every existing
+service has a shortcut for creating its derivable with customized attributes.</p>
+<p>Whenever you need to extend parent service and set <code>attr</code> to <code>value</code> in the
+child class, use <code>with_attributes</code> classmethod of the parent service.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="n">MyData</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+<span class="k">class</span> <span class="nc">MyCollection</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">):</span>
+    <span class="n">DataFactory</span> <span class="o">=</span> <span class="n">MyData</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">MyCollection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[1, 2, 3]</span>
+</code></pre></div>
+</div>
+<p>And, in the same way you can pass settings for services, you can also specify
+factories when collection is initialized. Every <code>&lt;SERVICE&gt;_factory</code> paramterer
+of the collection's constructor overrides corresponding factory of the
+collection: <code>data_factory=StaticData</code> sets <code>DataFactory = StaticData</code>,
+<code>serializer_factory=CsvSerializer</code> sets <code>SerializerFactory = CsvSerializer</code>,
+etc.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>Instead of creating a new classes from previous examples, you could use the
+following code:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="o">&gt;&gt;&gt;</span>     <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">,</span>
+<span class="o">&gt;&gt;&gt;</span>     <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]},</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</code></pre></div>
+<p>Or even:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="o">&gt;&gt;&gt;</span>     <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span>
+<span class="o">&gt;&gt;&gt;</span>         <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="o">&gt;&gt;&gt;</span>     <span class="p">),</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</code></pre></div>
+<p>This form is convenient when you experimenting with collections or creating
+them dynamically. But more often you'll create a separate class for collection
+and services. This flow is more readable and flexible, as you keep all the
+derived classes and can combine/reuse them in future.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>*_factory</code> accepts <strong>a class</strong> that can be used to initialize the service. You can
+use <code>data.StaticData</code>, because it's a class. Or you can use
+<code>data.StaticData.with_attributes(data=[1, 2, 3])</code>, because this method creates
+a new class.</p>
+<p>But you cannot use <code>data_factory=data.StaticData()</code> with parenthesis, because
+in this way you create <strong>an instance</strong> of the service and this instance cannot
+be used to initialize another instance.</p>
+<p>Remember: factory is a class; service is an object of this class.</p>
+</div>
+<h2 id="usage">Usage</h2>
+<p>Collections are not very impressive. You literally can create the collection
+and then you can iterate over a single page of collection results. But this
+must be exactly what you are doing most of the time. In a well defined
+collection, you don't need to access any services, apart from serializer.</p>
+<p>Let's use collection of all users from DB.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Definition of collection</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">ckan</span> <span class="kn">import</span> <span class="n">model</span>
+<span class="kn">from</span> <span class="nn">ckanext.collection.shared</span> <span class="kn">import</span> <span class="n">collection</span><span class="p">,</span> <span class="n">data</span>
+
+<span class="k">class</span> <span class="nc">Users</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">):</span>
+    <span class="n">DataFactory</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">ModelData</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="p">,</span>
+        <span class="n">is_scalar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div>
+</div>
+<p>Initialize this collection without arguments to work with 1st-10th users <code class="highlight"><span class="n">users</span> <span class="o">=</span> <span class="n">Users</span><span class="p">()</span></code>.</p>
+<p>You can use direct access to data service to get users from 11th: <code class="highlight"><span class="n">users</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">10</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span></code>. But you can also initialize the collection for the second
+page: <code class="highlight"><span class="n">users</span> <span class="o">=</span> <span class="n">Users</span><span class="p">(</span><span class="n">pager_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span></code>.</p>
+<p>If you know that you'll process more than 10 users at once, it's still possible
+to avoid direct access to data. Just set <code>rows_per_page</code> option of the pager:
+<code class="highlight"><span class="n">users</span> <span class="o">=</span> <span class="n">Users</span><span class="p">(</span><span class="n">pager_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rows_per_page&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">})</span></code></p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><code>ModelData</code> supports search by filterable columns. For example, if you want to
+search users by <code>sysadmin</code> flag, configure columns service and add <code>sysadmin</code>
+to the <code>Columns.filterable</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">sysadmins</span> <span class="o">=</span> <span class="n">Users</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">{</span><span class="s2">&quot;sysadmin&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">columns_factory</span><span class="o">=</span><span class="n">columns</span><span class="o">.</span><span class="n">Columns</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span><span class="n">filterable</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;sysadmin&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">all</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">sysadmin</span> <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">sysadmins</span><span class="p">)</span>
+<span class="go">True</span>
+</code></pre></div>
+<p>Obviously, you can just create plain collection of users and pick sysadmins
+manually, iterating over <code>users.data</code>. And it would be absolutely normal
+solution, that works with any collection.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">sysadmins</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">user</span> <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">Users</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">sysadmin</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">]</span>
+</code></pre></div>
+<p>But some services have more efficient ways to work with data, other than naive
+iteration. In case of <code>ModelData</code>, specifying <code>Columns.filterable</code> and using
+params of collection to filter the data produces optimized SQL query that
+fetches only required rows from DB.</p>
+<p>Always check documentation of the collection and its services and there is a
+chance that you'll find more efficient solution of your problem.</p>
+</div>
+<h2 id="replacing-the-service">Replacing the service</h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This functionality is experimental and can change in future. Use it only if you
+see no other ways to achieve the result.</p>
+</div>
+<p>It's possible to replace collection services after collection
+initialized. There are two ways to do it: by creating a new instance of the
+service and by expropriation service from the different collection.</p>
+<p>Creating a new service is staightforward. Service's constructor accepts
+collection as first positional argument and unlimited number of keyword-only
+arguments which are collected as service's settings.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_service</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_service</span> <span class="ow">is</span> <span class="n">col</span><span class="o">.</span><span class="n">data</span>
+<span class="go">True</span>
+</code></pre></div>
+<p>The above example approximately the same as the following code</p>
+<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">,</span>
+    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]},</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+<p>When a new service is created, old service instance is discarded and the new
+one is attached to the collection. As you can see in the example, there is no
+need to assign the service into collection's <code>data</code> attribute. We just
+initialize the service and it automatically got into the right place.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Never use discarded service. It still has references to its parent collection,
+but collection itself does not recognize the discarded service anymore. This
+one-way reference often produce strange behavior.</p>
+</div>
+<p>Reusing service from the existing collection is also simple. Just call
+<code>replace_service</code> of the new collection, that will take the service, and pass
+into it service that must be attached to collection.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">src</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dest</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dest</span><span class="o">.</span><span class="n">replace_service</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">dest</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">)</span>
+<span class="go">True</span>
+</code></pre></div>
+</div>
+<p><code>replace_service</code> also detaches old service and attaches the new one to
+collection. And, on top of this, the new service <em>is detached from its original
+collection</em>. It makes original collection unusable, unless you give it a new
+service instance instead.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Collection that lost its service because it was transfered to another
+collection, must not be used anymore. Just as with detached services, old
+collection still contains reference to its detached service, but service
+becomes the part of different collection and has no back reference to old
+collection. Using collection with such kind of one-way reference to service
+ofter produces strange behavior.</p>
+<p>If you want to use collection that lost its service, initialize a new service
+that will replace the old instance:</p>
+<div class="highlight"><pre><span></span><code><span class="n">src</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">)</span>
+<span class="n">dest</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">()</span>
+<span class="n">dest</span><span class="o">.</span><span class="n">replace_service</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># right now `src` cannot be used</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+
+<span class="c1"># now `src` got a new data service and it can be used again</span>
+</code></pre></div>
+</div>
 
 
 
@@ -859,13 +1160,13 @@ collection. It will always use <code>StaticData</code> with <code>data</code> se
         
         
           
-          <a href="../columns/" class="md-footer__link md-footer__link--next" aria-label="Next: Columns">
+          <a href="../domain/" class="md-footer__link md-footer__link--next" aria-label="Next: Abstract service">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Columns
+                Abstract service
               </div>
             </div>
             <div class="md-footer__button md-icon">

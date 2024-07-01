@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://datashades.github.io/ckanext-collection/structure/serializer/">
+        <link rel="canonical" href="https://datashades.github.io/ckanext-collection/structure/domain/">
       
       
-        <link rel="prev" href="../filters/">
+        <link rel="prev" href="../collection/">
       
       
-        <link rel="next" href="../pager/">
+        <link rel="next" href="../columns/">
       
       
       <link rel="icon" href="../../img/favicon.ico">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Serializer - ckanext-collection</title>
+        <title>Abstract service - ckanext-collection</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#serializer" class="md-skip">
+        <a href="#abstract-service" class="md-skip">
           Skip to content
         </a>
       
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Serializer
+              Abstract service
             
           </span>
         </div>
@@ -428,10 +428,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../domain/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Abstract service
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -440,6 +460,53 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Service
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      Domain
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Settings
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -512,19 +579,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../serializer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -533,7 +591,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -700,6 +757,41 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Service
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      Domain
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Settings
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -716,34 +808,151 @@
   
 
 
-<h1 id="serializer">Serializer</h1>
-<p>Serializer converts data into textual, binary or any other alternative
-representation. For example, if you want to compute records produced by the
-<code>data</code> service of the collection into pandas' DataFrame, you should probably
-use serializer.</p>
-<p>Serializers are main users of columns service, because it contains details
-about specific data columns. And serializers often iterate data service
-directly(ignoring <code>range</code> method), to serialize all available records.</p>
-<p>The only required method for serializer is <code>serialize</code>. This method must return
-an data from <code>data</code> service transformed into format provided by serializer. For
-example, <code>JsonSerializer</code> returns string with JSON-encoded data.</p>
-<p>You are not restricted by textual or binary formats. Serializer that transforms
-data into pandas' DataFrame is completely valid version of the serializer.</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">NewLineSerializer</span><span class="p">(</span><span class="n">Serializer</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attached</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-
-        <span class="k">return</span> <span class="n">result</span>
-
-<span class="n">col</span> <span class="o">=</span> <span class="n">StaticCollection</span><span class="p">(</span>
-    <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{},</span>
-    <span class="n">serializer_factory</span><span class="o">=</span><span class="n">NewLineSerializer</span><span class="p">,</span>
-    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>
-<span class="p">)</span>
-<span class="k">assert</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">serializer</span><span class="o">.</span><span class="n">serialize</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;1</span><span class="se">\n</span><span class="s2">2</span><span class="se">\n</span><span class="s2">3</span><span class="se">\n</span><span class="s2">&quot;</span>
+<h1 id="abstract-service">Abstract service</h1>
+<p>It's a concept, not a real service. This concept is used as a base by
+absolutely every service of any collection. And if you decide to introduce a
+brand new service, it will extend the base abstract service.</p>
+<p>Because this abstract service is used by every service type, it defines a
+number of standard traits of every service. Everything you'll learn in this
+chapter can be applied to every service you see in a real application.</p>
+<h2 id="service">Service</h2>
+<p>The abstract service actually consists of two classes. The first one is
+<code>types.Service</code>. This is an abrstract class, which contains abstract property
+<code>service_name</code>. This class identifies the name of the service inside the
+collection.</p>
+<p>The base <code>data.Data</code> class implements <code>types.Service</code> and its implementation of
+<code>service_name</code> returns <code>data</code>. The base <code>serialize.Serializer</code> has
+<code>service_name</code> that returns <code>serializer</code>. And every other type of service does
+similar thing.</p>
+<p>Because of this, collection knows, where to put the service in the following
+code snippet:</p>
+<div class="highlight"><pre><span></span><code><span class="n">src</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">)</span>
+<span class="n">dest</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">()</span>
+<span class="n">dest</span><span class="o">.</span><span class="n">replace_service</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 </code></pre></div>
+<p>We don't tell collection, that we are replacing the data service. But because
+the object passed into <code>replace_service</code> has <code>service_name</code> property,
+collection can recognize it and assign into correct attribute.</p>
+<p>If someone create a service that provides Solr connection, this service will
+get <code>service_name</code> property with value <code>solr</code>. And because of it, collection
+will keep any instance of such service as <code>col.solr</code>.</p>
+<h2 id="domain">Domain</h2>
+<p>The second component of abstract service is <code>Domain</code>. <code>Domain</code> and
+<code>types.Service</code> are always used together. Every non-abstract service is
+subclassed from both <code>Domain</code> and <code>types.Service</code>.</p>
+<p><code>Domain</code> provides a set of convenient features for services.</p>
+<p>First, and probably most important, it defines the constructor of service as
+method with one positional-only argument(the collection) and any number of
+keyword-only arguments(settings). Thanks to <code>Domain</code>, when service is
+initialized, it's automatically attached to collection.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">)</span>
+<span class="go">True</span>
+</code></pre></div>
+<p>Settings are processed in a special way and will be described further inside
+<a href="#settings">settings</a> section.</p>
+<p><code>Domain</code> exposes collection as <code>attached</code> property of the service. This is the
+two-way reference: collection contains link to its services and every service
+contains a link to the collection.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">attached</span> <span class="ow">is</span> <span class="n">col</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">attached</span> <span class="ow">is</span> <span class="n">col</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">attached</span> <span class="ow">is</span> <span class="n">col</span>
+<span class="go">True</span>
+</code></pre></div>
+<p>And <code>Domain</code> provides <code>with_attributes</code> classmethod inside service. This method
+creates a subclass of the caller with overridden attributes.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">MyData</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="n">data_factory</span><span class="o">=</span><span class="n">MyData</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">a</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="err">`</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">b</span>
+<span class="go">2</span>
+</code></pre></div>
+<h2 id="settings">Settings</h2>
+<p>Service settings are passed as keyword-only arguments to service constructor or
+as <code>&lt;SERVICE&gt;_settings</code> dictionary to collection constructor. In both cases
+settings are processed in the same way. Service keeps known parameters and
+ignores everything else.</p>
+<p>That's a rule. Service does not keeps all the settings, it stores only settings
+that are registered inside the service.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>As <code>Data</code> has no settings, the whole <code>data_settings</code> is ignored.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+</code></pre></div>
+</div>
+<p>Every <em>configurable attribute</em> of the service must be registered first, and
+only then you can set it via settings.</p>
+<p>To register the attribute, you have to create it inside class definition. And
+its value must be generated by <code>configurable_attribute</code> function.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">ckanext.collection.shared</span> <span class="kn">import</span> <span class="n">collection</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">configurable_attribute</span>
+
+<span class="k">class</span> <span class="nc">MyData</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">configurable_attribute</span><span class="p">(</span><span class="s2">&quot;default a&quot;</span><span class="p">)</span> <span class="c1"># (1)!</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">configurable_attribute</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;default b&quot;</span><span class="p">)</span> <span class="c1"># (2)!</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">configurable_attribute</span><span class="p">()</span> <span class="c1"># (3)!</span>
+</code></pre></div>
+<ol>
+<li>Positional argument is used as default value for the attribute</li>
+<li>Named <code>default_factory</code> accepts a function that receives the service
+   instance and returns default value of attribute.</li>
+<li>If no default provided, attribute becomes mandatory and will cause an
+   exception if missing during initialization of service.</li>
+</ol>
+</div>
+<p><code>configurable_attribute</code> accepts either static default value or a function that
+produces default value. Such function must be passed via named argument
+<code>default_factory</code> and must accept the only parameter: the service itself. If
+<code>configurable_attribute</code> is called without arguments, it registers a required
+attribute and service cannot be initialized without this attribute.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It's not allowed to use other configurable attributes inside <code>default_factory</code>
+of configurable attribute. The initialization order of configurable attributes
+is not defined at the moment. There are not guarantees that referred attribute
+is already initialized when <code>default_factory</code> is called.</p>
+</div>
+<p>Any configurable attribute can be assigned via settings. If you try using
+settings with the class from the example above, registered attributes will be
+picked and added to the service:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">MyData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">a</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">b</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">c</span>
+<span class="go">[1, 2, 3]</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><code>with_attributes</code> also can create configurable attributes.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">ckanext.collection.shared</span> <span class="kn">import</span> <span class="n">data</span><span class="p">,</span> <span class="n">configurable_attribute</span>
+
+<span class="n">MyData</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span>
+    <span class="n">a</span><span class="o">=</span><span class="n">configurable_attribute</span><span class="p">(</span><span class="s2">&quot;default a&quot;</span><span class="p">),</span>
+    <span class="n">b</span><span class="o">=</span><span class="n">configurable_attribute</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;default b&quot;</span><span class="p">),</span>
+    <span class="n">c</span><span class="o">=</span><span class="n">configurable_attribute</span><span class="p">(),</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
 
 
 
@@ -779,7 +988,7 @@ data into pandas' DataFrame is completely valid version of the serializer.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../filters/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Filters">
+          <a href="../collection/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Collection">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -789,20 +998,20 @@ data into pandas' DataFrame is completely valid version of the serializer.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Filters
+                Collection
               </div>
             </div>
           </a>
         
         
           
-          <a href="../pager/" class="md-footer__link md-footer__link--next" aria-label="Next: Pager">
+          <a href="../columns/" class="md-footer__link md-footer__link--next" aria-label="Next: Columns">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Pager
+                Columns
               </div>
             </div>
             <div class="md-footer__button md-icon">

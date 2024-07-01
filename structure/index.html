@@ -62,10 +62,12 @@
   
     
     
+      
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -117,7 +119,43 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -325,6 +363,8 @@
       
         
       
+        
+      
     
     
     
@@ -375,6 +415,27 @@
   
   <span class="md-ellipsis">
     Collection
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="domain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Abstract service
   </span>
   
 
@@ -645,11 +706,71 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Collection
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#services" class="md-nav__link">
     <span class="md-ellipsis">
       Services
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Services">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data" class="md-nav__link">
+    <span class="md-ellipsis">
+      data
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pager" class="md-nav__link">
+    <span class="md-ellipsis">
+      pager
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serializer" class="md-nav__link">
+    <span class="md-ellipsis">
+      serializer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      columns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      filters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -674,7 +795,7 @@
 <h1 id="structure-of-the-collection">Structure of the collection</h1>
 <h2 id="introduction">Introduction</h2>
 <p>Collections are designed to describe the data. Most common logic often can be
-define declaratively and all imperative commands are ether hidden deep inside
+defined declaratively and all imperative commands are ether hidden deep inside
 different parts of collection or injected as tiny lambda-functions.</p>
 <p>But describing the data is not simple, especially if data needs to be
 interactive. As result, collections have complex internal structure. Good news,
@@ -702,42 +823,46 @@ you need something simple, you can use the minimum of knowledge.</p>
 </div>
 </div>
 </div>
-<p>For the standard scenarios, ckanext-collection already contains a number of
+<p>For most standard use-cases, ckanext-collection already contains a number of
 classes that do the heavy lifting. And in future, as more popular scenarios
 discovered, the number of classes will grow.</p>
 <p>Still, custom requirements are often appear in the project. Because of it,
 understanding how collection works and how it can be customized is the key
 point in building the perfect collection.</p>
-<h2 id="services">Services</h2>
+<h2 id="collection">Collection</h2>
 <p>Collection itself contains just a bare minimum of logic, and real magic happens
 inside its <em>services</em>. Collection knows how to initialize services and usually
-the only difference between all your collections, is the way all their services
-are configured.</p>
-<p>Collection contains the following standard services:</p>
-<ul>
-<li><code>data</code>: controls the exact data that can be received from
-  collection. Contains logic for searching, filters, sorting, etc.</li>
-<li><code>pager</code>: defines restrictions for data iteration. Exactly this service limits
-  results to 10 records when you iterating over collection.</li>
-<li><code>serializer</code>: specifies how collection can be transformed into specific
-  format. Using correct serializer you'll be able to dump the whole collection
-  as CSV, JSON, YAML or render it as HTML table.</li>
-<li><code>columns</code>: contains configuration of specific data columns used by other
-  services. It may define model attributes that are dumped into CSV, names of
-  the transformation functions that are applied to the certain attribute, names
-  of the columns that are available for sorting in HTML representation of data.</li>
-<li><code>filters</code>: contains configuration of additional widgets produced during data
-  serialization. For example, when data is serialized into an HTML table,
-  filters can define configuration of dropdowns and input fields from the data
-  search form.</li>
-</ul>
+the only difference between all collections, is the way their services are
+configured.</p>
+<h2 id="services">Services</h2>
+<h3 id="data">data</h3>
+<p>controls the exact data that can be received from collection. Contains logic
+for searching, filters, sorting, etc.</p>
+<h3 id="pager">pager</h3>
+<p>defines restrictions for data iteration. Exactly this service limits results to
+10 records when you iterating over collection.</p>
+<h3 id="serializer">serializer</h3>
+<p>specifies how collection can be transformed into specific format. Using correct
+serializer you'll be able to dump the whole collection as CSV, JSON, YAML or
+render it as HTML table.</p>
+<h3 id="columns">columns</h3>
+<p>contains configuration of specific data columns used by other services. It may
+define model attributes that are dumped into CSV, names of the transformation
+functions that are applied to the certain attribute, names of the columns that
+are available for sorting in HTML representation of data.</p>
+<p>Mainly used by serializer(controls visibility of data fields) and data(controls
+ability to search, filter and sort by field) services.</p>
+<h3 id="filters">filters</h3>
+<p>contains configuration of additional widgets produced during data
+serialization. For example, when data is serialized into an HTML table, filters
+can define configuration of dropdowns and input fields from the data search
+form.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>You can define more services in custom collections. The list above only
-enumerates all the services that are available in the base collection and in
-all collections shipped with the current extension. For example, one of
-built-in collections, <code>DbCollection</code> has additional service called
-<code>db_connection</code> that can communicate with DB.</p>
+enumerates the services available in the base collection.</p>
+<p>For example, one of built-in collections, <code>DbCollection</code> has additional service
+called <code>db_connection</code> that can communicate with DB.</p>
 </div>
 
 

@@ -2,77 +2,82 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://datashades.github.io/ckanext-collection/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/configuration/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/detailed/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/installation/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/integrations/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/interfaces/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/usage/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/api/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/structure/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/structure/collection/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/structure/columns/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/structure/data/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://datashades.github.io/ckanext-collection/structure/domain/</loc>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/structure/filters/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/structure/pager/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datashades.github.io/ckanext-collection/structure/serializer/</loc>
-         <lastmod>2024-06-30</lastmod>
+         <lastmod>2024-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
