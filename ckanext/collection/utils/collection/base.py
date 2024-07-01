@@ -85,6 +85,12 @@ class Collection(types.BaseCollection):
         "serializer",
     )
 
+    def __str__(self):
+        return f"{self.__class__.__name__}:{self.name or 'anonymous'}"
+
+    def __iter__(self) -> Iterator[Any]:
+        yield from self.data.range(self.pager.start, self.pager.end)
+
     def __init__(
         self,
         name: str = "",
@@ -165,9 +171,6 @@ class Collection(types.BaseCollection):
         old_service = getattr(self, service.service_name, None)
         setattr(self, service.service_name, service)
         return old_service
-
-    def __iter__(self) -> Iterator[Any]:
-        yield from self.data.range(self.pager.start, self.pager.end)
 
     def make_serializer(self, **kwargs: Any) -> Serializer[Any, Self]:
         """Return serializer."""

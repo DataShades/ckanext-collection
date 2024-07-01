@@ -29,8 +29,8 @@ class BaseSaData(
     """Data source for custom SQL statement."""
 
     _data: cached_property[TStatement]
-    use_naive_filters: bool = internal.configurable_attribute(False)
-    use_naive_search: bool = internal.configurable_attribute(False)
+    use_naive_filters: bool = internal.configurable_attribute(True)
+    use_naive_search: bool = internal.configurable_attribute(True)
     session: AlchemySession = internal.configurable_attribute(
         default_factory=lambda self: model.Session,
     )
@@ -86,31 +86,40 @@ class BaseSaData(
 
         params = self.attached.params
         if self.use_naive_filters:
-            stmt = stmt.where(
-                sa.and_(
-                    sa.true(),
-                    *[
-                        self._into_clause(stmt.selected_columns[name], params[name])
-                        for name in self.attached.columns.filterable
-                        if name in params
-                        and params[name] != ""
-                        and name in stmt.selected_columns
-                    ],
-                ),
-            )
+            filters = [
+                name
+                for name in self.attached.columns.filterable
+                if name in params
+                and params[name] != ""
+                and name in stmt.selected_columns
+            ]
 
-        if self.use_naive_search:
-            if (q := params.get("q")) and "q" not in self.attached.columns.searchable:
+            if filters:
                 stmt = stmt.where(
-                    sa.or_(
-                        sa.false(),
+                    sa.and_(
                         *[
-                            stmt.selected_columns[name].ilike(f"%{q}%")
-                            for name in self.attached.columns.searchable
-                            if name in stmt.selected_columns
+                            self._into_clause(stmt.selected_columns[name], params[name])
+                            for name in filters
                         ],
                     ),
                 )
+
+        if self.use_naive_search:
+            if (q := params.get("q")) and "q" not in self.attached.columns.searchable:
+                filters = [
+                    name
+                    for name in self.attached.columns.searchable
+                    if name in stmt.selected_columns
+                ]
+                if filters:
+                    stmt = stmt.where(
+                        sa.or_(
+                            *[
+                                stmt.selected_columns[name].ilike(f"%{q}%")
+                                for name in filters
+                            ],
+                        ),
+                    )
             for name in self.attached.columns.searchable:
                 if name not in params or name not in stmt.selected_columns:
                     continue

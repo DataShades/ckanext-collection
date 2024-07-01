@@ -5,6 +5,8 @@ repo_url:  https://github.com/DataShades/ckanext-collection
 
 markdown_extensions:
   - pymdownx.snippets
+  - pymdownx.highlight:
+      use_pygments: true
   - pymdownx.inlinehilite
   - pymdownx.blocks.admonition
   - pymdownx.blocks.details
@@ -41,7 +43,28 @@ theme:
   logo: img/logo.png
   favicon: img/favicon.ico
   palette:
-    primary: blue
+    # Palette toggle for light mode
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
   features:
     - navigation.instant
     - navigation.instant.prefetch
@@ -61,6 +84,7 @@ nav:
   - Structure:
     - structure/index.md
     - structure/collection.md
+    - structure/domain.md
     - structure/columns.md
     - structure/data.md
     - structure/filters.md
