@@ -13,39 +13,27 @@ CONFIG_INIT_MODULES = "ckanext.collection.htmx_init_modules"
 
 
 def anonymous_collections() -> list[str]:
-    """Names of registered collections that are viewable by any visitor,
-    including anonymous.
-    """
-
+    """Names of registered public collections."""
     return tk.config[CONFIG_ANNONYMOUS]
 
 
 def authenticated_collections() -> list[str]:
-    """Names of registered collections that are viewable by any authenticated
-    user.
-    """
+    """Names of registered  collections available to registered users."""
     return tk.config[CONFIG_AUTHENTICATED]
 
 
 def include_htmx_asset() -> bool:
-    """Add HTMX asset to pages. Enable this option if you are using CKAN
-    v2.10.
-    """
-
+    """Add HTMX asset to pages."""
     return tk.config[CONFIG_INCLUDE_ASSET]
 
 
 def htmx_init_modules() -> bool:
-    """Initialize CKAN JS modules every time HTMX fetches HTML from the
-    server.
-    """
-
+    """Initialize CKAN JS modules when HTMX fetches HTML from the server."""
     return tk.config[CONFIG_INIT_MODULES]
 
 
 def serializer(format: str) -> type[types.BaseSerializer] | None:
     """Import path for serializer used by `format` export endpoint."""
-
     value = tk.config.get(f"ckanext.collection.export.{format}.serializer")
     if value:
         return import_string(value, silent=True)

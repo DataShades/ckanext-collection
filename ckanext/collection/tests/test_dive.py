@@ -34,12 +34,6 @@ class TestOverview:
         for pkg in col:
             assert isinstance(pkg, dict)
 
-    @pytest.mark.usefixtures("clean_db", "clean_index", "package")
-    def test_api_list(self):
-        col = ApiListCollection("", {}, data_settings={"action": "package_list"})
-        for pkg in col:
-            assert isinstance(pkg, str)
-
     @pytest.mark.usefixtures("clean_db", "user")
     def test_api(self):
         col = ApiCollection("", {}, data_settings={"action": "user_list"})

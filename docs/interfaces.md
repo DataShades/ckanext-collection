@@ -2,6 +2,6 @@
 
 
 ## ICollection
-::: ckanext.collection.interfaces.ICollection
+::: collection.interfaces.ICollection
     options:
         show_bases: false

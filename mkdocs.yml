@@ -25,6 +25,7 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
+          paths: ["ckanext"]
           options:
             show_root_full_path: false
             show_root_toc_entry: false
@@ -85,11 +86,11 @@ nav:
     - structure/index.md
     - structure/collection.md
     - structure/domain.md
-    - structure/columns.md
     - structure/data.md
-    - structure/filters.md
-    - structure/serializer.md
     - structure/pager.md
+    - structure/columns.md
+    - structure/serializer.md
+    - structure/filters.md
   - API:
     - api/index.md
   - configuration.md

@@ -17,10 +17,26 @@ log = logging.getLogger(__name__)
 class ApiData(Data[types.TData, types.TDataCollection], internal.UserTrait):
     """API data source.
 
-    This base class is suitable for building API calls.
+    This base class is suitable for building API calls. Its `compute_data`
+    makes the single request to the specified API action and yields items from
+    the response.
 
     Attributes:
-      action: API action that returns the data
+        action: API action that returns the data
+        payload: parameters passed to the action
+        ignore_auth: skip authorization checks
+        user (str): name of the user for the action. Default: `tk.current_user.name`
+
+    Example:
+        ```pycon
+        >>> col = collection.Collection(
+        >>>     data_factory=data.ApiData,
+        >>>     data_settings={"action": "group_list_authz", "user": "default"},
+        >>> )
+        >>> list(col)
+        [{...}, {...}]
+        ```
+
     """
 
     action: str = internal.configurable_attribute()
@@ -41,7 +57,28 @@ class ApiData(Data[types.TData, types.TDataCollection], internal.UserTrait):
 
 
 class ApiSearchData(ApiData[types.TData, types.TDataCollection]):
-    """API data source optimized for package_search-like actions."""
+    """API data source optimized for package_search-like actions.
+
+    This class expects that API action accepts `start` and `rows` parameters
+    that controls offset and limit. And result of the action must contain
+    `count` and `results` keys.
+
+    This data service can iterate over huge number of items, reading just few
+    of them into the memory at once.
+
+    Example:
+        ```pycon
+        >>> col = collection.Collection(
+        >>>     data_factory=data.ApiSearchData,
+        >>>     data_settings={
+        >>>         "action": "package_search",
+        >>>         "payload": {"q": "res_format:CSV"},
+        >>>     },
+        >>> )
+        >>> list(col)
+        [{...}, {...}]
+        ```
+    """
 
     def prepare_payload(self) -> dict[str, Any]:
         payload = super().prepare_payload()
@@ -79,12 +116,18 @@ class ApiSearchData(ApiData[types.TData, types.TDataCollection]):
         return data["count"]
 
     def range(self, start: int, end: int) -> Iterable[types.TData]:
-        """@inherit"""
         action = self.get_action()
         return action(
             self.make_context(),
             dict(self.prepare_payload(), rows=end - start, start=start),
         )["results"]
+
+    def at(self, index: int) -> types.TData:
+        action = self.get_action()
+        return action(
+            self.make_context(),
+            dict(self.prepare_payload(), rows=1, start=index),
+        )["results"][0]
 
     def __iter__(self) -> Iterator[types.TData]:
         action = self.get_action()
@@ -97,38 +140,4 @@ class ApiSearchData(ApiData[types.TData, types.TDataCollection]):
             start += len(result["results"])
 
             if start >= result["count"] or not result["results"]:
-                break
-
-
-class ApiListData(ApiSearchData[types.TData, types.TDataCollection]):
-    """API data source optimized for organization_list-like actions."""
-
-    def range(self, start: int, end: int) -> Iterable[types.TData]:
-        """@inherit"""
-        action = self.get_action()
-        return action(
-            self.make_context(),
-            dict(self.prepare_payload(), limit=end - start, offset=start),
-        )
-
-    def compute_data(self):
-        action = self.get_action()
-        return action(self.make_context(), self.prepare_payload())
-
-    def compute_total(self, data: dict[str, Any]) -> int:
-        return len(data)
-
-    def __iter__(self) -> Iterator[types.TData]:
-        action = self.get_action()
-        context = self.make_context()
-        start = 0
-        while True:
-            result = action(context, dict(self.prepare_payload(), offset=start))
-            if not result:
-                break
-
-            yield from result
-            start += len(result)
-
-            if start >= self.total:
                 break

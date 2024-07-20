@@ -58,7 +58,7 @@ class Serializer(
     internal.Domain[types.TDataCollection],
     Generic[types.TSerialized, types.TDataCollection],
 ):
-    """Base collection serializer.
+    r"""Base collection serializer.
 
     For any derived implementation, `serialize` must transfrom data of the
     collection into expected format. Example:
@@ -68,7 +68,7 @@ class Serializer(
     >>>         yield yaml.dump(record)
     >>>
     >>> def serialize(self):
-    >>>     return "---\n".join(self.stream())
+    >>>     return "---\\n".join(self.stream())
 
     """
 
@@ -119,7 +119,6 @@ class Serializer(
 class StreamingSerializer(
     Serializer[types.TSerialized, types.TDataCollection],
 ):
-
     @abc.abstractmethod
     def stream(self) -> Iterable[types.TSerialized]:
         """Iterate over fragments of the content.
@@ -137,7 +136,6 @@ class StreamingSerializer(
 class DictListSerializer(
     StreamingSerializer["list[dict[str, Any]]", types.TDataCollection],
 ):
-
     def stream(self):
         """Iterate over fragments of the content."""
         for item in self.attached.data:
@@ -145,7 +143,6 @@ class DictListSerializer(
 
 
 class RenderableSerializer(StreamingSerializer[str, types.TDataCollection]):
-
     def stream(self) -> Iterable[str]:
         """Iterate over fragments of the content."""
         yield ""
@@ -222,10 +219,7 @@ class JsonSerializer(StreamingSerializer[str, types.TDataCollection]):
 
 
 class ChartJsSerializer(StreamingSerializer[str, types.TDataCollection]):
-    """Serialize collection into data source for ChartJS module of
-    ckanext-charts.
-
-    """
+    """Serialize collection into data source for ChartJS."""
 
     label_column: str = internal.configurable_attribute("")
     dataset_columns: list[str] = internal.configurable_attribute(

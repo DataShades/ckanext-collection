@@ -234,30 +234,3 @@ class TestApiSearchData:
 
         assert obj.total == 1
         assert next(iter(obj))["id"] == ids[1]
-
-
-@pytest.mark.usefixtures("clean_db")
-class TestApiListData:
-    def test_base(self, organization_factory: Any):
-        ids = sorted([o["name"] for o in organization_factory.create_batch(3)])
-
-        collection = Collection("", {})
-        obj = data.ApiListData(collection, action="organization_list")
-
-        assert obj.total == 3
-        assert sorted(obj) == ids
-
-    def test_payload(self, organization_factory: Any):
-        organization_factory(type="custom")
-
-        collection = Collection("", {})
-
-        obj = data.ApiListData(collection, action="organization_list")
-        assert obj.total == 0
-
-        obj = data.ApiListData(
-            collection,
-            action="organization_list",
-            payload={"type": "custom"},
-        )
-        assert obj.total == 1

@@ -93,7 +93,7 @@ def my_factory(name: str, params: dict[str, Any], **kwargs: Any):
 ## Initialize collection
 
 Collection class defines the data source of collection and different aspects of
-it behavior. But collection class itself does not contain any data and
+its behavior. But collection class itself does not contain any data and
 collection instance must be created to work with data.
 
 Any collection can be initialized directly, using collection class. And every

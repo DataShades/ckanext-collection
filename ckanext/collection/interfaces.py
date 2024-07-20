@@ -1,3 +1,5 @@
+"""Interface."""
+
 from __future__ import annotations
 
 from ckan.plugins import Interface
@@ -6,7 +8,7 @@ from ckanext.collection.types import CollectionFactory
 
 
 class ICollection(Interface):
-    """Extend functionality of ckanext-collections
+    """Extend functionality of ckanext-collections.
 
     Example:
         ```python

@@ -1,6 +1,4 @@
-"""Logic used across collection utilities.
-
-"""
+"""Logic used across collection utilities."""
 
 from __future__ import annotations
 
@@ -52,7 +50,6 @@ class AttachTrait(abc.ABC, Generic[types.TDataCollection]):
     logic.
 
     Example:
-
     >>> class Impl(AttachTrait):
     >>>     def __init__(self, collection):
     >>>         self._attach(collection)
@@ -187,7 +184,6 @@ def configurable_attribute(
     """Declare configurable attribute.
 
     Example:
-
     >>> class DataFactory(Data):
     >>>     private = configurable_attribute(False)
     >>>
@@ -198,9 +194,9 @@ def configurable_attribute(
 
 
 class UserTrait(AttrSettingsTrait):
-    """Add configurable `user` attribute, with default set to
-    `current_user.name`.
+    """Add configurable `user` attribute.
 
+    Default value set to `tk.current_user.name`.
     """
 
     user = configurable_attribute(

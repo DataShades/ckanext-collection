@@ -167,7 +167,7 @@ class Collection(types.BaseCollection):
     ) -> types.BaseDbConnection | None: ...
 
     def replace_service(self, service: types.Service) -> types.Service | None:
-        """Attach service to collection"""
+        """Attach service to collection."""
         old_service = getattr(self, service.service_name, None)
         setattr(self, service.service_name, service)
         return old_service

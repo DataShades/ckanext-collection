@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from ckanext.collection.utils.data import StaticData
 
-from .api import ApiCollection, ApiListCollection, ApiSearchCollection
+from .api import ApiCollection, ApiSearchCollection
 from .base import Collection
 from .db import DbCollection
 from .explorer import CollectionExplorer, DbExplorer
@@ -13,7 +13,6 @@ __all__ = [
     "DbCollection",
     "ApiCollection",
     "ApiSearchCollection",
-    "ApiListCollection",
     "ModelCollection",
     "CollectionExplorer",
     "DbExplorer",

@@ -11,14 +11,28 @@ class Data(
     internal.Domain[types.TDataCollection],
     Generic[types.TData, types.TDataCollection],
 ):
-    """Data source for collection.
+    """Base data source for collection.
 
-    This class produces data for collection.
+    This class defines an outline of the data service. In basic case, sublcass
+    should override `compute_data` method and return a Sequence from it to keep
+    all methods functional.
+
+    Example:
+        ```python
+        class MyData(data.Data):
+            def compute_data(self):
+                return range(1, 20)
+        ```
 
     """
 
-    def __init__(self, obj: types.TDataCollection, /, **kwargs: Any):
-        super().__init__(obj, **kwargs)
+    @cached_property
+    def _data(self):
+        return self.compute_data()
+
+    @cached_property
+    def _total(self) -> int:
+        return self.compute_total(self._data)
 
     def __iter__(self) -> Iterator[types.TData]:
         yield from self._data
@@ -61,11 +75,3 @@ class Data(
     @property
     def total(self):
         return self._total
-
-    @cached_property
-    def _data(self):
-        return self.compute_data()
-
-    @cached_property
-    def _total(self) -> int:
-        return self.compute_total(self._data)

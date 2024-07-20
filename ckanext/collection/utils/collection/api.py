@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ckanext.collection.utils.data import ApiData, ApiListData, ApiSearchData
+from ckanext.collection.utils.data import ApiData, ApiSearchData
 
 from .base import Collection
 
@@ -11,7 +11,3 @@ class ApiCollection(Collection):
 
 class ApiSearchCollection(ApiCollection):
     DataFactory = ApiSearchData
-
-
-class ApiListCollection(ApiCollection):
-    DataFactory = ApiListData

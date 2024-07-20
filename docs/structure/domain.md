@@ -12,7 +12,7 @@ chapter can be applied to every service you see in a real application.
 
 The abstract service actually consists of two classes. The first one is
 `types.Service`. This is an abrstract class, which contains abstract property
-`service_name`. This class identifies the name of the service inside the
+`service_name`. The property identifies the name of the service inside the
 collection.
 
 The base `data.Data` class implements `types.Service` and its implementation of

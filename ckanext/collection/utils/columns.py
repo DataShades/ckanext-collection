@@ -68,7 +68,7 @@ class Columns(
             return cast("set[str]", set())
 
         if value is self.Default.ALL:
-            return {c for c in self.names}
+            return set(self.names)
 
         if value is self.Default.NOT_HIDDEN:
             return {c for c in self.names if c not in self.hidden}

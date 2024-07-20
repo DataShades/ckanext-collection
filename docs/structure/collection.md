@@ -51,12 +51,100 @@ name and colon is removed. Then, the prefix is removed.
 ///
 
 
+/// details | Why `params` are transformed?
+    type: tip
+
+As long as collection is initialized manually and don't have a name, you don't
+need to think about `params` transformation.
+
+```pycon
+>>> col = collection.Collection("", {"a": 1, "xxx:b": 2, "yyy:c": 3})
+>>> col.params
+{"a": 1, "xxx:b": 2, "yyy:c": 3}
+```
+
+Transformation becomes important, whn you initialize registered *named*
+collection via `get_collection`
+
+```pycon
+>>> col = get_collection(
+>>>    "my-collection",
+>>>    {"a": 1, "my-collection:b": 2},
+>>> )
+>>> col.params
+{"b": 2}
+```
+
+This design decision was made to simplify rendering conllections on webpages.
+
+Imagine the page that renders `users` and `packages` collection. These
+collections are rendered as tables with pagination and view code looks like this:
+
+```python
+import ckan.plugins.toolkit as tk
+from ckan.logic import parse_params
+
+@route(...)
+def users_and_packages():
+    params = parse_params(tk.request.args)
+
+    users = get_collection("users", params)
+    packages = get_collection("packages", params)
+
+    return tk.render(template, {
+        "users": users,
+        "packages": packages,
+    })
+
+```
+
+Because `params` uses collection name as prefix, it's possible to paginate
+collections separately. Query string `?users:page=2&packages:page=8` parsed
+into `params` dictionary on the first line of view. This dictionary contains
+both page values with prefixes. When `users` and `packages` collections
+initialized, they pick only relevant values from `params`, so `users` takes
+`page=2` and `packages` takes `page=8`.
+
+In this way, `params` flow naturally from user into collection. When you are
+initializing collections in code, most likely you'll interact with collection
+classes instead of `get_collection`, so you can leave collection name empty and
+keep all `params`:
+
+```python
+col = MyCollection("", {...})
+```
+
+And when you must use `get_collection` with named collection, but want to pass
+all `params` into collection, you can easily add prefixes yoursef:
+
+```pycon
+>>> data = {"a": 1, "b": 2}
+>>> name = "my-collection"
+>>> col = get_collection(name, {f"{name}:{k}": v for k, v in data.items()})
+>>> col.params
+{"a": 1, "b": 2}
+```
+
+And to make it even simpler, `get_collection` accepts `prefix_params` as 3rd
+positional argument. When this flag is enabled, prefixes are added
+automatically, so you can achieve the same effect as in snippet above using
+short version:
+
+```pycon
+>>> col = get_collection("my-collection", {"a": 1, "b": 2}, True)
+>>> col.params
+{"a": 1, "b": 2}
+```
+
+
+///
+
 ## Initialization
 
 When a collection is created, it initializes services using service factories
 and service settings. `data` service is initialized using
-`Collection.DataFactory` class, `serializer` is initialized using
-`Collection.SerializerService`, etc.
+`Collection.DataFactory` class and `data_settings`, `serializer` is initialized
+using `Collection.SerializerService` and `serializer_settings`, etc.
 
 This logic creates a workflow for defining new collections. Create a subclass
 of base Collection and override `*Factory` of this new class.
@@ -193,8 +281,8 @@ Or even:
 
 This form is convenient when you experimenting with collections or creating
 them dynamically. But more often you'll create a separate class for collection
-and services. This flow is more readable and flexible, as you keep all the
-derived classes and can combine/reuse them in future.
+and services. Using separate classes is more readable and flexible, as you keep
+all the derived classes and can combine/reuse them in future.
 
 ///
 

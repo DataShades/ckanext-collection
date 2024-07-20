@@ -26,7 +26,33 @@ class BaseSaData(
     Data[types.TData, types.TDataCollection],
     Generic[TStatement, types.TData, types.TDataCollection],
 ):
-    """Data source for custom SQL statement."""
+    """Abstract data source for SQL statements.
+
+    This class can be extended to build data source over SQL statement.
+
+    Attributes:
+        use_naive_filters: search by filterable columns from `params`. Default: true
+        use_naive_search: if `params` contains `q`, ILIKE it against searchable
+            columns. Default: true
+        session: SQLAlchemy session
+
+    Example:
+        ```python
+        import sqlalchemy as sa
+        from ckan import model
+
+        class UserData(data.BaseSaData):
+            def get_base_statement(self):
+                return sa.select(model.User.name)
+        ```
+
+        ```pycon
+        >>> col = collection.Collection(data_factory=data.UserData)
+        >>> list(col)
+        [("default",), (...,)]
+        ```
+
+    """
 
     _data: cached_property[TStatement]
     use_naive_filters: bool = internal.configurable_attribute(True)
@@ -68,7 +94,7 @@ class BaseSaData(
         return stmt
 
     def count_statement(self, stmt: TStatement) -> int:
-        """Count number of items in query"""
+        """Count number of items in query."""
         count_stmt: Select = sa.select(sa.func.count()).select_from(stmt)
         return cast(int, self._execute(count_stmt).scalar())
 
@@ -80,7 +106,6 @@ class BaseSaData(
 
     def statement_with_filters(self, stmt: TStatement) -> TStatement:
         """Add normal filter to statement."""
-
         if not isinstance(stmt, Select):
             return stmt
 
@@ -152,7 +177,21 @@ class BaseSaData(
 
 
 class StatementSaData(BaseSaData[Select, types.TData, types.TDataCollection]):
-    """Data source for custom SQL statement."""
+    """Data source for arbitrary SQL statement.
+
+    Attributes:
+        statement (sqlalchemy.sql.Select): select statement
+
+    Example:
+        ```pycon
+        >>> col = collection.Collection(
+        >>>     data_factory=data.StatementSaData,
+        >>>     data_settings={"statement": sa.select(model.User.name)},
+        >>> )
+        >>> list(col)
+        [("default",), (...,)]
+        ```
+    """
 
     statement: Any = internal.configurable_attribute(None)
 
@@ -162,7 +201,27 @@ class StatementSaData(BaseSaData[Select, types.TData, types.TDataCollection]):
 
 
 class UnionSaData(BaseSaData[Select, types.TData, types.TDataCollection]):
-    """Data source for custom SQL statement."""
+    """Data source for multiple SQL statement merged with UNION ALL.
+
+    Attributes:
+        statements (sqlalchemy.sql.Select): select statements
+
+    Example:
+        ```pycon
+        >>> col = collection.Collection(
+        >>>     data_factory=data.UnionSaData,
+        >>>     data_settings={"statements": [
+        >>>         sa.select(model.User.name, sa.literal("user")),
+        >>>         sa.select(model.Package.name, sa.literal("package")),
+        >>>         sa.select(model.Group.name, sa.literal("group")),
+        >>>     ]},
+        >>> )
+        >>> list(col)
+        [("default", "user"),
+        ("warandpeace", "package"),
+        ("my-cool-group", "group")]
+        ```
+    """
 
     statements: Iterable[GenerativeSelect] = internal.configurable_attribute(
         default_factory=lambda self: [],
@@ -174,13 +233,22 @@ class UnionSaData(BaseSaData[Select, types.TData, types.TDataCollection]):
 
 
 class ModelData(BaseSaData[Select, types.TData, types.TDataCollection]):
-    """DB data source.
-
-    This base class is suitable for building SQL query.
+    """Data source for SQLAlchemy model.
 
     Attributes:
       model: main model used by data source
-      is_scalar: return model instance instead of columns set.
+      is_scalar: return model instance instead of collection of columns.
+
+    Example:
+        ```pycon
+        >>> col = collection.Collection(
+        >>>     data_factory=data.ModelData,
+        >>>     data_settings={"model": model.User, "is_scalar": True},
+        >>> )
+        >>> list(col)
+        [<User ...>, ...]
+        ```
+
     """
 
     model: Any = internal.configurable_attribute(None)
@@ -221,8 +289,7 @@ class ModelData(BaseSaData[Select, types.TData, types.TDataCollection]):
         return [self.model] if self.is_scalar else [mapper.columns]
 
     def get_extra_sources(self) -> dict[str, Any]:
-        """Return mapping of additional models/subqueries used to build the
-        statement.
+        """Return mapping of additional models/subqueries for statement.
 
         Note: Don't call this method direclty. Instead, use `extra_sources`
         property, that caches return value of the current method. Extra sources
@@ -267,7 +334,6 @@ class ModelData(BaseSaData[Select, types.TData, types.TDataCollection]):
 
     def apply_joins(self, stmt: Select) -> Select:
         """Return list of columns for select statement."""
-
         sources = self.extra_sources
 
         for name, condition, isouter in self.get_joins():

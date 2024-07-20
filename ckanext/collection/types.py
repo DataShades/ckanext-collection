@@ -42,7 +42,7 @@ class Service:
 
 
 class BaseColumns(abc.ABC, Service):
-    """Declaration of columns properties"""
+    """Declaration of columns properties."""
 
     names: list[str]
     visible: set[str]
@@ -77,7 +77,7 @@ class BaseData(abc.ABC, Sized, Iterable[Any], Service):
 
 
 class BasePager(abc.ABC, Service):
-    """Declaration of pager properties"""
+    """Declaration of pager properties."""
 
     params: dict[str, Any]
 

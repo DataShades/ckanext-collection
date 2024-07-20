@@ -6,7 +6,7 @@ Tools for building interfaces for data collections using declarative style.
 
 This extension simplifies describing series of items, such as datasets from
 search page, users registered on portal, rows of CSV file, tables in DB,
-etc. Once you defined the way items are obtained from data source, you'll get
+etc. Once you defined the way of fetching items from data source, you'll get
 generic interface for pagination, search and displaying data in any format:
 HTML page, CSV document, JSON list, or any other custom format that you can
 describe.

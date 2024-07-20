@@ -1,3 +1,5 @@
+"""Views of the extension."""
+
 from __future__ import annotations
 
 from flask import Blueprint
@@ -18,7 +20,7 @@ try:
     from ckanext.ap_main.views.generics import ApConfigurationPageView
 
     class ApConfiguration(ApConfigurationPageView):
-        pass
+        """Config page for admin panel."""
 
     bp.add_url_rule(
         "/admin-panel/config/collection",
@@ -31,6 +33,7 @@ except ImportError:
 
 @bp.route("/api/util/collection/<name>/render")
 def render(name: str) -> str | bytes:
+    """Render public collection."""
     try:
         tk.check_access("collection_view_render", {}, {"name": name})
     except tk.NotAuthorized:
@@ -49,6 +52,7 @@ def render(name: str) -> str | bytes:
 @bp.route("/api/util/collection/<name>/export")
 @bp.route("/api/util/collection/<name>/export/<format>")
 def export(name: str, format: str | None = None) -> types.Response:
+    """Serialize and download public collection."""
     try:
         tk.check_access("collection_view_export", {}, {"name": name})
     except tk.NotAuthorized:

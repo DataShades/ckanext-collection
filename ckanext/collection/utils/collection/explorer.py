@@ -19,8 +19,9 @@ from .db import DbCollection
 
 class ExplorerSerializer(HtmlSerializer[types.TDataCollection]):
     extend_page_template: bool = internal.configurable_attribute(
-        default_factory=lambda self: tk.request
-        and not tk.request.headers.get("hx-request"),
+        default_factory=lambda self: bool(
+            tk.request and not tk.request.headers.get("hx-request"),
+        ),
     )
     main_template: str = internal.configurable_attribute(
         "collection/serialize/explorer/main.html",
