@@ -11,10 +11,10 @@
         <link rel="canonical" href="https://datashades.github.io/ckanext-collection/structure/data/">
       
       
-        <link rel="prev" href="../columns/">
+        <link rel="prev" href="../domain/">
       
       
-        <link rel="next" href="../filters/">
+        <link rel="next" href="../pager/">
       
       
       <link rel="icon" href="../../img/favicon.ico">
@@ -449,27 +449,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../columns/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Columns
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -482,6 +461,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Data
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -491,6 +481,139 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#base-data-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      Base Data class
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#available-data-factories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available data factories
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Available data factories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.Data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.StaticData" class="md-nav__link">
+    <span class="md-ellipsis">
+      StaticData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.CsvFileData" class="md-nav__link">
+    <span class="md-ellipsis">
+      CsvFileData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.ApiData" class="md-nav__link">
+    <span class="md-ellipsis">
+      ApiData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.ApiSearchData" class="md-nav__link">
+    <span class="md-ellipsis">
+      ApiSearchData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.BaseSaData" class="md-nav__link">
+    <span class="md-ellipsis">
+      BaseSaData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.StatementSaData" class="md-nav__link">
+    <span class="md-ellipsis">
+      StatementSaData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.UnionSaData" class="md-nav__link">
+    <span class="md-ellipsis">
+      UnionSaData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.ModelData" class="md-nav__link">
+    <span class="md-ellipsis">
+      ModelData
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -504,11 +627,32 @@
   
   
     <li class="md-nav__item">
-      <a href="../filters/" class="md-nav__link">
+      <a href="../pager/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Filters
+    Pager
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../columns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Columns
   </span>
   
 
@@ -546,11 +690,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../pager/" class="md-nav__link">
+      <a href="../filters/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Pager
+    Filters
   </span>
   
 
@@ -680,6 +824,128 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#base-data-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      Base Data class
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#available-data-factories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available data factories
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Available data factories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.Data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.StaticData" class="md-nav__link">
+    <span class="md-ellipsis">
+      StaticData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.CsvFileData" class="md-nav__link">
+    <span class="md-ellipsis">
+      CsvFileData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.ApiData" class="md-nav__link">
+    <span class="md-ellipsis">
+      ApiData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.ApiSearchData" class="md-nav__link">
+    <span class="md-ellipsis">
+      ApiSearchData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.BaseSaData" class="md-nav__link">
+    <span class="md-ellipsis">
+      BaseSaData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.StatementSaData" class="md-nav__link">
+    <span class="md-ellipsis">
+      StatementSaData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.UnionSaData" class="md-nav__link">
+    <span class="md-ellipsis">
+      UnionSaData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.data.ModelData" class="md-nav__link">
+    <span class="md-ellipsis">
+      ModelData
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -697,51 +963,860 @@
 
 
 <h1 id="data">Data</h1>
+<h2 id="overview">Overview</h2>
 <p>This service produces the data for collection. Every data service must:</p>
 <ul>
-<li>be Iterable and iterate over all available records by default</li>
+<li>be <code>Iterable</code></li>
+<li>yield all existing records during iteration. I.e, if data service produces
+  datasets from <code>package_search</code> API, <code>list(data)</code> must contain <strong>all</strong>
+  datasets from the search index, not only first 10 or 20.</li>
 <li>define <code>total</code> property, that reflects number of available records so that
   <code>len(list(data)) == data.total</code></li>
 <li>define <code>range(start: Any, end: Any)</code> method that returns slice of the data</li>
 </ul>
 <p>Base class for data services - <code>Data</code> - already contains a simple version of
-this logic. You need to define only one method to make you custom
-implementations: <code>compute_data()</code>. When data if accessed for the first time,
-<code>compute_data</code> is called. Its result cached and used for iteration in
-for-loops, slicing via <code>range</code> method and size measurement via <code>total</code>
-property.</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">CustomData</span><span class="p">(</span><span class="n">Data</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">compute_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+this logic. Just override <code>compute_data()</code> and return a sequence with records
+from it, to satisfy minimal requirements of the data service.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyData</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">compute_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;abcdefghijklmnopqrstuvwxyz&quot;</span>
-
-<span class="n">col</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">data_factory</span><span class="o">=</span><span class="n">CustomData</span><span class="p">)</span>
-<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;f&quot;</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="s2">&quot;j&quot;</span><span class="p">]</span>
-<span class="k">assert</span> <span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">total</span> <span class="o">==</span> <span class="mi">26</span>
-<span class="k">assert</span> <span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;xyz&quot;</span>
 </code></pre></div>
-<p>If you need more complex data source, make sure you defined <code>__iter__</code>,
-<code>total</code>, and <code>range</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">CustomData</span><span class="p">(</span><span class="n">Data</span><span class="p">):</span>
-    <span class="n">names</span> <span class="o">=</span> <span class="n">configurable_attribute</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Anna&quot;</span><span class="p">,</span> <span class="s2">&quot;Henry&quot;</span><span class="p">,</span> <span class="s2">&quot;Mary&quot;</span><span class="p">])</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">yield from</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">name</span> <span class="o">&lt;</span> <span class="n">start</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="k">if</span> <span class="n">name</span> <span class="o">&gt;</span> <span class="n">end</span><span class="p">:</span>
-                <span class="k">break</span>
-            <span class="k">yield</span> <span class="n">name</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="n">data_factory</span><span class="o">=</span><span class="n">MyData</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;, &quot;g&quot;, &quot;h&quot;, &quot;i&quot;, &quot;j&quot;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">total</span>
+<span class="go">26</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="go">&quot;xyz&quot;</span>
 </code></pre></div>
+</div>
+<p>Using <code>compute_data</code> simplifies defining data services, but it's not
+required. You can explicitly implement all methods</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code>class MyData(data.Data):
+    letters = &quot;abcdefghijklmnopqrstuvwxyz&quot;
+
+    @property
+    def total(self):
+        return len(self.letters)
+
+    def __iter__(self):
+        yield from self.letters
+
+    def range(self, start, end):
+        return self.letters[start:end]
+</code></pre></div>
+</div>
+<h2 id="base-data-class">Base <code>Data</code> class</h2>
+<p>This class defines a couple of standard helpers in addition to minimal
+requirements of data service</p>
+<p>The most important, it caches result of <code>compute_data</code> when data or data length
+is accessed. Because of it, items and length of the data service are not
+updated in runtime.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>In the following example, items from data service and its length is not changes
+after assigning to <code>items</code>, because of <code>compute_data</code> called only during first
+access to data. After this point, data service uses cached result of the first
+<code>compute_data</code> call.</p>
+<p><div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyData</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">):</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">compute_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="n">data_factory</span><span class="o">=</span><span class="n">MyData</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="go">[1, 2, 3]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">total</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># (1)!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="go">[1, 2, 3]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">total</span>
+<span class="go">3</span>
+</code></pre></div></p>
+<ol>
+<li>This has no sense, because data is already cached and <code>items</code> property will
+   not be used anymore</li>
+</ol>
+<p>To reset the cache and use <code>compute_data</code> again, call <code>refresh_data()</code> method
+of the data service.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="s2">&quot;hello&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">refresh_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="go">[&quot;h&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">total</span>
+<span class="go">5</span>
+</code></pre></div>
+</div>
+<p>Base <code>Data</code> class expects that <code>compute_data</code> returns a
+<a href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence"><code>collections.abc.Sequence</code></a>.
+With this expectation it implements <code>range(start, end)</code> that returns slice of
+the data, and <code>at(index)</code> that returns element with specified index.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyData</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">compute_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+       <span class="k">return</span> <span class="s2">&quot;hello world&quot;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="n">data_factory</span><span class="o">=</span><span class="n">MyData</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">&quot;o&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="go">&quot;world&quot;</span>
+</code></pre></div>
+<p>These methods are also accessible via index operator.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+<span class="go">&quot;o&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">:]</span>
+<span class="go">&quot;world&quot;</span>
+</code></pre></div>
+</div>
+<p>If you are not going to rely on <code>compute_data</code> when extending <code>Data</code> class,
+implement your own caching logic and index-acces, if you need them.</p>
+<h2 id="available-data-factories">Available data factories</h2>
+<p>These factories are available at <code>ckanext.collection.shared.data</code>.</p>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.data.Data" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>Data</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+      <p>Base data source for collection.</p>
+<p>This class defines an outline of the data service. In basic case, sublcass
+should override <code>compute_data</code> method and return a Sequence from it to keep
+all methods functional.</p>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyData</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">compute_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+</code></pre></div>
+</details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.data.StaticData" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>StaticData</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+      <p>Static data source.</p>
+<p>This class produce items from its <code>data</code> attribute. Use any sequence as a
+value for <code>data</code> during initialization.</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">ATTRIBUTE</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.StaticData.data">data</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>sequence of items produced by the service</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="typing.Iterable">Iterable</span>[<span title="ckanext.collection.types.TData">TData</span>]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <p><div class="highlight"><pre><span></span><code><span class="n">NumericData</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+
+<span class="n">UppercaseData</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="n">data_factory</span><span class="o">=</span><span class="n">NumericData</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</span>
+</code></pre></div></p>
+</details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.data.CsvFileData" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>CsvFileData</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+      <p>Data source for CSV file.</p>
+<p>CSV file available at path specified by <code>source</code> attribute of the service
+is read into memory and its every row transformed into dictionary.</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">ATTRIBUTE</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.CsvFileData.source">source</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>path to CSV source</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>str</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">CsvFileData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;/path/to/file.csv&quot;</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[</span>
+<span class="go">    {&quot;column_1&quot;: &quot;value_1&quot;, &quot;column_2&quot;: &quot;value_2&quot;},</span>
+<span class="go">    ...</span>
+<span class="go">]</span>
+</code></pre></div>
+</details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.data.ApiData" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>ApiData</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+      <p>API data source.</p>
+<p>This base class is suitable for building API calls. Its <code>compute_data</code>
+makes the single request to the specified API action and yields items from
+the response.</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">ATTRIBUTE</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.ApiData.action">action</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>API action that returns the data</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>str</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.ApiData.payload">payload</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>parameters passed to the action</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>dict[str, <span title="typing.Any">Any</span>]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.ApiData.ignore_auth">ignore_auth</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>skip authorization checks</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>bool</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.ApiData.user">user</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>name of the user for the action. Default: <code>tk.current_user.name</code></p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>str</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ApiData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;group_list_authz&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;default&quot;</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[{...}, {...}]</span>
+</code></pre></div>
+</details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.data.ApiSearchData" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>ApiSearchData</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="collection.utils.data.api.ApiData" href="#collection.shared.data.ApiData">ApiData</a>[<span title="ckanext.collection.types.TData">TData</span>, <span title="ckanext.collection.types.TDataCollection">TDataCollection</span>]</code></p>
+
+
+      <p>API data source optimized for package_search-like actions.</p>
+<p>This class expects that API action accepts <code>start</code> and <code>rows</code> parameters
+that controls offset and limit. And result of the action must contain
+<code>count</code> and <code>results</code> keys.</p>
+<p>This data service can iterate over huge number of items, reading just few
+of them into the memory at once.</p>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ApiSearchData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;package_search&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;payload&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;res_format:CSV&quot;</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[{...}, {...}]</span>
+</code></pre></div>
+</details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.data.BaseSaData" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>BaseSaData</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+      <p>Abstract data source for SQL statements.</p>
+<p>This class can be extended to build data source over SQL statement.</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">ATTRIBUTE</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.BaseSaData.use_naive_filters">use_naive_filters</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>search by filterable columns from <code>params</code>. Default: true</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>bool</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.BaseSaData.use_naive_search">use_naive_search</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>if <code>params</code> contains <code>q</code>, ILIKE it against searchable columns. Default: true</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>bool</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.BaseSaData.session">session</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>SQLAlchemy session</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="ckan.types.AlchemySession">AlchemySession</span></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">sqlalchemy</span> <span class="k">as</span> <span class="nn">sa</span>
+<span class="kn">from</span> <span class="nn">ckan</span> <span class="kn">import</span> <span class="n">model</span>
+
+<span class="k">class</span> <span class="nc">UserData</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">BaseSaData</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_base_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">sa</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">UserData</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[(&quot;default&quot;,), (...,)]</span>
+</code></pre></div>
+</details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.data.StatementSaData" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>StatementSaData</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="collection.utils.data.model.BaseSaData" href="#collection.shared.data.BaseSaData">BaseSaData</a>[<span title="sqlalchemy.sql.selectable.Select">Select</span>, <span title="ckanext.collection.types.TData">TData</span>, <span title="ckanext.collection.types.TDataCollection">TDataCollection</span>]</code></p>
+
+
+      <p>Data source for arbitrary SQL statement.</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">ATTRIBUTE</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.StatementSaData.statement">statement</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>select statement</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="sqlalchemy.sql.Select">Select</span></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">StatementSaData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;statement&quot;</span><span class="p">:</span> <span class="n">sa</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">name</span><span class="p">)},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[(&quot;default&quot;,), (...,)]</span>
+</code></pre></div>
+</details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.data.UnionSaData" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>UnionSaData</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="collection.utils.data.model.BaseSaData" href="#collection.shared.data.BaseSaData">BaseSaData</a>[<span title="sqlalchemy.sql.selectable.Select">Select</span>, <span title="ckanext.collection.types.TData">TData</span>, <span title="ckanext.collection.types.TDataCollection">TDataCollection</span>]</code></p>
+
+
+      <p>Data source for multiple SQL statement merged with UNION ALL.</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">ATTRIBUTE</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.UnionSaData.statements">statements</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>select statements</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="sqlalchemy.sql.Select">Select</span></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">UnionSaData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;statements&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">sa</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">literal</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">)),</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">sa</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Package</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">literal</span><span class="p">(</span><span class="s2">&quot;package&quot;</span><span class="p">)),</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">sa</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Group</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">literal</span><span class="p">(</span><span class="s2">&quot;group&quot;</span><span class="p">)),</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">]},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[(&quot;default&quot;, &quot;user&quot;),</span>
+<span class="go">(&quot;warandpeace&quot;, &quot;package&quot;),</span>
+<span class="go">(&quot;my-cool-group&quot;, &quot;group&quot;)]</span>
+</code></pre></div>
+</details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.data.ModelData" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>ModelData</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="collection.utils.data.model.BaseSaData" href="#collection.shared.data.BaseSaData">BaseSaData</a>[<span title="sqlalchemy.sql.selectable.Select">Select</span>, <span title="ckanext.collection.types.TData">TData</span>, <span title="ckanext.collection.types.TDataCollection">TDataCollection</span>]</code></p>
+
+
+      <p>Data source for SQLAlchemy model.</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">ATTRIBUTE</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.ModelData.model">model</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>main model used by data source</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="typing.Any">Any</span></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.ModelData.is_scalar">is_scalar</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>return model instance instead of collection of columns.</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>bool</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ModelData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="p">,</span> <span class="s2">&quot;is_scalar&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[&lt;User ...&gt;, ...]</span>
+</code></pre></div>
+</details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
 
 
 
@@ -777,7 +1852,7 @@ property.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../columns/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Columns">
+          <a href="../domain/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Abstract service">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -787,20 +1862,20 @@ property.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Columns
+                Abstract service
               </div>
             </div>
           </a>
         
         
           
-          <a href="../filters/" class="md-footer__link md-footer__link--next" aria-label="Next: Filters">
+          <a href="../pager/" class="md-footer__link md-footer__link--next" aria-label="Next: Pager">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Filters
+                Pager
               </div>
             </div>
             <div class="md-footer__button md-icon">
