@@ -93,5 +93,6 @@ nav:
     - structure/filters.md
   - Examples:
     - examples/index.md
+    - examples/access.md
   - configuration.md
   - integrations.md

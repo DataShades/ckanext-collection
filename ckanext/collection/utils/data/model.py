@@ -50,6 +50,7 @@ class BaseSaData(
         use_naive_search: if `params` contains `q`, ILIKE it against searchable
             columns. Default: true
         session: SQLAlchemy session
+        is_scalar: return only first column from each row
 
     Example:
         ```python
@@ -70,6 +71,8 @@ class BaseSaData(
     """
 
     _data: cached_property[TStatement]
+    is_scalar: bool = internal.configurable_attribute(False)
+
     use_naive_filters: bool = internal.configurable_attribute(True)
     use_naive_search: bool = internal.configurable_attribute(True)
     session: AlchemySession = internal.configurable_attribute(
@@ -103,7 +106,13 @@ class BaseSaData(
         return self.execute_statement(stmt)
 
     def execute_statement(self, stmt: TStatement) -> Iterable[types.TData]:
-        result: Any = self._execute(stmt)
+        result: Any
+        if self.is_scalar:
+            result = self.session.scalars(stmt)
+
+        else:
+            result = self.session.execute(stmt)
+
         return result
 
     def alter_statement(self, stmt: TStatement):
@@ -121,6 +130,11 @@ class BaseSaData(
 
         if value is self.EMPTY_STRING:
             value = ""
+
+        column_type = column.type.python_type
+        if not isinstance(value, column_type) and value is not None:
+            value = str(value)  # noqa: PLW2901
+            column = sa.func.cast(column, sa.Text)
 
         return column == value
 
@@ -357,7 +371,6 @@ class ModelData(BaseSaData[Select, types.TData, types.TDataCollection]):
             [<User id=id-123-123 name=user-name>, ...]
             ```
             ///
-
         static_columns: select only specified columns. If `is_scalar` flag
             enabled, only first columns from this list is returned.
             /// details
@@ -426,8 +439,6 @@ class ModelData(BaseSaData[Select, types.TData, types.TDataCollection]):
     """
 
     model: Any = internal.configurable_attribute(None)
-    is_scalar: bool = internal.configurable_attribute(False)
-
     static_columns: list[sa.Column[Any] | Label[Any]] = internal.configurable_attribute(
         default_factory=lambda self: [],
     )
@@ -440,16 +451,6 @@ class ModelData(BaseSaData[Select, types.TData, types.TDataCollection]):
     static_joins: list[tuple[str, Any, bool]] = internal.configurable_attribute(
         default_factory=lambda self: [],
     )
-
-    def execute_statement(self, stmt: Select) -> Iterable[types.TData]:
-        result: Any
-        if self.is_scalar:
-            result = self.session.scalars(stmt)
-
-        else:
-            result = self.session.execute(stmt)
-
-        return result
 
     def select_columns(self) -> Iterable[Any]:
         """Return list of columns for select statement."""
