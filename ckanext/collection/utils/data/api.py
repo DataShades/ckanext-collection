@@ -21,6 +21,11 @@ class ApiData(Data[types.TData, types.TDataCollection], internal.UserTrait):
     makes the single request to the specified API action and yields items from
     the response.
 
+    Warning:
+        Iteration and size measurement uses cached version of action's result.
+        To call action again and use the fresh result, use `refresh_data()` method
+        of the service.
+
     Attributes:
         action: API action that returns the data
         payload: parameters passed to the action
@@ -64,7 +69,38 @@ class ApiSearchData(ApiData[types.TData, types.TDataCollection]):
     `count` and `results` keys.
 
     This data service can iterate over huge number of items, reading just few
-    of them into the memory at once.
+    of them into the memory at once. It means you can iterate over thousands of
+    datasets in an efficient way without messing with offsets and limits:
+
+    ```python
+    packages = collection.Collection(
+        data_factory=data.ApiSearchData,
+        data_settings={"action": "package_search"},
+    )
+
+    # the following loop goes over every available package, no matter how may
+    # of them are available inside search index
+    for pkg in packages.data: # (1)!
+        ...
+
+    # total number of items processed in the previous step is the same as
+    # number of public datasets
+    assert packages.data.total == tk.get_action("package_search")({}, {})["count"]
+    ```
+
+    1. `data` service is iterated directly to access all the items. Iterating
+       over `packages` would yield just first 10 items because of pagination.
+
+
+    Warning:
+        Size measurement uses cached number of records. To refresh the total
+        number of records, call `refresh_data()` method of the service. Such
+        thing can be used if a new item was created after initialization of the
+        collection
+
+        The records are not cached, to reduce memory usage. Every separate
+        iteration over data service and every `range` call initiates a fresh
+        API request.
 
     Example:
         ```pycon
@@ -78,6 +114,7 @@ class ApiSearchData(ApiData[types.TData, types.TDataCollection]):
         >>> list(col)
         [{...}, {...}]
         ```
+
     """
 
     def prepare_payload(self) -> dict[str, Any]:

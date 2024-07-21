@@ -13,10 +13,12 @@ class Columns(
     """Collection of columns details for filtering/rendering.
 
     Attributes:
-      names: list of all available columns
-      visible: columns that can be viewed
-      sortable: columns that can be sorted
-      labels: UI labels for columns
+        names: list of all available columns
+        visible: columns that can be viewed
+        sortable: columns that can be sorted
+        filterable: columns that can be filtered using exect match
+        searchable: columns that can be searched by partial match
+        labels: UI labels for columns
     """
 
     class Default(internal.Sentinel, enum.Enum):

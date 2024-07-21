@@ -205,6 +205,13 @@ These factories are available at `ckanext.collection.shared.data`.
         heading_level: 3
         members: []
 
+::: collection.shared.data.TemporalSaData
+    options:
+        show_root_heading: true
+        show_root_toc_entry: true
+        heading_level: 3
+        members: []
+
 ::: collection.shared.data.StatementSaData
     options:
         show_root_heading: true

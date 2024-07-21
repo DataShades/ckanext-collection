@@ -16,6 +16,12 @@ class CsvFileData(Data[types.TData, types.TDataCollection]):
     CSV file available at path specified by `source` attribute of the service
     is read into memory and its every row transformed into dictionary.
 
+    Warning:
+        Iteration and size measurement uses cached version of source's content.
+        If `source` attribute was overriden or its content was modified after
+        service initialization, call `refresh_data()` method
+        of the service to reset the cache.
+
     Attributes:
         source: path to CSV source
 

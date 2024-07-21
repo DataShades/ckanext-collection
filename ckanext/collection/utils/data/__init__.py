@@ -9,7 +9,7 @@ from .api import ApiData, ApiSearchData
 from .base import Data
 from .db import DbData, TableData
 from .misc import CsvFileData
-from .model import BaseSaData, ModelData, StatementSaData, UnionSaData
+from .model import BaseSaData, ModelData, StatementSaData, TemporalSaData, UnionSaData
 
 __all__ = [
     "Data",
@@ -25,6 +25,7 @@ __all__ = [
     "BaseModelData",
     "DbData",
     "ModelData",
+    "TemporalSaData",
 ]
 
 BaseModelData = BaseSaData
@@ -39,6 +40,11 @@ class StaticData(Data[types.TData, types.TDataCollection]):
 
     This class produce items from its `data` attribute. Use any sequence as a
     value for `data` during initialization.
+
+    Warning:
+        Iteration and size measurement uses cached version of `data`. If `data`
+        attribute was overriden after service initialization, call
+        `refresh_data()` method of the service to reset the cache.
 
     Attributes:
         data: sequence of items produced by the service
@@ -56,6 +62,7 @@ class StaticData(Data[types.TData, types.TDataCollection]):
         >>> list(col)
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         ```
+
     """
 
     data: Iterable[types.TData] = internal.configurable_attribute(

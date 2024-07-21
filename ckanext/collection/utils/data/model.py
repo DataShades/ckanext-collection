@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import abc
 import logging
+from datetime import date
 from functools import cached_property
 from typing import Any, Generic, Iterable, Iterator, TypeVar, cast
 
@@ -28,7 +29,21 @@ class BaseSaData(
 ):
     """Abstract data source for SQL statements.
 
-    This class can be extended to build data source over SQL statement.
+    This class can be extended to build data source over SQL statement. Its
+    `compute_data` calls 4 methods:
+
+    * `get_base_statement`: produces initial statement
+    * `alter_statement(stmt)`: modifies statement or replaces it completely
+    * `statement_with_filters(stmt)`: apply `WHERE` and `HAVING` conditions
+    * `statement_with_sorting(stmt)`: apply `ORDER BY`
+
+    These methods do nothing by default, but can be replaced in sublcasses to
+    build SQL statement gradually.
+
+    Warning:
+        Final statement produced by `compute_data` and total number of results
+        are cached. Call `refresh_data()` method of the service to rebuild the
+        statement and refresh number of rows.
 
     Attributes:
         use_naive_filters: search by filterable columns from `params`. Default: true
@@ -47,7 +62,7 @@ class BaseSaData(
         ```
 
         ```pycon
-        >>> col = collection.Collection(data_factory=data.UserData)
+        >>> col = collection.Collection(data_factory=UserData)
         >>> list(col)
         [("default",), (...,)]
         ```
@@ -60,6 +75,8 @@ class BaseSaData(
     session: AlchemySession = internal.configurable_attribute(
         default_factory=lambda self: model.Session,
     )
+
+    EMPTY_STRING = object()
 
     def compute_data(self):
         stmt = self.get_base_statement()
@@ -101,6 +118,9 @@ class BaseSaData(
     def _into_clause(self, column: ColumnElement[Any], value: Any):
         if isinstance(value, list):
             return column.in_(value)
+
+        if value is self.EMPTY_STRING:
+            value = ""
 
         return column == value
 
@@ -176,8 +196,67 @@ class BaseSaData(
         return stmt.order_by(col_object.desc() if desc else col_object.asc())
 
 
+class TemporalSaData(BaseSaData[TStatement, types.TData, types.TDataCollection]):
+    """Data source that supports pagination by datetime column.
+
+    Attributes:
+        temporal_column: column used for pagination
+
+    Example:
+        This class can be used as a base for SQL statement based data
+        services. Collection that uses such data service must also use
+        `pager.TemporalPager` instead of the default `pager.ClassicPager`.
+
+        ```python
+        import sqlalchemy as sa
+        from datetime import date, timedelta
+        from ckan import model
+
+        class TemporalPackageData(data.TemporalSaData):
+            def get_base_statement(self):
+                return sa.select(model.Package.name, model.Package.metadata_created)
+        ```
+
+        ```pycon
+        >>> col = collection.Collection(
+        >>>     data_factory=TemporalPackageData,
+        >>>     data_settings={"temporal_column": model.Package.metadata_created},
+        >>>     pager_factory=pager.TemporalPager,
+        >>>     pager_settings={"since": datetime.now() - timedelta(days=40)},
+        >>> )
+        >>> list(col)
+        [("pkg1", datetime.datetime(2024, 6, 13, 10, 40, 22, 518511)), ...]
+        ```
+
+    """
+
+    temporal_column: ColumnElement[Any] = internal.configurable_attribute()
+
+    def range(self, start: date | None, end: date | None) -> Iterable[types.TData]:  # type: ignore
+        stmt = self._data
+        if not isinstance(stmt, Select):
+            return self.execute_statement(stmt)
+
+        if isinstance(self.temporal_column, str):
+            col = stmt.selected_columns[self.temporal_column]
+        else:
+            col = self.temporal_column
+
+        if start:
+            stmt = stmt.where(col >= start)
+        if end:
+            stmt = stmt.where(col < end)
+
+        return self.execute_statement(stmt)
+
+
 class StatementSaData(BaseSaData[Select, types.TData, types.TDataCollection]):
     """Data source for arbitrary SQL statement.
+
+    Warning:
+        Final statement produced by `compute_data` and total number of results
+        are cached. Call `refresh_data()` method of the service to rebuild the
+        statement and refresh number of rows.
 
     Attributes:
         statement (sqlalchemy.sql.Select): select statement
@@ -191,6 +270,7 @@ class StatementSaData(BaseSaData[Select, types.TData, types.TDataCollection]):
         >>> list(col)
         [("default",), (...,)]
         ```
+
     """
 
     statement: Any = internal.configurable_attribute(None)
@@ -202,6 +282,11 @@ class StatementSaData(BaseSaData[Select, types.TData, types.TDataCollection]):
 
 class UnionSaData(BaseSaData[Select, types.TData, types.TDataCollection]):
     """Data source for multiple SQL statement merged with UNION ALL.
+
+    Warning:
+        Final statement produced by `compute_data` and total number of results
+        are cached. Call `refresh_data()` method of the service to rebuild the
+        statement and refresh number of rows.
 
     Attributes:
         statements (sqlalchemy.sql.Select): select statements
@@ -235,9 +320,98 @@ class UnionSaData(BaseSaData[Select, types.TData, types.TDataCollection]):
 class ModelData(BaseSaData[Select, types.TData, types.TDataCollection]):
     """Data source for SQLAlchemy model.
 
+    Warning:
+        Final statement produced by `compute_data` and total number of results
+        are cached. Call `refresh_data()` method of the service to rebuild the
+        statement and refresh number of rows.
+
     Attributes:
-      model: main model used by data source
-      is_scalar: return model instance instead of collection of columns.
+        model: main model used by data source
+        is_scalar: return model instance instead of collection of columns.
+            /// details
+                type: example
+
+            Non-scalar collection returns rows as tuples of columns
+            ```pycon
+            >>> col = collection.Collection(
+            >>>     data_factory=data.ModelData,
+            >>>     data_settings={
+            >>>         "model": model.User,
+            >>>         "is_scalar": False,
+            >>>     },
+            >>> )
+            >>> list(col)
+            [("id-123-123", "user-name", ...), ...]
+            ```
+
+            Scalar collection yields model instances
+            ```pycon
+            >>> col = collection.Collection(
+            >>>     data_factory=data.ModelData,
+            >>>     data_settings={
+            >>>         "model": model.User,
+            >>>         "is_scalar": True,
+            >>>     },
+            >>> )
+            >>> list(col)
+            [<User id=id-123-123 name=user-name>, ...]
+            ```
+            ///
+
+        static_columns: select only specified columns. If `is_scalar` flag
+            enabled, only first columns from this list is returned.
+            /// details
+                type: example
+
+            Non-scalar collection with `static_columns` produces tuples with values
+            ```pycon
+            >>> col = collection.Collection(
+            >>>     data_factory=data.ModelData,
+            >>>     data_settings={
+            >>>         "model": model.User,
+            >>>         "is_scalar": False,
+            >>>         "static_columns": [model.User.name, model.User.sysadmin],
+            >>>     },
+            >>> )
+            >>> list(col)
+            [("default", True), ...]
+            ```
+
+            Scalar collection with `static_columns` yields values of the first column
+            ```pycon
+            >>> col = collection.Collection(
+            >>>     data_factory=data.ModelData,
+            >>>     data_settings={
+            >>>         "model": model.User,
+            >>>         "is_scalar": True,
+            >>>         "static_columns": [model.User.name, model.User.sysadmin],
+            >>>     },
+            >>> )
+            >>> list(col)
+            ["default", ...]
+            ```
+            ///
+
+        static_filters: apply filters to the select statement
+            /// details
+                type: example
+
+            Filters are values produced by operations with model columns. The
+            same thing you'd pass into `.filter`/`.where` methods.
+
+            ```pycon
+            >>> col = collection.Collection(
+            >>>     data_factory=data.ModelData,
+            >>>     data_settings={
+            >>>         "model": model.User,
+            >>>         "is_scalar": True,
+            >>>         "static_filters": [model.User.sysadmin == True],
+            >>>     },
+            >>> )
+            >>> list(col)
+            [<User sysadmin=True ...>, ...]
+            ```
+            ///
 
     Example:
         ```pycon

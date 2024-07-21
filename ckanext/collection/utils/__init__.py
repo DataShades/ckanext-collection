@@ -32,7 +32,7 @@ from .db_connection import (
     UrlDbConnection,
 )
 from .filters import Filters, TableFilters
-from .pager import ClassicPager, Pager
+from .pager import ClassicPager, OffsetPager, Pager, TemporalPager
 from .serialize import (
     ChartJsSerializer,
     CsvSerializer,
@@ -62,6 +62,8 @@ __all__ = [
     "ChartJsSerializer",
     "DictListSerializer",
     "ClassicPager",
+    "TemporalPager",
+    "OffsetPager",
     "Collection",
     "CollectionExplorer",
     "DbExplorer",

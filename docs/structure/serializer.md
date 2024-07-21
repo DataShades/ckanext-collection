@@ -1,10 +1,11 @@
 # Serializer
 
+## Overview
 
 Serializer converts data into textual, binary or any other alternative
-representation. For example, if you want to compute records produced by the
-`data` service of the collection into pandas' DataFrame, you should probably
-use serializer.
+representation. For example, if you want to transform records produced by the
+`data` service of the collection into MessagePack, you should probably use
+serializer.
 
 Serializers are main users of columns service, because it contains details
 about specific data columns. And serializers often iterate data service
@@ -17,19 +18,88 @@ example, `JsonSerializer` returns string with JSON-encoded data.
 You are not restricted by textual or binary formats. Serializer that transforms
 data into pandas' DataFrame is completely valid version of the serializer.
 
+/// admonition
+    type: example
+
 ```python
-class NewLineSerializer(Serializer):
+from array import array
+
+class ArraySerializer(serialize.Serializer):
     def serialize(self):
-        result = ""
+        result = array("i")
         for item in self.attached.data:
-            result += str(item) + "\n"
+            result.append(item)
 
         return result
 
-col = StaticCollection(
-    "name", {},
-    serializer_factory=NewLineSerializer,
+col = collection.StaticCollection(
+    serializer_factory=ArraySerializer,
     data_settings={"data": [1, 2, 3]}
 )
-assert "".join(col.serializer.serialize()) == "1\n2\n3\n"
+assert col.serializer.serialize() == array("i", [1,2,3])
 ```
+///
+
+## Available serializer factories
+
+::: collection.shared.serialize.Serializer
+    options:
+        show_root_heading: true
+        show_root_toc_entry: true
+        show_bases: false
+        heading_level: 3
+        members: []
+
+::: collection.shared.serialize.DictListSerializer
+    options:
+        show_root_heading: true
+        show_root_toc_entry: true
+        show_bases: false
+        heading_level: 3
+        members: []
+
+::: collection.shared.serialize.CsvSerializer
+    options:
+        show_root_heading: true
+        show_root_toc_entry: true
+        show_bases: false
+        heading_level: 3
+        members: []
+
+::: collection.shared.serialize.JsonlSerializer
+    options:
+        show_root_heading: true
+        show_root_toc_entry: true
+        show_bases: false
+        heading_level: 3
+        members: []
+
+::: collection.shared.serialize.JsonSerializer
+    options:
+        show_root_heading: true
+        show_root_toc_entry: true
+        show_bases: false
+        heading_level: 3
+        members: []
+
+::: collection.shared.serialize.HtmlSerializer
+    options:
+        show_root_heading: true
+        show_root_toc_entry: true
+        show_bases: false
+        heading_level: 3
+        members: []
+
+::: collection.shared.serialize.TableSerializer
+    options:
+        show_root_heading: true
+        show_root_toc_entry: true
+        heading_level: 3
+        members: []
+
+::: collection.shared.serialize.HtmxTableSerializer
+    options:
+        show_root_heading: true
+        show_root_toc_entry: true
+        heading_level: 3
+        members: []

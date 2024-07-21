@@ -91,7 +91,7 @@ nav:
     - structure/columns.md
     - structure/serializer.md
     - structure/filters.md
-  - API:
-    - api/index.md
+  - Examples:
+    - examples/index.md
   - configuration.md
   - integrations.md

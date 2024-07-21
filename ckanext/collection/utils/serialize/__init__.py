@@ -58,17 +58,21 @@ class Serializer(
     internal.Domain[types.TDataCollection],
     Generic[types.TSerialized, types.TDataCollection],
 ):
-    r"""Base collection serializer.
+    """Base collection serializer.
 
     For any derived implementation, `serialize` must transfrom data of the
-    collection into expected format. Example:
+    collection into expected format.
 
-    >>> def stream(self):
-    >>>     for record in self.attached.data:
-    >>>         yield yaml.dump(record)
-    >>>
-    >>> def serialize(self):
-    >>>     return "---\\n".join(self.stream())
+    Example:
+        ```pycon
+        >>> class MySerializer(serialize.Serializer):
+        >>>     def stream(self):
+        >>>         for record in self.attached.data:
+        >>>             yield yaml.dump(record)
+        >>>
+        >>>     def serialize(self):
+        >>>         return "---\\n".join(self.stream())
+        ```
 
     """
 
@@ -83,7 +87,8 @@ class Serializer(
 
     def serialize(self) -> types.TSerialized:
         """Return serialized data."""
-        return cast(types.TSerialized, None)
+        result: Any = (r for r in self.attached.data)
+        return result
 
     def serialize_value(self, value: Any, name: str, record: Any):
         """Transform record's value into its serialized form."""
@@ -136,6 +141,24 @@ class StreamingSerializer(
 class DictListSerializer(
     StreamingSerializer["list[dict[str, Any]]", types.TDataCollection],
 ):
+    """Convert data into a list of dictionaries.
+
+    Example:
+        ```pycon
+        >>> col = collection.Collection(
+        >>>     serializer_factory=serialize.DictListSerializer,
+        >>>     columns_factory=columns.Columns.with_attributes(
+        >>>         names=["name", "sysadmin"],
+        >>>     ),
+        >>>     data_factory=data.ModelData,
+        >>>     data_settings={"model": model.User},
+        >>> )
+        >>> col.serializer.serialize()
+        [{'name': 'default', 'sysadmin': True}]
+        ```
+
+    """
+
     def stream(self):
         """Iterate over fragments of the content."""
         for item in self.attached.data:
@@ -153,7 +176,23 @@ class RenderableSerializer(StreamingSerializer[str, types.TDataCollection]):
 
 
 class CsvSerializer(StreamingSerializer[str, types.TDataCollection]):
-    """Serialize collection into CSV document."""
+    """Serialize collection into CSV document.
+
+    Example:
+        ```pycon
+        >>> col = collection.Collection(
+        >>>     serializer_factory=serialize.CsvSerializer,
+        >>>     columns_factory=columns.Columns.with_attributes(
+        >>>         names=["name", "sysadmin"],
+        >>>     ),
+        >>>     data_factory=data.ModelData,
+        >>>     data_settings={"model": model.User},
+        >>> )
+        >>> col.serializer.serialize()
+        name,sysadmin
+        default,True
+        ```
+    """
 
     def get_writer(self, buff: io.StringIO, fieldnames: list[str]):
         return csv.DictWriter(buff, fieldnames, extrasaction="ignore")
@@ -169,7 +208,9 @@ class CsvSerializer(StreamingSerializer[str, types.TDataCollection]):
     def stream(self) -> Iterable[str]:
         buff = io.StringIO()
         data = iter(self.attached.data)
-        fieldnames = self.attached.columns.names
+        fieldnames = [
+            n for n in self.attached.columns.names if n in self.attached.columns.names
+        ]
         if not fieldnames:
             empty = object()
             row = next(data, empty)
@@ -193,7 +234,26 @@ class CsvSerializer(StreamingSerializer[str, types.TDataCollection]):
 
 
 class JsonlSerializer(StreamingSerializer[str, types.TDataCollection]):
-    """Serialize collection into JSONL lines."""
+    """Serialize collection into JSONL lines.
+
+    Attributes:
+        encoder: `json.JSONEncoder` instance used for serialization
+
+    Example:
+        ```pycon
+        >>> col = collection.Collection(
+        >>>     serializer_factory=serialize.JsonlSerializer,
+        >>>     columns_factory=columns.Columns.with_attributes(
+        >>>         names=["name", "sysadmin"],
+        >>>     ),
+        >>>     data_factory=data.ModelData,
+        >>>     data_settings={"model": model.User},
+        >>> )
+        >>> col.serializer.serialize()
+        {"name: "default", "sysadmin": true}
+        {"name: "normal_user", "sysadmin": false}
+        ```
+    """
 
     encoder = internal.configurable_attribute(json.JSONEncoder(default=str))
 
@@ -208,7 +268,26 @@ class JsonlSerializer(StreamingSerializer[str, types.TDataCollection]):
 
 
 class JsonSerializer(StreamingSerializer[str, types.TDataCollection]):
-    """Serialize collection into single JSON document."""
+    """Serialize collection into single JSON document.
+
+    Attributes:
+        encoder: `json.JSONEncoder` instance used for serialization
+
+    Example:
+        ```pycon
+        >>> col = collection.Collection(
+        >>>     serializer_factory=serialize.JsonSerializer,
+        >>>     columns_factory=columns.Columns.with_attributes(
+        >>>         names=["name", "sysadmin"],
+        >>>     ),
+        >>>     data_factory=data.ModelData,
+        >>>     data_settings={"model": model.User},
+        >>> )
+        >>> col.serializer.serialize()
+        [{"name: "default", "sysadmin": true},
+         {"name: "normal_user", "sysadmin": false}]
+        ```
+    """
 
     encoder = internal.configurable_attribute(json.JSONEncoder(default=str))
 
@@ -259,7 +338,27 @@ class ChartJsSerializer(StreamingSerializer[str, types.TDataCollection]):
 
 
 class HtmlSerializer(RenderableSerializer[types.TDataCollection]):
-    """Serialize collection into HTML document."""
+    """Serialize collection into HTML document.
+
+    Attributes:
+        main_template: path to Jinja2 template for the collection
+        record_template: path to Jinja2 template for the individual record
+
+    Example:
+        ```pycon
+        >>> col = collection.Collection(
+        >>>     serializer_factory=serialize.HtmlSerializer,
+        >>>     data_factory=data.StaticData,
+        >>>     data_settings={"data": range(3)},
+        >>> )
+        >>> col.serializer.serialize()
+        <ul>
+          <li>0</li>
+          <li>1</li>
+          <li>2</li>
+        </ul>
+        ```
+    """
 
     ensure_dictized: bool = internal.configurable_attribute(False)
 
@@ -276,14 +375,48 @@ class HtmlSerializer(RenderableSerializer[types.TDataCollection]):
         }
 
     def stream(self):
-        yield tk.render(
-            self.main_template,
-            self.get_data(),
+        import contextlib
+
+        from flask import has_app_context
+
+        from ckan.lib.helpers import _get_auto_flask_context  # type: ignore
+
+        ctx: Any = (
+            contextlib.nullcontext() if has_app_context() else _get_auto_flask_context()
         )
+        with ctx:
+            yield tk.render(
+                self.main_template,
+                self.get_data(),
+            )
 
 
 class TableSerializer(HtmlSerializer[types.TDataCollection]):
-    """Serialize collection into HTML table."""
+    """Serialize collection into HTML table.
+
+    Attributes:
+        main_template: path to template for the collection
+        main_template: path to template for the table wrapper
+        record_template: path to template for the individual record
+        counter_template: path to template for the item counter
+        pager_template: path to template for the table pagination widget
+        form_template: path to template for the search form
+        filter_template: path to template for filters block inside search form
+
+    Example:
+        ```pycon
+        >>> col = collection.Collection(
+        >>>     serializer_factory=serialize.TableSerializer,
+        >>>     columns_factory=columns.Columns.with_attributes(
+        >>>         names=["name", "sysadmin"],
+        >>>     ),
+        >>>     data_factory=data.ModelData,
+        >>>     data_settings={"model": model.User},
+        >>> )
+        >>> col.serializer.serialize()
+        <table>...</table>
+        ```
+    """
 
     main_template: str = internal.configurable_attribute(
         "collection/serialize/table/main.html",
@@ -320,7 +453,22 @@ class TableSerializer(HtmlSerializer[types.TDataCollection]):
 
 
 class HtmxTableSerializer(TableSerializer[types.TDataCollection]):
-    """Serialize collection into HTML table."""
+    """Serialize collection into HTML table powered by HTMX.
+
+    Example:
+        ```pycon
+        >>> col = collection.Collection(
+        >>>     serializer_factory=serialize.HtmxTableSerializer,
+        >>>     columns_factory=columns.Columns.with_attributes(
+        >>>         names=["name", "sysadmin"],
+        >>>     ),
+        >>>     data_factory=data.ModelData,
+        >>>     data_settings={"model": model.User},
+        >>> )
+        >>> col.serializer.serialize()
+        <table>...</table>
+        ```
+    """
 
     main_template: str = internal.configurable_attribute(
         "collection/serialize/htmx_table/main.html",
