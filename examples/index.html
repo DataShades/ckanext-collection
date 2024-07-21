@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://datashades.github.io/ckanext-collection/api/">
+        <link rel="canonical" href="https://datashades.github.io/ckanext-collection/examples/">
       
       
         <link rel="prev" href="../structure/filters/">
       
       
-        <link rel="next" href="../configuration/">
+        <link rel="next" href="access/">
       
       
       <link rel="icon" href="../img/favicon.ico">
@@ -22,7 +22,7 @@
     
     
       
-        <title>API - ckanext-collection</title>
+        <title>Examples - ckanext-collection</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#api" class="md-skip">
+        <a href="#examples" class="md-skip">
           Skip to content
         </a>
       
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              API
+              Examples
             
           </span>
         </div>
@@ -570,6 +570,8 @@
           
         
       
+        
+      
     
     
     
@@ -586,21 +588,47 @@
               
   
   <span class="md-ellipsis">
-    API
+    Examples
   </span>
   
 
             </a>
+            
+              
+              <label class="md-nav__link md-nav__link--active" for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
             
           </div>
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
-            API
+            Examples
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="access/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Accessing data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
               
             
           </ul>
@@ -686,7 +714,28 @@
   
 
 
-<h1 id="api">API</h1>
+<h1 id="examples">Examples</h1>
+<p>All services provided by the extension are defined using public interfaces. If
+you don't understand the logic behind a certain service or want to modify its
+behavior, you can extend existing service or create a new service.</p>
+<p>Don't try to squeeze project requirements into existing utilities. Instead,
+define the optimized services that do the work in the most efficient way. Class
+creation is the base principle of ckanext-collection philosophy, so create
+classes, and create a lot of them.</p>
+<p>In this section you'll find examples of collections that were created in real
+project, and examples that exist only for demonstration. You'll notice that
+some examples do the same things, but in a different way. For example, packages
+or users will be listed using <code>data.ModelData</code> in one example, while another
+example will use <code>data.ApiSearchData</code>.</p>
+<p>There are no ideal generic solutions, and often different approaches will be
+interchangeable. Check the example, read the explanation, and choose the flow
+that is the most efficient and the most readable for you. You can always build
+a multiple versions of the same collection, create a benchmark for it and swap
+implementation as project evolves. Collection exposes the data, and how this
+data is produced is an implementation detail of the collection that is hiddent
+from other parts of the application. It means, you'll be able to change
+implementation without breaking any code that uses the collection as long as
+you keep the output unchanged.</p>
 
 
 
@@ -739,13 +788,13 @@
         
         
           
-          <a href="../configuration/" class="md-footer__link md-footer__link--next" aria-label="Next: Configuration">
+          <a href="access/" class="md-footer__link md-footer__link--next" aria-label="Next: Accessing data">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Configuration
+                Accessing data
               </div>
             </div>
             <div class="md-footer__button md-icon">

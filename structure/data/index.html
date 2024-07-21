@@ -580,6 +580,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#collection.shared.data.TemporalSaData" class="md-nav__link">
+    <span class="md-ellipsis">
+      TemporalSaData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#collection.shared.data.StatementSaData" class="md-nav__link">
     <span class="md-ellipsis">
       StatementSaData
@@ -724,6 +733,8 @@
           
         
       
+        
+      
     
     
     
@@ -736,25 +747,51 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../api/" class="md-nav__link ">
+            <a href="../../examples/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
-    API
+    Examples
   </span>
   
 
             </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
             
           </div>
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
-            API
+            Examples
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/access/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Accessing data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
               
             
           </ul>
@@ -913,6 +950,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#collection.shared.data.TemporalSaData" class="md-nav__link">
+    <span class="md-ellipsis">
+      TemporalSaData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#collection.shared.data.StatementSaData" class="md-nav__link">
     <span class="md-ellipsis">
       StatementSaData
@@ -1018,10 +1064,10 @@ is accessed. Because of it, items and length of the data service are not
 updated in runtime.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p>In the following example, items from data service and its length is not changes
-after assigning to <code>items</code>, because of <code>compute_data</code> called only during first
-access to data. After this point, data service uses cached result of the first
-<code>compute_data</code> call.</p>
+<p>In the following example, items from data service and its length are not
+changed after assigning to <code>items</code>, because of <code>compute_data</code> called only
+during first access to data. After this point, data service uses cached result
+of the first <code>compute_data</code> call.</p>
 <p><div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyData</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">):</span>
     <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 
@@ -1149,6 +1195,13 @@ all methods functional.</p>
 value for <code>data</code> during initialization.</p>
 
 
+<details class="warning" open>
+  <summary>Warning</summary>
+  <p>Iteration and size measurement uses cached version of <code>data</code>. If <code>data</code>
+attribute was overriden after service initialization, call
+<code>refresh_data()</code> method of the service to reset the cache.</p>
+</details>
+
 <table>
       <thead>
         <tr>
@@ -1179,7 +1232,9 @@ value for <code>data</code> during initialization.</p>
   <summary>Example</summary>
   <p><div class="highlight"><pre><span></span><code><span class="n">NumericData</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
 
-<span class="n">UppercaseData</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span><span class="p">)</span>
+<span class="n">UppercaseData</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="s2">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span><span class="p">,</span>
+<span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="n">data_factory</span><span class="o">=</span><span class="n">NumericData</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
@@ -1225,6 +1280,14 @@ value for <code>data</code> during initialization.</p>
 <p>CSV file available at path specified by <code>source</code> attribute of the service
 is read into memory and its every row transformed into dictionary.</p>
 
+
+<details class="warning" open>
+  <summary>Warning</summary>
+  <p>Iteration and size measurement uses cached version of source's content.
+If <code>source</code> attribute was overriden or its content was modified after
+service initialization, call <code>refresh_data()</code> method
+of the service to reset the cache.</p>
+</details>
 
 <table>
       <thead>
@@ -1305,6 +1368,13 @@ is read into memory and its every row transformed into dictionary.</p>
 makes the single request to the specified API action and yields items from
 the response.</p>
 
+
+<details class="warning" open>
+  <summary>Warning</summary>
+  <p>Iteration and size measurement uses cached version of action's result.
+To call action again and use the fresh result, use <code>refresh_data()</code> method
+of the service.</p>
+</details>
 
 <table>
       <thead>
@@ -1426,8 +1496,38 @@ the response.</p>
 that controls offset and limit. And result of the action must contain
 <code>count</code> and <code>results</code> keys.</p>
 <p>This data service can iterate over huge number of items, reading just few
-of them into the memory at once.</p>
+of them into the memory at once. It means you can iterate over thousands of
+datasets in an efficient way without messing with offsets and limits:</p>
+<div class="highlight"><pre><span></span><code><span class="n">packages</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ApiSearchData</span><span class="p">,</span>
+    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;package_search&quot;</span><span class="p">},</span>
+<span class="p">)</span>
 
+<span class="c1"># the following loop goes over every available package, no matter how may</span>
+<span class="c1"># of them are available inside search index</span>
+<span class="k">for</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="n">packages</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="c1"># (1)!</span>
+    <span class="o">...</span>
+
+<span class="c1"># total number of items processed in the previous step is the same as</span>
+<span class="c1"># number of public datasets</span>
+<span class="k">assert</span> <span class="n">packages</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">total</span> <span class="o">==</span> <span class="n">tk</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span><span class="s2">&quot;package_search&quot;</span><span class="p">)({},</span> <span class="p">{})[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span>
+</code></pre></div>
+<ol>
+<li><code>data</code> service is iterated directly to access all the items. Iterating
+   over <code>packages</code> would yield just first 10 items because of pagination.</li>
+</ol>
+
+
+<details class="warning" open>
+  <summary>Warning</summary>
+  <p>Size measurement uses cached number of records. To refresh the total
+number of records, call <code>refresh_data()</code> method of the service. Such
+thing can be used if a new item was created after initialization of the
+collection</p>
+<p>The records are not cached, to reduce memory usage. Every separate
+iteration over data service and every <code>range</code> call initiates a fresh
+API request.</p>
+</details>
 
 <details class="example" open>
   <summary>Example</summary>
@@ -1478,8 +1578,24 @@ of them into the memory at once.</p>
 
 
       <p>Abstract data source for SQL statements.</p>
-<p>This class can be extended to build data source over SQL statement.</p>
+<p>This class can be extended to build data source over SQL statement. Its
+<code>compute_data</code> calls 4 methods:</p>
+<ul>
+<li><code>get_base_statement</code>: produces initial statement</li>
+<li><code>alter_statement(stmt)</code>: modifies statement or replaces it completely</li>
+<li><code>statement_with_filters(stmt)</code>: apply <code>WHERE</code> and <code>HAVING</code> conditions</li>
+<li><code>statement_with_sorting(stmt)</code>: apply <code>ORDER BY</code></li>
+</ul>
+<p>These methods do nothing by default, but can be replaced in sublcasses to
+build SQL statement gradually.</p>
 
+
+<details class="warning" open>
+  <summary>Warning</summary>
+  <p>Final statement produced by <code>compute_data</code> and total number of results
+are cached. Call <code>refresh_data()</code> method of the service to rebuild the
+statement and refresh number of rows.</p>
+</details>
 
 <table>
       <thead>
@@ -1507,7 +1623,8 @@ of them into the memory at once.</p>
             <td><code><span title="collection.shared.data.BaseSaData.use_naive_search">use_naive_search</span></code></td>
             <td class="doc-attribute-details">
               <div class="doc-md-description">
-                <p>if <code>params</code> contains <code>q</code>, ILIKE it against searchable columns. Default: true</p>
+                <p>if <code>params</code> contains <code>q</code>, ILIKE it against searchable
+columns. Default: true</p>
               </div>
               <p>
                   <span class="doc-attribute-annotation">
@@ -1531,6 +1648,20 @@ of them into the memory at once.</p>
               </p>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.BaseSaData.is_scalar">is_scalar</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>return only first column from each row</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>bool</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
       </tbody>
     </table>
 
@@ -1544,9 +1675,98 @@ of them into the memory at once.</p>
     <span class="k">def</span> <span class="nf">get_base_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">sa</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">UserData</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span><span class="n">data_factory</span><span class="o">=</span><span class="n">UserData</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
 <span class="go">[(&quot;default&quot;,), (...,)]</span>
+</code></pre></div>
+</details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.data.TemporalSaData" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>TemporalSaData</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="collection.utils.data.model.BaseSaData" href="#collection.shared.data.BaseSaData">BaseSaData</a>[<span title="collection.utils.data.model.TStatement">TStatement</span>, <span title="ckanext.collection.types.TData">TData</span>, <span title="ckanext.collection.types.TDataCollection">TDataCollection</span>]</code></p>
+
+
+      <p>Data source that supports pagination by datetime column.</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">ATTRIBUTE</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.TemporalSaData.temporal_column">temporal_column</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>column used for pagination</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="sqlalchemy.sql.ColumnElement">ColumnElement</span>[<span title="typing.Any">Any</span>]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <p>This class can be used as a base for SQL statement based data
+services. Collection that uses such data service must also use
+<code>pager.TemporalPager</code> instead of the default <code>pager.ClassicPager</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">sqlalchemy</span> <span class="k">as</span> <span class="nn">sa</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">ckan</span> <span class="kn">import</span> <span class="n">model</span>
+
+<span class="k">class</span> <span class="nc">TemporalPackageData</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">TemporalSaData</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_base_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">sa</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Package</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">Package</span><span class="o">.</span><span class="n">metadata_created</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">TemporalPackageData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;temporal_column&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">Package</span><span class="o">.</span><span class="n">metadata_created</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">pager_factory</span><span class="o">=</span><span class="n">pager</span><span class="o">.</span><span class="n">TemporalPager</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">pager_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;since&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">40</span><span class="p">)},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[(&quot;pkg1&quot;, datetime.datetime(2024, 6, 13, 10, 40, 22, 518511)), ...]</span>
 </code></pre></div>
 </details>
 
@@ -1588,6 +1808,13 @@ of them into the memory at once.</p>
 
       <p>Data source for arbitrary SQL statement.</p>
 
+
+<details class="warning" open>
+  <summary>Warning</summary>
+  <p>Final statement produced by <code>compute_data</code> and total number of results
+are cached. Call <code>refresh_data()</code> method of the service to rebuild the
+statement and refresh number of rows.</p>
+</details>
 
 <table>
       <thead>
@@ -1664,6 +1891,13 @@ of them into the memory at once.</p>
 
       <p>Data source for multiple SQL statement merged with UNION ALL.</p>
 
+
+<details class="warning" open>
+  <summary>Warning</summary>
+  <p>Final statement produced by <code>compute_data</code> and total number of results
+are cached. Call <code>refresh_data()</code> method of the service to rebuild the
+statement and refresh number of rows.</p>
+</details>
 
 <table>
       <thead>
@@ -1747,6 +1981,13 @@ of them into the memory at once.</p>
       <p>Data source for SQLAlchemy model.</p>
 
 
+<details class="warning" open>
+  <summary>Warning</summary>
+  <p>Final statement produced by <code>compute_data</code> and total number of results
+are cached. Call <code>refresh_data()</code> method of the service to rebuild the
+statement and refresh number of rows.</p>
+</details>
+
 <table>
       <thead>
         <tr>
@@ -1774,11 +2015,108 @@ of them into the memory at once.</p>
             <td class="doc-attribute-details">
               <div class="doc-md-description">
                 <p>return model instance instead of collection of columns.</p>
+<details class="example">
+<summary>Example</summary>
+<p>Non-scalar collection returns rows as tuples of columns
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ModelData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;is_scalar&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[(&quot;id-123-123&quot;, &quot;user-name&quot;, ...), ...]</span>
+</code></pre></div></p>
+<p>Scalar collection yields model instances
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ModelData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;is_scalar&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[&lt;User id=id-123-123 name=user-name&gt;, ...]</span>
+</code></pre></div></p>
+</details>
               </div>
               <p>
                   <span class="doc-attribute-annotation">
                     <b>TYPE:</b>
-                      <code>bool</code>
+                      <code><span title="typing.Any">Any</span></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.ModelData.static_columns">static_columns</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>select only specified columns. If <code>is_scalar</code> flag
+enabled, only first columns from this list is returned.</p>
+<details class="example">
+<summary>Example</summary>
+<p>Non-scalar collection with <code>static_columns</code> produces tuples with values
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ModelData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;is_scalar&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;static_columns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">sysadmin</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[(&quot;default&quot;, True), ...]</span>
+</code></pre></div></p>
+<p>Scalar collection with <code>static_columns</code> yields values of the first column
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ModelData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;is_scalar&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;static_columns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">sysadmin</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[&quot;default&quot;, ...]</span>
+</code></pre></div></p>
+</details>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>list[<span title="sqlalchemy.Column">Column</span>[<span title="typing.Any">Any</span>] | <span title="sqlalchemy.sql.elements.Label">Label</span>[<span title="typing.Any">Any</span>]]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.data.ModelData.static_filters">static_filters</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>apply filters to the select statement</p>
+<details class="example">
+<summary>Example</summary>
+<p>Filters are values produced by operations with model columns. The
+same thing you'd pass into <code>.filter</code>/<code>.where</code> methods.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ModelData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;is_scalar&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;static_filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">sysadmin</span> <span class="o">==</span> <span class="kc">True</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[&lt;User sysadmin=True ...&gt;, ...]</span>
+</code></pre></div>
+</details>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>list[<span title="typing.Any">Any</span>]</code>
                   </span>
               </p>
             </td>

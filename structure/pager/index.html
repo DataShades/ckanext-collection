@@ -482,6 +482,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Pager
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -491,6 +502,85 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#available-pager-factories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available pager factories
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Available pager factories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.pager.Pager" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pager
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.pager.ClassicPager" class="md-nav__link">
+    <span class="md-ellipsis">
+      ClassicPager
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.pager.OffsetPager" class="md-nav__link">
+    <span class="md-ellipsis">
+      OffsetPager
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.pager.TemporalPager" class="md-nav__link">
+    <span class="md-ellipsis">
+      TemporalPager
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -580,6 +670,8 @@
           
         
       
+        
+      
     
     
     
@@ -592,25 +684,51 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../api/" class="md-nav__link ">
+            <a href="../../examples/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
-    API
+    Examples
   </span>
   
 
             </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
             
           </div>
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
-            API
+            Examples
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/access/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Accessing data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
               
             
           </ul>
@@ -680,6 +798,74 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#available-pager-factories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available pager factories
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Available pager factories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.pager.Pager" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pager
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.pager.ClassicPager" class="md-nav__link">
+    <span class="md-ellipsis">
+      ClassicPager
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.pager.OffsetPager" class="md-nav__link">
+    <span class="md-ellipsis">
+      OffsetPager
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.pager.TemporalPager" class="md-nav__link">
+    <span class="md-ellipsis">
+      TemporalPager
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -697,45 +883,415 @@
 
 
 <h1 id="pager">Pager</h1>
-<p>Pager service sets the upper and lower bounds on data used by
-collection. Default pager used by collection relies on numeric <code>start</code>/<code>end</code>
-values. But it's possible to define custom pager that uses alphabetical or
-temporal bounds, as long as <code>range</code> method of your custom data service supports
-these bounds.</p>
-<p>Standard pager(<code>ClassicPager</code>) has two configurable attributes: <code>page</code>(default:
-1) and <code>rows_per_page</code>(default: 10).</p>
-<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">StaticCollection</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{})</span>
-<span class="k">assert</span> <span class="n">col</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">page</span> <span class="o">==</span> <span class="mi">1</span>
-<span class="k">assert</span> <span class="n">col</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">rows_per_page</span> <span class="o">==</span> <span class="mi">10</span>
+<h2 id="overview">Overview</h2>
+<p>Pager service sets the upper and lower bounds on data used by collection. When
+collection is used in loops, it gets position of the first and last record from
+the pager and passes these values to <code>range</code> method of the data service. The
+result is iterated over.</p>
+<p>Collection uses <a href="#collection.shared.pager.ClassicPager">ClassicPager</a> by default. It
+implements pagination using <code>page</code> and <code>rows_per_page</code> parameters. These
+settings of the pager service are used to compute <code>pager.start</code> and <code>pager.end</code>.</p>
+<p>Default value of the <code>rows_per_page</code> is 10, and <code>page</code> is set to <code>1</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">start</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">end</span>
+<span class="go">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</span>
 </code></pre></div>
-<p>Because of these values you see only first 10 records from data when iterating
-the collection. Let's change pager settings:</p>
-<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">StaticCollection</span><span class="p">(</span>
-    <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="p">{},</span>
-    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)},</span>
-    <span class="n">pager_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;rows_per_page&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">}</span>
-<span class="p">)</span>
-<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">]</span>
+<p>If <code>page</code> is passed to <code>pager_settings</code> of the collection, or directly to the
+pager constructor, it modifies <code>start</code> and <code>end</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">pager</span><span class="o">.</span><span class="n">ClassicPager</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">start</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">end</span>
+<span class="go">30</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[21, 22, 23, 24, 25, 26, 27, 28, 29, 30]</span>
 </code></pre></div>
-<p>Pagination details are often passed with search parameters and have huge
-implact on the required data frame. Because of it, if <code>pager_settings</code> are
-missing, <code>ClassicPager</code> will look for settings inside collection
-parameters(second argument of the collection constructor). But in this case,
-pager will use only items that has <code>&lt;collection name&gt;:</code> prefix:</p>
-<div class="highlight"><pre><span></span><code><span class="n">col</span> <span class="o">=</span> <span class="n">StaticCollection</span><span class="p">(</span>
-    <span class="s2">&quot;xxx&quot;</span><span class="p">,</span>
-    <span class="p">{</span><span class="s2">&quot;xxx:page&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;xxx:rows_per_page&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
-    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)}</span>
-<span class="p">)</span>
-<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">]</span>
+<p><code>rows_per_page</code> controls the max number of items for a single page.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)},</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">pager_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rows_per_page&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">start</span>
+<span class="go">12</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">end</span>
+<span class="go">15</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[13, 14, 15]</span>
+</code></pre></div>
+<p>Pagination details are often mixed with data filters, so <code>ClassicPager</code>, used
+by default in Collection, check if <code>page</code> and <code>rows_per_page</code> are available in
+<code>params</code> of the collection. If so, these values are used instead of pager
+settings.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>In this example collection have different pager settings specified by
+<code>params</code>(second positional argument) and <code>pager_settings</code>. In such situation
+<code>params</code> have higher priority and <code>pager_settings</code> are ignored.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">{</span><span class="s2">&quot;rows_per_page&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="c1"># (1)!</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)},</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">pager_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rows_per_page&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>  <span class="c1"># (2)!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">start</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span><span class="o">.</span><span class="n">pager</span><span class="o">.</span><span class="n">end</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[2]</span>
+</code></pre></div>
+<ol>
+<li><code>params</code> have higher priority and will be used by collection when present</li>
+<li><code>pager_settings</code> are not used because they conflict with <code>params</code></li>
+</ol>
+</div>
+<h2 id="available-pager-factories">Available pager factories</h2>
 
-<span class="n">col</span> <span class="o">=</span> <span class="n">StaticCollection</span><span class="p">(</span>
-    <span class="s2">&quot;xxx&quot;</span><span class="p">,</span>
-    <span class="p">{</span><span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;rows_per_page&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
-    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)}</span>
-<span class="p">)</span>
-<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.pager.Pager" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>Pager</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+      <p>Base for pager service.</p>
+<p>This class must be extended by every implementation of the pager service.</p>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">StaticPager</span><span class="p">(</span><span class="n">Pager</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">end</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">10</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">10</span>
 </code></pre></div>
+</details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.pager.ClassicPager" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>ClassicPager</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+      <p>Page-number based pagination.</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">ATTRIBUTE</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.pager.ClassicPager.page">page</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>current active page</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>int</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.pager.ClassicPager.rows_per_page">rows_per_page</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>max number of items per page</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>int</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.pager.ClassicPager.prioritize_params">prioritize_params</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>if <code>params</code> contain pagination details,
+use them instead of <code>pager_settings</code>. Defaults to True.</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>bool</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)},</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">pager_factory</span><span class="o">=</span><span class="n">pager</span><span class="o">.</span><span class="n">ClassicPager</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">pager_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;rows_per_page&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[6, 7, 8, 9, 10]</span>
+</code></pre></div>
+</details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.pager.OffsetPager" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>OffsetPager</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+      <p>Limit/offset based pagination.</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">ATTRIBUTE</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.pager.OffsetPager.offset">offset</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>number of items to skip</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>int</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.pager.OffsetPager.limit">limit</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>max number of items per page</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>int</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">StaticData</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)},</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">pager_factory</span><span class="o">=</span><span class="n">pager</span><span class="o">.</span><span class="n">OffsetPager</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">pager_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="go">[3, 4, 5]</span>
+</code></pre></div>
+</details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.pager.TemporalPager" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>TemporalPager</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+      <p>Date based pagination.</p>
+<p>Data service of the collection that uses TemporalPager must implement
+<code>range</code> as <code>range(start: date | None, end: date | None)</code>.</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">ATTRIBUTE</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.pager.TemporalPager.since">since</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>date of the oldest record(<code>&gt;=</code>)</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="datetime.date">date</span> | None</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.pager.TemporalPager.until">until</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>date of the newest record(<code>&lt;</code>)</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="datetime.date">date</span> | None</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <p>Define data service that supports date ranges.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="k">class</span> <span class="nc">TemporalModelData</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">TemporalSaData</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">ModelData</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<p>Initialize the collection</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="o">&gt;&gt;&gt;</span>     <span class="n">data_factory</span><span class="o">=</span><span class="n">TemporalModelData</span><span class="p">,</span>
+<span class="o">&gt;&gt;&gt;</span>     <span class="n">data_settings</span><span class="o">=</span><span class="p">{</span>
+<span class="o">&gt;&gt;&gt;</span>         <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">Package</span><span class="p">,</span>
+<span class="o">&gt;&gt;&gt;</span>         <span class="s2">&quot;temporal_column&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">Package</span><span class="o">.</span><span class="n">metadata_created</span><span class="p">,</span>
+<span class="o">&gt;&gt;&gt;</span>     <span class="p">},</span>
+<span class="o">&gt;&gt;&gt;</span>     <span class="n">pager_factory</span><span class="o">=</span><span class="n">pager</span><span class="o">.</span><span class="n">TemporalPager</span><span class="p">,</span>
+<span class="o">&gt;&gt;&gt;</span>     <span class="n">pager_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;since&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)},</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="p">[(</span><span class="o">...</span><span class="n">package</span> <span class="n">created</span> <span class="n">yesterday</span><span class="p">),</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div>
+</details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
 
 
 

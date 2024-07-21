@@ -503,6 +503,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Columns
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -512,6 +523,58 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#available-columns-factories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available columns factories
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Available columns factories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.columns.Columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Columns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -580,6 +643,8 @@
           
         
       
+        
+      
     
     
     
@@ -592,25 +657,51 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../api/" class="md-nav__link ">
+            <a href="../../examples/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
-    API
+    Examples
   </span>
   
 
             </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
             
           </div>
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
-            API
+            Examples
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/access/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Accessing data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
               
             
           </ul>
@@ -680,6 +771,47 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#available-columns-factories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available columns factories
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Available columns factories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#collection.shared.columns.Columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Columns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -697,25 +829,184 @@
 
 
 <h1 id="columns">Columns</h1>
+<h2 id="overview">Overview</h2>
 <p>This service contains additional information about separate columns of data
 records. It defines following settings:</p>
 <ul>
 <li>names: all available column names. Used by other settings of columns service</li>
-<li>hidden: columns that should not be shown by serializer. Used by serializer
-  services</li>
-<li>visible: columns that must be shown by serializer. Used by serializer
-  services</li>
-<li>sortable: columns that support sorting. Used by data services</li>
-<li>filterable: columns that support filtration/facetting. Used by data services</li>
-<li>searchable: columns that support search by partial match. Used by data
-  services</li>
-<li>labels: human readable labels for columns. Used by serializer services</li>
+<li>hidden: <code>names</code> members that should not be serialized</li>
+<li>visible: <code>names</code> members that must be serialized</li>
+<li>sortable: <code>names</code> members that support sorting</li>
+<li>filterable: <code>names</code> members that support filtration/facetting</li>
+<li>searchable: <code>names</code> members that support search by partial match</li>
+<li>labels: human readable labels for <code>names</code> members</li>
 </ul>
-<p>This service contains information used by other service, so defining additional
-attributes here is completely normal. For example, some custom serializer, that
-serializes data into ORC, can expect <code>orc_format</code> attribute in the <code>columns</code>
-service to be available. So you can add as much additional column related
-details as required into this service.</p>
+<p>There are not rules regarding usage of this service. Any serializer, data
+service or any other service can use information from the columns service or
+ignore it.</p>
+<p>You can also add more properties to this service. For example, if you want to
+use specific order of columns inside your custom implementation of CSV
+serializer, you can add <code>order</code> attribute to the columns service and read it
+during serialization.</p>
+<p>If you are not going to share your custom services, you can ignore columns
+service. Otherwise, it's recommended to keep any column-related options
+here.</p>
+<p>For example, almost all built-in serializers of ckanext-collection use
+<code>visible</code>/<code>hidden</code> attributes of the columns service to include/exclude certain
+fields into serialization output. In this way you can switch to a different
+serializer with a minimal amount of setings and receive the same set of fields
+serialized into a different format.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">Collection</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data_factory</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ModelData</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">columns_factory</span><span class="o">=</span><span class="n">columns</span><span class="o">.</span><span class="n">Columns</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">names</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;sysadmin&quot;</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">hidden</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">serialize</span><span class="o">.</span><span class="n">CsvSerializer</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">serialize</span><span class="p">()</span>
+<span class="go">name,sysadmin</span>
+<span class="go">default,True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">serialize</span><span class="o">.</span><span class="n">JsonSerializer</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">serialize</span><span class="p">()</span>
+<span class="go">[{&quot;sysadmibn&quot;: true, &quot;name&quot;: &quot;default&quot;}]</span>
+</code></pre></div>
+</div>
+<h2 id="available-columns-factories">Available columns factories</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="collection.shared.columns.Columns" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>Columns</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+      <p>Collection of columns details for filtering/rendering.</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">ATTRIBUTE</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.columns.Columns.names">names</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>list of all available columns</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>list[str]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.columns.Columns.visible">visible</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>columns that can be viewed</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>set[str]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.columns.Columns.sortable">sortable</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>columns that can be sorted</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>set[str]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.columns.Columns.filterable">filterable</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>columns that can be filtered using exect match</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>set[str]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.columns.Columns.searchable">searchable</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>columns that can be searched by partial match</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>set[str]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="collection.shared.columns.Columns.labels">labels</span></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>UI labels for columns</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code>dict[str, str]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
 
 
 
