@@ -38,17 +38,19 @@ def basic_row_dictizer(row: Any) -> dict[str, Any]:
         return cast("dict[str, Any]", row)
 
     if isinstance(row, Row):
-        return dict(zip(row.keys(), row))
+        if hasattr(row, "_asdict"):
+            return row._asdict()  # # type: ignore
+
+        if hasattr(row, "keys"):
+            return dict(zip(row.keys(), row))
 
     try:
-        reflection = sa.inspect(  # pyright: ignore[reportUnknownVariableType]
-            row,
-        )
+        reflection = sa.inspect(row)
     except NoInspectionAvailable:
         raise TypeError(type(row)) from None
 
     if isinstance(reflection, InstanceState):
-        return {attr.key: attr.value for attr in reflection.attrs}  # pyright: ignore
+        return {attr.key: attr.value for attr in reflection.attrs}
 
     raise TypeError(type(row))
 

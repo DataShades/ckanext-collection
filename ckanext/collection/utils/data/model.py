@@ -512,7 +512,7 @@ class ModelData(BaseSaData[Select, types.TData, types.TDataCollection]):
         sources = self.extra_sources
 
         for name, condition, isouter in self.get_joins():
-            stmt = stmt.join(sources[name], condition, isouter)
+            stmt = stmt.join(sources[name], condition, isouter=isouter)
 
         return stmt
 
