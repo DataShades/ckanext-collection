@@ -121,7 +121,7 @@ class BaseSaData(
 
     def count_statement(self, stmt: TStatement) -> int:
         """Count number of items in query."""
-        count_stmt: Select = sa.select(sa.func.count()).select_from(stmt)
+        count_stmt: Select = sa.select(sa.func.count()).select_from(stmt.subquery())
         return cast(int, self._execute(count_stmt).scalar())
 
     def _into_clause(self, column: ColumnElement[Any], value: Any):
