@@ -12,10 +12,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Features
 
+- sqlalchemy v2 compatibility ([0275236](https://github.com/DataShades/ckanext-collection/commit/02752363b6b75623d0c713025409660706bd733b) by Sergey Motornyuk).
 - Serializer.dictize_row returns only Columns.visible ([0ad5295](https://github.com/DataShades/ckanext-collection/commit/0ad5295fd6a5c463befe3630b4b46dd801c3ac9b) by Sergey Motornyuk).
 
 ### Code Refactoring
 
+- ModelData has naive filters/search enabled by default ([cf16a86](https://github.com/DataShades/ckanext-collection/commit/cf16a86a4e90eff51c2d3e1387105af35f1c3ef0) by Sergey Motornyuk).
 - Columns filterable and sortable are empty by default ([aeb3950](https://github.com/DataShades/ckanext-collection/commit/aeb3950bda6013a680d9f48bba9d481d52d0bd47) by Sergey Motornyuk).
 
 <!-- insertion marker -->
