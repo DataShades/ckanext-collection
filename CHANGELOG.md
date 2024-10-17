@@ -6,9 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## Unreleased
+## [0.2.0](https://github.com/DataShades/ckanext-collection/releases/tag/0.2.0) - 2024-10-17
 
-<small>[Compare with latest](https://github.com/DataShades/ckanext-collection/compare/v0.1.2...HEAD)</small>
+<small>[Compare with v0.1.2](https://github.com/DataShades/ckanext-collection/compare/v0.1.2...0.2.0)</small>
 
 ### Features
 
@@ -20,7 +20,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - ModelData has naive filters/search enabled by default ([cf16a86](https://github.com/DataShades/ckanext-collection/commit/cf16a86a4e90eff51c2d3e1387105af35f1c3ef0) by Sergey Motornyuk).
 - Columns filterable and sortable are empty by default ([aeb3950](https://github.com/DataShades/ckanext-collection/commit/aeb3950bda6013a680d9f48bba9d481d52d0bd47) by Sergey Motornyuk).
 
-<!-- insertion marker -->
 ## [v0.1.2](https://github.com/DataShades/ckanext-collection/releases/tag/v0.1.2) - 2024-03-03
 
 <small>[Compare with v0.1.1](https://github.com/DataShades/ckanext-collection/compare/v0.1.1...v0.1.2)</small>

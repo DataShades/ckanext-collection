@@ -1,3 +1,42 @@
+[build-system]
+requires = [ "setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ckanext-collection"
+version = "0.2.0"
+description = ""
+classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)", "Programming Language :: Python :: 3.8", "Programming Language :: Python :: 3.9", "Programming Language :: Python :: 3.10", "Programming Language :: Python :: 3.11", "Programming Language :: Python :: 3.12",]
+keywords = [ "CKAN",]
+requires-python = ">= 3.8"
+dependencies = [ "typing-extensions",]
+readme = "README.md"
+license = {text = "AGPL"}
+authors = [
+    {name = "DataShades", email = "datashades@linkdigital.com.au"},
+    {name = "Sergey Motornyuk", email = "sergey.motornyuk@linkdigital.com.au"},
+]
+maintainers = [
+    {name = "DataShades", email = "datashades@linkdigital.com.au"},
+]
+
+[project.urls]
+Homepage = "https://github.com/DataShades/ckanext-collection"
+
+[project.optional-dependencies]
+test = [ "pytest-ckan", "ckanext-toolbelt",]
+docs = [ "mkdocs", "mkdocs-material", "pymdown-extensions", "mkdocstrings[python]",]
+dev = [ "pytest-ckan", "ckanext-toolbelt", "mkdocs", "mkdocs-material", "pymdown-extensions", "mkdocstrings[python]",]
+
+[project.entry-points."ckan.plugins"]
+collection = "ckanext.collection.plugin:CollectionPlugin"
+
+[project.entry-points."babel.extractors"]
+ckan = "ckan.lib.extract:extract_ckan"
+
+[tool.setuptools.packages]
+find = {}
+
 [tool.black]
 # line-length = 88
 # preview = true
