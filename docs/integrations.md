@@ -1,6 +1,6 @@
 # Integrations
 
-## [ckanext-admin-panel](https://github.com/mutantsan/ckanext-admin-panel)
+## [ckanext-admin-panel](https://github.com/DataShades/ckanext-admin-panel)
 
 To enable configuration form of ckanext-collection in the admin panel, enable
 the following arbitrary schema
