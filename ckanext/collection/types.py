@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import abc
 from collections.abc import Sized
-from typing import Any, Callable, Generic, Iterable, Literal, Protocol, Union
+from typing import Any, Callable, Generic, Iterable, Literal, Protocol, Union, TypeVar
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Engine
-from typing_extensions import NotRequired, TypeAlias, TypedDict, TypeVar
+from typing_extensions import NotRequired, TypeAlias, TypedDict
 
 
 # CollectionFactory: TypeAlias = "Callable[[str, dict[str, Any]], BaseCollection[Any]]"
