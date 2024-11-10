@@ -6,14 +6,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## [0.2.0](https://github.com/DataShades/ckanext-collection/releases/tag/0.2.0) - 2024-10-17
+## [v0.2.1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.2.1) - 2024-11-10
 
-<small>[Compare with v0.1.2](https://github.com/DataShades/ckanext-collection/compare/v0.1.2...0.2.0)</small>
+<small>[Compare with v0.1.2](https://github.com/DataShades/ckanext-collection/compare/v0.1.2...v0.2.1)</small>
 
 ### Features
 
+- include missing columns into serializer ([4c79b23](https://github.com/DataShades/ckanext-collection/commit/4c79b2307d5f4596119325f27d88ded37ded43d9) by Sergey Motornyuk).
 - sqlalchemy v2 compatibility ([0275236](https://github.com/DataShades/ckanext-collection/commit/02752363b6b75623d0c713025409660706bd733b) by Sergey Motornyuk).
 - Serializer.dictize_row returns only Columns.visible ([0ad5295](https://github.com/DataShades/ckanext-collection/commit/0ad5295fd6a5c463befe3630b4b46dd801c3ac9b) by Sergey Motornyuk).
+
+### Bug Fixes
+
+- TypeVar is imported from typing-extensions ([446ec37](https://github.com/DataShades/ckanext-collection/commit/446ec37ce82e886ede7aef9270fdb10ee5238d8e) by Sergey Motornyuk).
 
 ### Code Refactoring
 
@@ -98,3 +103,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [v0.0.1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.0.1) - 2023-10-23
 
 <small>[Compare with first commit](https://github.com/DataShades/ckanext-collection/compare/3bb615ac5019219f8072e2f915797f1bd9917b1a...v0.0.1)</small>
+
