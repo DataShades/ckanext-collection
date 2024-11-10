@@ -17,7 +17,8 @@ class CollectionFactory(Protocol):
         params: dict[str, Any],
         /,
         **kwargs: Any,
-    ) -> BaseCollection: ...
+    ) -> BaseCollection:
+        ...
 
 
 TCollection = TypeVar("TCollection", bound="BaseCollection")
@@ -50,7 +51,7 @@ class BaseColumns(abc.ABC, Service):
     filterable: set[str]
     searchable: set[str]
     labels: dict[str, str]
-    serializers: dict[str, list[tuple[str, dict[str, Any]]]]
+    serializers: dict[str, list[tuple[str | ValueSerializer, dict[str, Any]]]]
 
     @property
     def service_name(self):
@@ -121,7 +122,8 @@ class BasePager(abc.ABC, Service):
 
 class BaseSerializer(abc.ABC, Service):
     @abc.abstractmethod
-    def serialize(self) -> Any: ...
+    def serialize(self) -> Any:
+        ...
 
     @property
     def service_name(self):

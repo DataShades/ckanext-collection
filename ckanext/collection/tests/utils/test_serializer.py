@@ -21,8 +21,14 @@ def collection():
         {},
         data_settings={
             "data": [
-                {"name": "a", "age": 1},
-                {"name": "b", "age": 2},
+                {
+                    "name": "a",
+                    "age": 1,
+                },
+                {
+                    "name": "b",
+                    "age": 2,
+                },
             ],
         },
         columns_settings={
@@ -123,10 +129,6 @@ class TestHtmlSerializer:
     def test_output(self, collection: StaticCollection, ckan_config: Any):
         serializer = serialize.HtmlSerializer(collection)
         output = serializer.render().strip()
-
-        expected_output = (
-            """<ul><li>{"age": 1, "name": "a"}</li>"""
-            + """<li>{"age": 2, "name": "b"}</li></ul>"""
-        )
+        expected_output = """<ul><li>{&#39;name&#39;: &#39;a&#39;, &#39;age&#39;: 1}</li><li>{&#39;name&#39;: &#39;b&#39;, &#39;age&#39;: 2}</li></ul>"""
 
         assert output == expected_output

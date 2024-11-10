@@ -27,7 +27,7 @@ class TestCollection:
 
     def test_custom_factory(self):
         custom_factory = utils.Data[Any, Any].with_attributes()
-        collection = utils.Collection[Any]("", {}, data_factory=custom_factory)
+        collection = utils.Collection("", {}, data_factory=custom_factory)
 
         assert isinstance(collection.data, custom_factory)
 

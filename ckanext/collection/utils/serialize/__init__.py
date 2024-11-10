@@ -78,10 +78,10 @@ class Serializer(
 
     """
 
-    value_serializers: dict[str, types.ValueSerializer] = (
-        internal.configurable_attribute(
-            default_factory=lambda self: {},
-        )
+    value_serializers: dict[
+        str, types.ValueSerializer
+    ] = internal.configurable_attribute(
+        default_factory=lambda self: {},
     )
     row_dictizer: Callable[[Any], dict[str, Any]] = internal.configurable_attribute(
         basic_row_dictizer,
@@ -94,16 +94,14 @@ class Serializer(
 
     def serialize_value(self, value: Any, name: str, record: Any):
         """Transform record's value into its serialized form."""
-        for serializer_name, options in self.attached.columns.serializers.get(name, []):
-            if serializer_name not in self.value_serializers:
+        for serializer, options in self.attached.columns.serializers.get(name, []):
+            if isinstance(serializer, str):
+                serializer = self.value_serializers.get(serializer)
+
+            if not serializer:
                 continue
-            value = self.value_serializers[serializer_name](
-                value,
-                options,
-                name,
-                record,
-                self,
-            )
+
+            value = serializer(value, options, name, record, self)
 
         return value
 
@@ -117,9 +115,9 @@ class Serializer(
             visible = set(fields)
 
         return {
-            field: self.serialize_value(result[field], field, row)
+            field: self.serialize_value(result.get(field), field, row)
             for field in fields
-            if field in result and field in visible
+            if field in visible
         }
 
 
@@ -371,6 +369,13 @@ class HtmlSerializer(RenderableSerializer[types.TDataCollection]):
         "collection/serialize/html/record.html",
     )
 
+    prefix: str = internal.configurable_attribute("collection-content")
+    base_class: str = internal.configurable_attribute("collection")
+
+    @property
+    def form_id(self):
+        return f"{self.prefix}-form--{self.attached.name}"
+
     def get_data(self) -> dict[str, Any]:
         return {
             "collection": self.attached,
@@ -443,11 +448,6 @@ class TableSerializer(HtmlSerializer[types.TDataCollection]):
     )
 
     prefix: str = internal.configurable_attribute("collection-table")
-    base_class: str = internal.configurable_attribute("collection")
-
-    @property
-    def form_id(self):
-        return f"{self.prefix}-form--{self.attached.name}"
 
     @property
     def table_id(self):

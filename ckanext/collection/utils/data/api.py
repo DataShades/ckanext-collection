@@ -117,6 +117,9 @@ class ApiSearchData(ApiData[types.TData, types.TDataCollection]):
 
     """
 
+    start_param = internal.configurable_attribute("start")
+    rows_param = internal.configurable_attribute("rows")
+
     def prepare_payload(self) -> dict[str, Any]:
         payload = super().prepare_payload()
         return dict(
@@ -147,31 +150,40 @@ class ApiSearchData(ApiData[types.TData, types.TDataCollection]):
 
     def compute_data(self):
         action = self.get_action()
-        return action(self.make_context(), dict(self.prepare_payload(), rows=0))
+        payload = self.prepare_payload()
+        payload[self.rows_param] = 0
+
+        return action(self.make_context(), payload)
 
     def compute_total(self, data: dict[str, Any]) -> int:
         return data["count"]
 
     def range(self, start: int, end: int) -> Iterable[types.TData]:
         action = self.get_action()
-        return action(
-            self.make_context(),
-            dict(self.prepare_payload(), rows=end - start, start=start),
-        )["results"]
+
+        payload = self.prepare_payload()
+        payload[self.rows_param] = end - start
+        payload[self.start_param] = start
+
+        return action(self.make_context(), payload)["results"]
 
     def at(self, index: int) -> types.TData:
         action = self.get_action()
-        return action(
-            self.make_context(),
-            dict(self.prepare_payload(), rows=1, start=index),
-        )["results"][0]
+        payload = self.prepare_payload()
+        payload[self.rows_param] = 1
+        payload[self.start_param] = index
+
+        return action(self.make_context(), payload)["results"][0]
 
     def __iter__(self) -> Iterator[types.TData]:
         action = self.get_action()
         context = self.make_context()
         start = 0
+        payload = self.prepare_payload()
+        payload[self.start_param] = start
+
         while True:
-            result = action(context, dict(self.prepare_payload(), start=start))
+            result = action(context, payload)
 
             yield from result["results"]
             start += len(result["results"])

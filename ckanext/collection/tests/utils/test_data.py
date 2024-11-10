@@ -92,7 +92,7 @@ class TestStaticData:
     def test_pagination(self):
         dump = [{"a": 1}, {"a": 2}]
 
-        collection = Collection[Any](
+        collection = Collection(
             "",
             {"page": 2, "rows_per_page": 1},
             data_settings={"data": dump},
