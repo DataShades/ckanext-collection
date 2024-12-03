@@ -78,10 +78,10 @@ class Serializer(
 
     """
 
-    value_serializers: dict[str, types.ValueSerializer] = (
-        internal.configurable_attribute(
-            default_factory=lambda self: {},
-        )
+    value_serializers: dict[
+        str, types.ValueSerializer
+    ] = internal.configurable_attribute(
+        default_factory=lambda self: {},
     )
     row_dictizer: Callable[[Any], dict[str, Any]] = internal.configurable_attribute(
         basic_row_dictizer,
@@ -108,11 +108,16 @@ class Serializer(
     def dictize_row(self, row: Any) -> dict[str, Any]:
         """Transform single data record into serializable dictionary."""
         result = self.row_dictizer(row)
-        fields = self.attached.columns.names or list(result)
+        if fields := self.attached.columns.names:
+            visible = self.attached.columns.visible
+        else:
+            fields = list(result)
+            visible = set(fields)
 
         return {
             field: self.serialize_value(result.get(field), field, row)
             for field in fields
+            if field in visible
         }
 
 
