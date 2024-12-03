@@ -78,10 +78,10 @@ class Serializer(
 
     """
 
-    value_serializers: dict[
-        str, types.ValueSerializer
-    ] = internal.configurable_attribute(
-        default_factory=lambda self: {},
+    value_serializers: dict[str, types.ValueSerializer] = (
+        internal.configurable_attribute(
+            default_factory=lambda self: {},
+        )
     )
     row_dictizer: Callable[[Any], dict[str, Any]] = internal.configurable_attribute(
         basic_row_dictizer,
@@ -108,16 +108,9 @@ class Serializer(
     def dictize_row(self, row: Any) -> dict[str, Any]:
         """Transform single data record into serializable dictionary."""
         result = self.row_dictizer(row)
-        if fields := self.attached.columns.names:
-            visible = self.attached.columns.visible
-        else:
-            fields = list(result)
-            visible = set(fields)
-
         return {
-            field: self.serialize_value(result.get(field), field, row)
-            for field in fields
-            if field in visible
+            field: self.serialize_value(value, field, row)
+            for field, value in result.items()
         }
 
 
@@ -161,8 +154,15 @@ class DictListSerializer(
 
     def stream(self):
         """Iterate over fragments of the content."""
+        visible = self.attached.columns.visible
+
         for item in self.attached.data:
-            yield [self.dictize_row(item)]
+            row = {
+                k: v
+                for k, v in self.dictize_row(item).items()
+                if not visible or k in visible
+            }
+            yield [row]
 
 
 class RenderableSerializer(StreamingSerializer[str, types.TDataCollection]):
@@ -259,7 +259,11 @@ class JsonlSerializer(StreamingSerializer[str, types.TDataCollection]):
 
     def stream(self) -> Iterable[str]:
         buff = io.StringIO()
+        visible = self.attached.columns.visible
+
         for row in map(self.dictize_row, self.attached.data):
+            if visible:
+                row = {k: v for k, v in row.items() if not visible or k in visible}
             buff.write(self.encoder.encode(row))
             yield buff.getvalue()
             yield "\n"
@@ -292,8 +296,17 @@ class JsonSerializer(StreamingSerializer[str, types.TDataCollection]):
     encoder = internal.configurable_attribute(json.JSONEncoder(default=str))
 
     def stream(self):
+        visible = self.attached.columns.visible
+
         yield self.encoder.encode(
-            [self.dictize_row(row) for row in self.attached.data],
+            [
+                {
+                    k: v
+                    for k, v in self.dictize_row(row).items()
+                    if not visible or k in visible
+                }
+                for row in self.attached.data
+            ],
         )
 
 
