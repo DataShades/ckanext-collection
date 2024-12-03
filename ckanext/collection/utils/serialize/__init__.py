@@ -298,7 +298,7 @@ class JsonSerializer(StreamingSerializer[str, types.TDataCollection]):
     def stream(self):
         visible = self.attached.columns.visible
 
-        yield self.encoder.encode(
+        chunks = self.encoder.iterencode(
             [
                 {
                     k: v
@@ -308,6 +308,7 @@ class JsonSerializer(StreamingSerializer[str, types.TDataCollection]):
                 for row in self.attached.data
             ],
         )
+        yield from chunks
 
 
 class ChartJsSerializer(StreamingSerializer[str, types.TDataCollection]):
