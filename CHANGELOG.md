@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [v0.3.0](https://github.com/DataShades/ckanext-collection/releases/tag/v0.3.0) - 2025-03-11
+
+<small>[Compare with v0.2.1](https://github.com/DataShades/ckanext-collection/compare/v0.2.1...v0.3.0)</small>
+
+### Features
+
+- use streaming encoding in json serializer ([4b04cbc](https://github.com/DataShades/ckanext-collection/commit/4b04cbce5f13e4483b3c6fc40a0cd73383919b62) by Sergey Motornyuk).
+
+### Bug Fixes
+
+- namespaced package cannot be discovered ([1ba7b22](https://github.com/DataShades/ckanext-collection/commit/1ba7b22ea58c3baac6e0e36bedafe2b0af9b454c) by Sergey Motornyuk).
+- row dictizer ignores invisible columns ([0ec3eab](https://github.com/DataShades/ckanext-collection/commit/0ec3eaba1410ef59e9881fadd24297d5c84475ea) by Sergey Motornyuk).
+
 ## [v0.2.1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.2.1) - 2024-11-10
 
 <small>[Compare with v0.1.2](https://github.com/DataShades/ckanext-collection/compare/v0.1.2...v0.2.1)</small>
@@ -103,4 +116,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [v0.0.1](https://github.com/DataShades/ckanext-collection/releases/tag/v0.0.1) - 2023-10-23
 
 <small>[Compare with first commit](https://github.com/DataShades/ckanext-collection/compare/3bb615ac5019219f8072e2f915797f1bd9917b1a...v0.0.1)</small>
-
