@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import abc
 from collections.abc import Sized
-from typing import Any, Callable, Generic, Iterable, Literal, Protocol, Union, TypeVar
+from typing import Any, Callable, Generic, Iterable, Literal, Protocol, TypeVar, Union
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Engine
@@ -17,8 +17,7 @@ class CollectionFactory(Protocol):
         params: dict[str, Any],
         /,
         **kwargs: Any,
-    ) -> BaseCollection:
-        ...
+    ) -> BaseCollection: ...
 
 
 TCollection = TypeVar("TCollection", bound="BaseCollection")
@@ -122,8 +121,7 @@ class BasePager(abc.ABC, Service):
 
 class BaseSerializer(abc.ABC, Service):
     @abc.abstractmethod
-    def serialize(self) -> Any:
-        ...
+    def serialize(self) -> Any: ...
 
     @property
     def service_name(self):

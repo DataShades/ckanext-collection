@@ -16,7 +16,7 @@ from .model import BaseSaData
 
 class DbData(BaseSaData[Select, types.TData, types.TDbCollection], abc.ABC):
     def _execute(self, stmt: GenerativeSelect):
-        return self.attached.db_connection.engine.execute(stmt)
+        return self.attached.db_connection.engine.connect().execute(stmt)
 
 
 class TableData(DbData[types.TData, types.TDbCollection]):
