@@ -1,11 +1,11 @@
 htmx:
-  filter: rjsmin
+  filters: rjsmin
   output: ckanext-collection/%(version)s-htmx.js
   contents:
     - vendor/htmx.js
 
 htmx-init-ckan-modules:
-  filter: rjsmin
+  filters: rjsmin
   extra:
     preload:
       - base/main
